@@ -7,11 +7,13 @@
         
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="0"/>
         
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:SideBar}">
 
+                    <!-- SIDE BAR -->
                     <DockPanel>
 
                         <!-- SIDE BAR RESIZE HANDLE -->
@@ -24,11 +26,72 @@
                             
                         </Button>
 
-                        <Border>
+                        <!-- SIDE BAR AREA BORDER -->
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+
+                            <!-- SIDE BAR LAYOUT -->
+                            <Grid>
+                                
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>  <!-- SIDE BAR HEADER -->
+                                    <RowDefinition Height="*"/>     <!-- SIDE BAR CONTENT -->
+                                    <RowDefinition Height="Auto"/>  <!-- SIDE BAR SECTION BUTTONS -->
+                                </Grid.RowDefinitions>
+
+                                <!-- SIDE BAR HEADER AREA -->
+                                <Border x:Name="SideBarHeader"
+                                        DockPanel.Dock="Top"
+                                        Grid.Row="0">
+                                    
+                                </Border>
+
+                                <!-- SIDE BAR CONTENT AREA -->
+                                <Grid x:Name="SideBarContent"
+                                      Grid.Row="1"/>
+
+                                <!-- SIDE BAR SECTIONS AREA -->
+                                <StackPanel x:Name="SideBarSections"
+                                            Grid.Row="2">
+                                    
+                                </StackPanel>
+                                
+                                
+                                
+                            </Grid>
                             
                         </Border>
                         
                     </DockPanel>
+                    
+                    <!-- SIDE BAR FUNCTIONALITY -->
+                    <ControlTemplate.Triggers>
+                        
+                        <!-- TOGGLES THE DIRECTION OF THE COLLAPSE BUTTON WHEN THE SIDE BAR IS LEFT ALIGNED -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="{x:Static xl:SideBar.DockPositionProperty}" Value="Left"/>
+                            </MultiTrigger.Conditions>
+                        </MultiTrigger>
+
+                        <!-- TOGGLES THE DIRECTION OF THE COLLAPSE BUTTON WHEN THE SIDE BAR IS RIGHT ALIGNED -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="{x:Static xl:SideBar.DockPositionProperty}" Value="Right"/>
+                            </MultiTrigger.Conditions>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                    
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="xl:SideBarSection">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="xl:SideBarSection">
                     
                 </ControlTemplate>
             </Setter.Value>

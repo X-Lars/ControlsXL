@@ -23,6 +23,37 @@ namespace ControlsXL
     /// </summary>
     public class SideBar : HeaderedItemsControl
     {
+        
+
+        #region Constants
+
+        /// <summary>
+        /// The default height and minimum width when minimized of <see cref="SideBarSection"/>s.
+        /// </summary>
+        private const double DEFAULT_SECTION_SQUARE_DIMENSIONS = 32;
+
+        #endregion
+
+        #region Enumerations
+
+        /// <summary>
+        /// Defines the possible values of <see cref="SideBar"/> dock positions.
+        /// </summary>
+        public enum SideBarDockPositions
+        {
+            /// <summary>
+            /// Aligns the <see cref="SideBar"/> left.
+            /// </summary>
+            Left = 0,
+
+            /// <summary>
+            /// Aligns the <see cref="SideBar"/> right.
+            /// </summary>
+            Right = 2
+        }
+
+        #endregion
+
         #region Fields
 
         /// <summary>
@@ -54,7 +85,7 @@ namespace ControlsXL
         }
 
         /// <summary>
-        /// 
+        /// Creates and initializes a new <see cref="SideBar"/> control.
         /// </summary>
         public SideBar() : base()
         {
@@ -67,6 +98,31 @@ namespace ControlsXL
             CommandBindings.Add(new CommandBinding(_RoutedUICommandResizeSideBar, OnResizeSideBar));
             CommandBindings.Add(new CommandBinding(_RoutedUICommandResizeSections, OnResizeSections));
         }
+
+        #endregion
+
+        
+
+        #region Properties
+
+        /// <summary>
+        /// Registers the property to set the dock position of the side bar.
+        /// </summary>
+        public static readonly DependencyProperty DockPositionProperty = DependencyProperty.Register("DockPosition", typeof(SideBarDockPositions), typeof(SideBar), new UIPropertyMetadata(SideBarDockPositions.Left));
+
+        /// <summary>
+        /// Gets or sets the dock position of the side bar.
+        /// </summary>
+        /// <remarks><i>Only left and right docking is supported.</i></remarks>
+        public SideBarDockPositions DockPosition
+        {
+            get { return (SideBarDockPositions)GetValue(DockPositionProperty); }
+            set { SetValue(DockPositionProperty, value); }
+        }
+
+        #endregion
+
+        #region Properties
 
         #endregion
 
@@ -85,17 +141,12 @@ namespace ControlsXL
         /// <summary>
         /// Gets the command to resize the side bar.
         /// </summary>
-        /// <remarks><i>Exposes the resize command to xaml.</i></remarks>
         public static RoutedUICommand ResizeSideBarCommand { get { return _RoutedUICommandResizeSideBar; } }
 
         /// <summary>
         /// Gets the command to resize the sections.
         /// </summary>
         public static RoutedUICommand ResizeSectionsCommand { get { return _RoutedUICommandResizeSections; } }
-
-        #endregion
-
-        #region Properties
 
         #endregion
 

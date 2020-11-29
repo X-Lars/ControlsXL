@@ -3,6 +3,7 @@
     <ResourceDictionary.MergedDictionaries>
         
         <!-- Merges the specified dictionaries containing custom control skins into Skins\Default.xaml -->
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/VectorButton/VectorButtonDefault.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/SideBar/SideBarDefault.xaml"/>
         
     </ResourceDictionary.MergedDictionaries>
