@@ -4,17 +4,14 @@
 
     <Style TargetType="{x:Type xl:VectorButton}">
 
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
         
         <Setter Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
         <Setter Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
 
-        <!--<Setter Property="Width" Value="Auto"/>
-        <Setter Property="Height" Value="Auto"/>-->
-        
-        <!--<Setter Property="MinWidth" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>-->
-        <!--<Setter Property="MinHeight" Value="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"/>-->
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="Width" Value="Auto"/>
         
         <Setter Property="Template">
             <Setter.Value>
@@ -22,14 +19,24 @@
                     
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            RenderTransformOrigin="0.5, 0.5">
 
                         <Path x:Name="VectorImage"
                               Data="{TemplateBinding Vector}"
                               Fill="{TemplateBinding Fill}"
                               Stroke="{TemplateBinding Stroke}"
                               StrokeThickness="{TemplateBinding StrokeThickness}"
-                              Stretch="Uniform"/>
+                              Stretch="Uniform"
+                              RenderTransformOrigin="0.5, 0.5">
+
+                            <Path.RenderTransform>
+
+                                <ScaleTransform ScaleX="{Binding Scale, RelativeSource={RelativeSource TemplatedParent}}"
+                                                ScaleY="{Binding Scale, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                
+                            </Path.RenderTransform>
+                        </Path>
 
                     </Border>
 

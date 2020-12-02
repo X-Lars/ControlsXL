@@ -8,5 +8,7 @@
 
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, BackgroundBrush}" Color="{StaticResource DefaultControlBackgroundColor}" />
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, BorderBrush}" Color="{StaticResource DefaultControlBorderColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, ForegroundBrush}" Color="{StaticResource DefaultControlTextColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, HighlightBrush}" Color="{StaticResource DefaultControlHighlightColor}" />
 
 </ResourceDictionary>

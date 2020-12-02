@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ControlsXL
 {
@@ -28,7 +16,7 @@ namespace ControlsXL
         /// </summary>
         /// <remarks><i>Displays a square with a cross inside.</i></remarks>
         public const string DEFAULT_VECTOR_GRAPHIC = "F1 M 22,54L 22,22L 54,22L 54,54L 22,54 Z M 26,26L 26,50L 50,50L 50,26L 26,26 Z M 30.755,27.65L 38,34.895L 45.2449,27.6501L 48.3499,30.7551L 41.105,38L 48.35,45.245L 45.245,48.35L 38,41.105L 30.755,48.35L 27.65,45.245L 34.895,38L 27.65,30.755L 30.755,27.65 Z";
-
+        
         #endregion
 
         #region Constructor
@@ -77,6 +65,12 @@ namespace ControlsXL
         /// <remarks><i>Defaults to 1.</i></remarks>
         public static readonly DependencyProperty StrokeThicknessProperty = DependencyProperty.Register("StrokeThickness", typeof(double), typeof(VectorButton), new UIPropertyMetadata(1.0));
 
+        /// <summary>
+        /// Registers a property to set the scale of the vector graphic.
+        /// </summary>
+        /// <remarks><i>Defaults to 1.</i></remarks>
+        public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(nameof(Scale), typeof(double), typeof(VectorButton), new UIPropertyMetadata(1.0));
+
         #endregion
 
         #region Properties
@@ -117,6 +111,15 @@ namespace ControlsXL
             set { SetValue(StrokeThicknessProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the scale of the vector graphic.
+        /// </summary>
+        public double Scale
+        {
+            get { return (double)GetValue(ScaleProperty); }
+            set { SetValue(ScaleProperty, value); }
+        }
+
         #endregion
 
         #region Events
@@ -124,12 +127,12 @@ namespace ControlsXL
         /// <summary>
         /// Registers an event to capture mouse click events.
         /// </summary>
-        private static readonly RoutedEvent VectorButtonClickedRoutedEvent = EventManager.RegisterRoutedEvent("VectorButtonClickedEventHandler", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VectorButton));
+        private static readonly RoutedEvent VectorButtonClickedRoutedEvent = EventManager.RegisterRoutedEvent("VectorButtonClickedEvent", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VectorButton));
 
         /// <summary>
-        /// Handles the mouse click event.
+        /// Exposes the vector button mouse click event handler.
         /// </summary>
-        public event RoutedEventHandler VectorButtonClickedEventHandler
+        public event RoutedEventHandler VectorButtonClickedEvent
         {
             add { AddHandler(VectorButtonClickedRoutedEvent, value); }
             remove { RemoveHandler(VectorButtonClickedRoutedEvent, value); }
@@ -140,7 +143,7 @@ namespace ControlsXL
         #region Event Handlers
 
         /// <summary>
-        /// Handles the vector button clicked event.
+        /// Handles the vector button mouse click event.
         /// </summary>
         /// <param name="sender">The <see cref="object"/> that raised the event.</param>
         /// <param name="e">A <see cref="RoutedEventArgs"/> containing event data.</param>
