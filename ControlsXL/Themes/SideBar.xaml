@@ -21,7 +21,8 @@
                 <RotateTransform Angle="90" />
             </Setter.Value>
         </Setter>
-
+        <Setter Property="MinWidth" Value="50"/>
+        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ButtonBase}">
@@ -41,19 +42,19 @@
 
 
                             <!-- Button border highlight -->
-                            <Border Background="Transparent" DockPanel.Dock="Bottom">
+                            <Border Background="Transparent" DockPanel.Dock="Bottom" Width="Auto">
 
-                                <TextBlock Text="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"
-                                           Width="Auto"
+                                <!--<TextBlock x:Name="ButtonText" Text="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"
                                            HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
-                                <!--<ContentPresenter Focusable="False"
+                                           VerticalAlignment="Center"
+                                           Width="Auto"/>-->
+                                <ContentPresenter x:Name="Content" Focusable="False"
                                               Margin="4,0,4,0"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
                                                   
                                               Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"/>-->
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"/>
                             </Border>
                         </DockPanel>
                     </Border>
@@ -208,10 +209,15 @@
                                             </Grid.RowDefinitions>
 
                                             <!-- SIDE BAR COMMON AREA CONTENT -->
-                                            <ContentPresenter x:Name="CommonContent"
-                                                              Content="{Binding CommonSection, RelativeSource={RelativeSource TemplatedParent}}"
-                                                              Grid.Row="0"/>
+                                            <ScrollViewer Grid.Row="0"
+                                                          HorizontalScrollBarVisibility="Disabled"
+                                                          VerticalScrollBarVisibility="Hidden">
+                                            
+                                                <ContentPresenter x:Name="CommonContent"
+                                                                  Content="{Binding CommonSection, RelativeSource={RelativeSource TemplatedParent}}"/>
 
+                                            </ScrollViewer>
+                                            
                                             <!-- SIDE BAR COMMON AREA RESIZE HANDLE -->
                                             <Button x:Name="SideBarCommonSectionResizeHandle"
                                                     Background="Transparent"
@@ -261,9 +267,14 @@
                                       Grid.Row="2">
 
                                     <!-- SIDE BAR EXPANDED CONTENT -->
-                                    <ContentPresenter x:Name="SideBarContent"
-                                                      Focusable="False"
-                                                      Content="{Binding SectionContent, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                                  VerticalScrollBarVisibility="Hidden">
+                                        
+                                        <ContentPresenter x:Name="SideBarContent"
+                                                          Focusable="False"
+                                                          Content="{Binding SectionContent, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                        
+                                    </ScrollViewer>
 
                                     <!-- SIDE BAR COLLAPSED OPTION BUTTONS -->
                                     <DockPanel x:Name="SideBarCollapsedOptionButtonsContainer"
@@ -277,7 +288,7 @@
                                                          Scale="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_SCALE_FACTOR}"
                                                          Vector="{StaticResource GeometryExpand}"
                                                          Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"/>
-
+                                        
                                         <Border x:Name="PopupLocation"
                                                 DockPanel.Dock="Top" 
                                                 HorizontalAlignment="Right"  
@@ -289,28 +300,31 @@
                                                       Content="Show Content"
                                                       DockPanel.Dock="Top"
                                                       IsChecked="{Binding IsCollapsedContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                        
+                                        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                                      VerticalScrollBarVisibility="Hidden">
 
-                                        <ItemsControl x:Name="SideBarCollapsedOptionButtons"
-                                                      DockPanel.Dock="Bottom"
-                                                      ItemsSource="{TemplateBinding OptionButtons}">
+                                            <ItemsControl x:Name="SideBarCollapsedOptionButtons"
+                                                            ItemsSource="{TemplateBinding OptionButtons}">
 
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <VirtualizingStackPanel Orientation="Vertical"/>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                        </ItemsControl>
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <VirtualizingStackPanel Orientation="Vertical"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
 
+                                        </ScrollViewer>
                                         
                                         <!-- SIDE BAR COLLAPSED OPTION BUTTON STYLE -->
                                         <DockPanel.Resources>
-                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ResourceKey=SideBarVerticalButtonBase}"/>
-                                            <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource ResourceKey=SideBarVerticalToggleButton}"/>
+                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource SideBarVerticalButtonBase}"/>
+                                            <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource SideBarVerticalToggleButton}"/>
                                         </DockPanel.Resources>
-                                        
 
+                                        
                                     </DockPanel>
-                                    
+                                   
                                     <!-- SIDE BAR COLLAPSED SECTION CONTENT POPUP -->
                                     <Popup x:Name="PART_SideBarCollapsedContentPopup"
                                            AllowsTransparency="True"
@@ -548,7 +562,9 @@
                                 </Grid>
                                 
                                 <ContentPresenter x:Name="Content"
-                                                  Content="{TemplateBinding Header}"/>
+                                                  Content="{TemplateBinding Header}"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"/>
                                 
                             </DockPanel>
                             
