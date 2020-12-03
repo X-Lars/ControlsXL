@@ -1,9 +1,19 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 namespace ControlsXL
 {
+    /// <summary>
+    /// Defines the possible modes of a <see cref="VectorButton"/>.
+    /// </summary>
+    public enum VectorButtonModes
+    {
+        Default,
+        Toggle
+    }
+
     /// <summary>
     /// A button with a vector based symbol inside.
     /// </summary>
@@ -37,6 +47,7 @@ namespace ControlsXL
         {
             // Register the mouse click event handler
             AddHandler(ClickEvent, new RoutedEventHandler(VectorButtonClicked));
+            
         }
 
         #endregion
@@ -71,6 +82,16 @@ namespace ControlsXL
         /// <remarks><i>Defaults to 1.</i></remarks>
         public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(nameof(Scale), typeof(double), typeof(VectorButton), new UIPropertyMetadata(1.0));
 
+        /// <summary>
+        /// Registers the property to determine the button checked state.
+        /// </summary>
+        public static readonly DependencyProperty IsCheckedProperty = DependencyProperty.Register("IsChecked", typeof(bool), typeof(VectorButton), new UIPropertyMetadata(false));
+
+        /// <summary>
+        /// Registers the property to set the <see cref="VectorButton"/> mode.
+        /// </summary>
+        public static readonly DependencyProperty ModeProperty = DependencyProperty.Register("Mode", typeof(VectorButtonModes), typeof(VectorButton), new UIPropertyMetadata(VectorButtonModes.Default));
+        
         #endregion
 
         #region Properties
@@ -120,6 +141,24 @@ namespace ControlsXL
             set { SetValue(ScaleProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the checked state of the <see cref="VectorButton"/>.
+        /// </summary>
+        public bool IsChecked
+        {
+            get { return (bool)GetValue(IsCheckedProperty); }
+            set { SetValue(IsCheckedProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the <see cref="VectorButton"/> mode.
+        /// </summary>
+        public VectorButtonModes Mode
+        {
+            get { return (VectorButtonModes)GetValue(ModeProperty); }
+            set { SetValue(ModeProperty, value); }
+        }
+
         #endregion
 
         #region Events
@@ -130,12 +169,26 @@ namespace ControlsXL
         private static readonly RoutedEvent VectorButtonClickedRoutedEvent = EventManager.RegisterRoutedEvent("VectorButtonClickedEvent", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VectorButton));
 
         /// <summary>
-        /// Exposes the vector button mouse click event handler.
+        /// Registers an event to capture state change events.
+        /// </summary>
+        private static readonly RoutedEvent VectorButtonStateChangedRoutedEvent = EventManager.RegisterRoutedEvent("VectorButtonStateChangedEvent", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VectorButton));
+
+        /// <summary>
+        /// Exposes the vector button mouse click event.
         /// </summary>
         public event RoutedEventHandler VectorButtonClickedEvent
         {
             add { AddHandler(VectorButtonClickedRoutedEvent, value); }
             remove { RemoveHandler(VectorButtonClickedRoutedEvent, value); }
+        }
+
+        /// <summary>
+        /// Exposes the vector button state change event.
+        /// </summary>
+        public event RoutedEventHandler StateChanged
+        {
+            add { AddHandler(VectorButtonStateChangedRoutedEvent, value); }
+            remove { RemoveHandler(VectorButtonStateChangedRoutedEvent, value); }
         }
 
         #endregion
@@ -149,9 +202,25 @@ namespace ControlsXL
         /// <param name="e">A <see cref="RoutedEventArgs"/> containing event data.</param>
         protected virtual void VectorButtonClicked(object sender, RoutedEventArgs e)
         {
-            RaiseEvent(new RoutedEventArgs(VectorButtonClickedRoutedEvent));
+            if (Mode == VectorButtonModes.Default)
+            {
+                RaiseEvent(new RoutedEventArgs(VectorButtonClickedRoutedEvent, sender));
+            }
+            else
+            {
+                IsChecked ^= true;
+
+                // Switch the checked state
+                RaiseEvent(new RoutedEventArgs(VectorButtonClickedRoutedEvent, sender));
+                RaiseEvent(new RoutedEventArgs(VectorButtonStateChangedRoutedEvent, sender));
+            }
         }
 
+        #endregion
+
+        #region Callbacks
+
+ 
         #endregion
     }
 }

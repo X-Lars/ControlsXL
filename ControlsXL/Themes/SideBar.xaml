@@ -5,7 +5,9 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Geometry.xaml" />    
     </ResourceDictionary.MergedDictionaries>
-    
+
+    <!-- Converts a boolean to visibility values -->
+    <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
     
     <!-- SIDE BAR STYLE -->
     <Style TargetType="{x:Type xl:SideBar}">
@@ -62,7 +64,7 @@
                                         <Border x:Name="SideBarCommonHeader"
                                                 DockPanel.Dock="Top"
                                                 Grid.Row="0"
-                                                Height="{x:Static xl:SideBar.SectionHeight}">
+                                                Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
 
                                             <DockPanel>
                                                 
@@ -77,6 +79,7 @@
 
                                                 <!-- SIDE BAR COMMON AREA HEADER TEXT -->
                                                 <TextBlock x:Name="SideBarCommonHeaderText"
+                                                           FontWeight="Bold"
                                                            HorizontalAlignment="Center"
                                                            Text="{Binding Path=Header, RelativeSource={RelativeSource TemplatedParent}}"
                                                            VerticalAlignment="Center"/>
@@ -116,7 +119,7 @@
                                         Background="{DynamicResource {ComponentResourceKey xl:Skins, HighlightBrush}}"
                                         DockPanel.Dock="Top"
                                         Grid.Row="1"
-                                        Height="{x:Static xl:SideBar.SectionHeight}">
+                                        Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
 
                                     <DockPanel>
 
@@ -133,6 +136,7 @@
 
                                         <!-- SIDE BAR HEADER TEXT -->
                                         <TextBlock x:Name="SideBarHeaderText"
+                                                   FontWeight="Bold"
                                                    HorizontalAlignment="Center"
                                                    Text="{Binding Path=SelectedSection.Header, RelativeSource={RelativeSource TemplatedParent}}"
                                                    VerticalAlignment="Center">
@@ -162,6 +166,7 @@
                                             ClickMode="Press"
                                             Command="{x:Static xl:SideBar.ResizeSectionsCommand}"
                                             Cursor="SizeNS"
+                                            Focusable="False"
                                             Height="5"/>
 
                                     <!-- SIDE BAR MAXIMIZED SECTIONS -->
@@ -172,7 +177,7 @@
                                     <Border x:Name="PART_SideBarMinimizedSections"
                                             Background="{TemplateBinding Background}"
                                             BorderBrush="{TemplateBinding BorderBrush}"
-                                            Height="{x:Static xl:SideBar.SectionHeight}">
+                                            Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
                                         
                                         <DockPanel>
                                             
@@ -189,12 +194,31 @@
                                             </ItemsControl>
 
                                             <!-- SIDE BAR MINIMIZED SECTIONS OVERFLOW MENU BUTTON -->
-                                            <ToggleButton x:Name="SideBarOverflowMenuButton"
+                                            <xl:VectorButton x:Name="SideBarOverflowMenuButton"
+                                                             Background="{TemplateBinding Background}"
+                                                             BorderBrush="{TemplateBinding BorderBrush}"
+                                                             BorderThickness="1"
+                                                             ClickMode="Press"
+                                                             DockPanel.Dock="Right"
+                                                             Fill="{TemplateBinding Background}"
+                                                             Height="{x:Static xl:SideBar.SIDEBAR_SECTION_MINIMIZED_DIMENSIONS}"
+                                                             HorizontalAlignment="Right"
+                                                             IsChecked="{Binding IsOverflowMenuVisible, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                                             Mode="Toggle"
+                                                             Stroke="{TemplateBinding BorderBrush}"
+                                                             StrokeThickness="3"
+                                                             Vector="{StaticResource GeometryStack}"
+                                                             Visibility="{Binding IsOverflowMenuButtonVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource VisibilityConverter}}"
+                                                             Width="{x:Static xl:SideBar.SIDEBAR_SECTION_MINIMIZED_DIMENSIONS}"/>
+
+
+                                            <!--<ToggleButton x:Name="SideBarOverflowMenuButton"
                                                           ClickMode="Press"
                                                           DockPanel.Dock="Right"
                                                           Height="{x:Static xl:SideBar.SIDEBAR_SECTION_MINIMIZED_DIMENSIONS}"
                                                           HorizontalAlignment="Right"
                                                           IsChecked="{Binding IsOverflowMenuVisible, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                                          Visibility="{Binding IsOverflowMenuButtonVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource VisibilityConverter}}"
                                                           Width="{x:Static xl:SideBar.SIDEBAR_SECTION_MINIMIZED_DIMENSIONS}">
                                                 
                                                 <ToggleButton.Content>
@@ -208,7 +232,7 @@
                                                     
                                                 </ToggleButton.Content>
                                                 
-                                            </ToggleButton>
+                                            </ToggleButton>-->
                                         </DockPanel>
                                     </Border>
 
@@ -299,7 +323,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
         <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Skins, ForegroundBrush}}"/>
         
-        <Setter Property="Height" Value="{x:Static xl:SideBar.SectionHeight}"/>
+        <Setter Property="Height" Value="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}"/>
         
         <Setter Property="Template">
             <Setter.Value>
@@ -327,24 +351,24 @@
                                         BorderThickness="0"
                                         DockPanel.Dock="Left"
                                         Focusable="False"
-                                        Width="{x:Static xl:SideBar.SectionIndicatorWidth}"/>
+                                        Width="{x:Static xl:SideBar.SIDEBAR_SECTION_INDICATOR_WIDTH}"/>
 
                                 <Image x:Name="SideBarSectionImage"
                                        DockPanel.Dock="Left"
                                        Focusable="False"
-                                       Height="{x:Static xl:SideBar.SectionImageDimensions}"
+                                       Height="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"
                                        RenderTransformOrigin="0.5, 0.5"
                                        Source="{TemplateBinding Image}"
-                                       Width="{x:Static xl:SideBar.SectionImageDimensions}"/>
+                                       Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"/>
 
                                 <Grid x:Name="SideBarSectionVector"
                                       Background="Transparent"
                                       ClipToBounds="True"
                                       DockPanel.Dock="Left"
                                       Focusable="False"
-                                      Height="{x:Static xl:SideBar.SectionImageDimensions}"
+                                      Height="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"
                                       Visibility="Collapsed"
-                                      Width="{x:Static xl:SideBar.SectionImageDimensions}">
+                                      Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}">
 
                                     <Path x:Name="SideBarSectionVectorData"
                                           Data="{TemplateBinding Vector}"
@@ -377,6 +401,7 @@
                         <Trigger Property="IsMaximized" Value="False">
                             <Setter TargetName="Content" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="SideBarSectionIndicator" Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="MinWidth" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
                         </Trigger>
                         
                         <Trigger Property="IsSelected" Value="True">

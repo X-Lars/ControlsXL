@@ -18,4 +18,7 @@
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, PressedBackgroundBrush}" Color="{StaticResource DefaultControlPressedBackgroundColor}"/>
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, PressedBorderBrush}" Color="{StaticResource DefaultControlPressedBorderColor}"/>
 
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, CheckedBackgroundBrush}" Color="{StaticResource DefaultHighlightColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, CheckedForegroundBrush}" Color="{StaticResource DefaultHighlightTextColor}"/>
+
 </ResourceDictionary>

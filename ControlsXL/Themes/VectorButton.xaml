@@ -15,7 +15,7 @@
 
         <Setter Property="Height" Value="Auto"/>
         <Setter Property="Width" Value="Auto"/>
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:VectorButton}">
@@ -62,6 +62,11 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Skins, DisabledBackgroundBrush}}"/>
                             <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Skins, DisabledBorderBrush}}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Skins, CheckedBackgroundBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Skins, CheckedForegroundBrush}}"/>
                         </Trigger>
                         
                     </ControlTemplate.Triggers>

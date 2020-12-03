@@ -84,7 +84,7 @@ namespace ControlsXL
         /// The width of the <see cref="SideBarSection"/>s selection indicator.
         /// </summary>
         /// <remarks><i>The value is in device independent units (1/96th inch per unit).</i></remarks>
-        private const double SECTION_INDICATOR_WIDTH = 5;
+        public const double SIDEBAR_SECTION_INDICATOR_WIDTH = 5;
 
         #endregion
 
@@ -262,6 +262,12 @@ namespace ControlsXL
         private static readonly DependencyPropertyKey OverflowMenuItemsPropertyKey = DependencyProperty.RegisterReadOnly("OverflowMenuItems", typeof(Collection<SideBarSection>), typeof(SideBar), new UIPropertyMetadata(null));
 
         /// <summary>
+        /// Registers the property to set the overflow menu button visibility.
+        /// </summary>
+        private static readonly DependencyProperty IsOverflowMenuButtonVisibleProperty = DependencyProperty.Register("IsOverflowMenuButtonVisible", typeof(bool), typeof(SideBar), new UIPropertyMetadata(false, IsOverFlowmenuButtonVisibleChangedCallback));
+
+       
+        /// <summary>
         /// Registers the specialized read only property to get the <see cref="SideBarSection"/>'s content.
         /// </summary>
         private static readonly DependencyPropertyKey SectionContentPropertyKey = DependencyProperty.RegisterReadOnly(nameof(SectionContent), typeof(object), typeof(SideBar), new UIPropertyMetadata(null));
@@ -340,29 +346,29 @@ namespace ControlsXL
             get { return _OverflowMenuItems; }
         }
 
-        /// <summary>
-        /// Gets the height of <see cref="SideBarSection"/>s.
-        /// </summary>
-        public static double SectionHeight
-        {
-            get { return SIDEBAR_SECTION_HEIGHT; }
-        }
+        ///// <summary>
+        ///// Gets the height of <see cref="SideBarSection"/>s.
+        ///// </summary>
+        //public static double SectionHeight
+        //{
+        //    get { return SIDEBAR_SECTION_HEIGHT; }
+        //}
 
-        /// <summary>
-        /// Gets the dimensions of <see cref="SideBarSection"/> images.
-        /// </summary>
-        public static double SectionImageDimensions
-        {
-            get { return SIDEBAR_SECTION_IMAGE_DIMENSIONS; }
-        }
+        ///// <summary>
+        ///// Gets the dimensions of <see cref="SideBarSection"/> images.
+        ///// </summary>
+        //public static double SectionImageDimensions
+        //{
+        //    get { return SIDEBAR_SECTION_IMAGE_DIMENSIONS; }
+        //}
 
-        /// <summary>
-        /// Gets the width of the selected <see cref="SideBarSection"/> indicator.
-        /// </summary>
-        public static double SectionIndicatorWidth
-        {
-            get { return SECTION_INDICATOR_WIDTH; }
-        }
+        ///// <summary>
+        ///// Gets the width of the selected <see cref="SideBarSection"/> indicator.
+        ///// </summary>
+        //public static double SectionIndicatorWidth
+        //{
+        //    get { return SECTION_INDICATOR_WIDTH; }
+        //}
 
         /// <summary>
         /// Gets or sets the <see cref="SideBar"/>'s common section.
@@ -462,6 +468,15 @@ namespace ControlsXL
         {
             get { return (bool)GetValue(ShowCommonProperty); }
             set { SetValue(ShowCommonProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets wheter the overflow menu button is visible.
+        /// </summary>
+        public bool IsOverflowMenuButtonVisible
+        {
+            get { return (bool)GetValue(IsOverflowMenuButtonVisibleProperty); }
+            set { SetValue(IsOverflowMenuButtonVisibleProperty, value); }
         }
 
         #endregion
@@ -736,7 +751,20 @@ namespace ControlsXL
                 sideBar.InitializeOverflowMenu();
         }
 
-        
+        /// <summary>
+        /// Handles the property changed event of the <see cref="IsOverflowMenuButtonVisibleProperty"/>.
+        /// </summary>
+        /// <param name="sender">The <see cref="DependencyObject"/> that raised the event.</param>
+        /// <param name="e">A <see cref="DependencyPropertyChangedEventArgs"/> containing event data.</param>
+        private static void IsOverFlowmenuButtonVisibleChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            SideBar sideBar = (SideBar)sender;
+
+            if ((bool)e.NewValue)
+                sideBar.InitializeOverflowMenu();
+        }
+
+
         /// <summary>
         /// Handles the property changed event of the <see cref="IsExpandendProperty"/>.
         /// </summary>
@@ -862,8 +890,11 @@ namespace ControlsXL
             _MaximizedSideBarSections = new Collection<SideBarSection>();
 
             // Initialize the number of visible sections
-            int visibleSections = this.VisibleSections;
+            int maximizedSections = this.VisibleSections;
             int minimizedSections = GetMinimizedSectionsDisplayCount();
+
+            // If the sum of minimized and maximized sections is smaller than the total number of sections, the overflow menu button is visible
+            IsOverflowMenuButtonVisible = (maximizedSections + minimizedSections) < this.Sections.Count;
 
             // Loop through all side bar sections
             for (int i = 0; i < _SideBarSections.Count; i++)
@@ -874,14 +905,14 @@ namespace ControlsXL
                 section.SideBar = this;
                 section.Height = SIDEBAR_SECTION_HEIGHT;
 
-                if(visibleSections > 0)
+                if(maximizedSections > 0)
                 {
                     section.IsMaximized = true;
 
                     // Add the section to the maximized section collection
                     _MaximizedSideBarSections.Add(section);
 
-                    visibleSections--;
+                    maximizedSections--;
                 }
                 else
                 {
@@ -901,11 +932,9 @@ namespace ControlsXL
                     this.SelectedSection = section;
             }
 
-            // Update the side bar properties
+            // Update the side bar section collections
             SetValue(MaximizedSectionsPropertyKey, _MaximizedSideBarSections);
             SetValue(MinimizedSectionsPropertyKey, _MinimizedSideBarSections);
-
-
         }
 
         /// <summary>
@@ -946,7 +975,7 @@ namespace ControlsXL
             if (_PARTSideBarMinimizedSections == null)
                 return 0;
 
-            return (int)Math.Floor((_PARTSideBarMinimizedSections.ActualWidth - SECTION_INDICATOR_WIDTH) / SIDEBAR_SECTION_MINIMIZED_DIMENSIONS);
+            return (int)Math.Floor((_PARTSideBarMinimizedSections.ActualWidth - SIDEBAR_SECTION_INDICATOR_WIDTH - SIDEBAR_SECTION_IMAGE_DIMENSIONS) / SIDEBAR_SECTION_MINIMIZED_DIMENSIONS);
         }
 
         /// <summary>
@@ -957,7 +986,7 @@ namespace ControlsXL
         {
             return (int)(_MaximizedSideBarSections.Count * SIDEBAR_SECTION_HEIGHT) + 
                    (int)(_MinimizedSideBarSections.Count > 0 ? (1 * SIDEBAR_SECTION_MINIMIZED_DIMENSIONS) : 0) + 
-                   (int)SECTION_INDICATOR_WIDTH * 2 +
+                   (int)SIDEBAR_SECTION_INDICATOR_WIDTH * 2 +
                    (int)SIDEBAR_SECTION_HEIGHT;
         }
 
