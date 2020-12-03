@@ -62,13 +62,25 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Skins\Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Skins\Default.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Skins\SideBar\SideBarDark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Skins\SideBar\SideBarDefault.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Skins\VectorButton\VectorButtonDark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Skins\VectorButton\VectorButtonDefault.xaml">
       <SubType>Designer</SubType>
@@ -79,7 +91,7 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Common\Skins.cs" />
-    <Compile Include="Common\SkinsManager.cs" />
+    <Compile Include="Common\ThemeManager.cs" />
     <Compile Include="SideBar.cs">
       <SubType>Code</SubType>
     </Compile>

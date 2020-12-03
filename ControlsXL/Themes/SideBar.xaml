@@ -24,11 +24,12 @@
                         <!-- SIDE BAR RESIZE HANDLE -->
                         <Button x:Name="SideBarResizeHandle" 
                                 Background="Transparent"
+                                BorderBrush="Transparent"
                                 ClickMode="Press"
                                 Command="{x:Static xl:SideBar.ResizeSideBarCommand}"
                                 Cursor="SizeWE"
                                 DockPanel.Dock="Right"
-                                Width="5">
+                                Width="3">
                             
                         </Button>
 

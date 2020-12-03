@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:xl="clr-namespace:ControlsXL">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Colors.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, BackgroundBrush}" Color="{StaticResource DefaultControlDarkColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, BorderBrush}" Color="{StaticResource DefaultControlDarkDarkColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, ForegroundBrush}" Color="{StaticResource DefaultControlTextColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, HighlightBrush}" Color="{StaticResource DefaultControlHighlightColor}" />
+
+</ResourceDictionary>

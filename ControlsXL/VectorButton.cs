@@ -47,7 +47,7 @@ namespace ControlsXL
         /// Registers a property to set the <see cref="Geometry"/> path defining the vector graphic.
         /// </summary>
         /// <remarks><i>Defaults to <see cref="DEFAULT_VECTOR_GRAPHIC"/>.</i></remarks>
-        public static readonly DependencyProperty VectorProperty = DependencyProperty.Register("Vector", typeof(Geometry), typeof(VectorButton), new UIPropertyMetadata(Geometry.Parse(DEFAULT_VECTOR_GRAPHIC)));
+        public static readonly DependencyProperty VectorProperty = DependencyProperty.Register("Vector", typeof(Geometry), typeof(VectorButton), new FrameworkPropertyMetadata(Geometry.Parse(DEFAULT_VECTOR_GRAPHIC), FrameworkPropertyMetadataOptions.AffectsRender));
 
         /// <summary>
         /// Registers a property to set the brush to stroke the vector graphic.

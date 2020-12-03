@@ -128,7 +128,7 @@ namespace ControlsXL
         /// <summary>
         /// Stores overflow menu items.
         /// </summary>
-        private Collection<object> _OverflowMenuItems;
+        private Collection<SideBarSection> _OverflowMenuItems;
 
         /// <summary>
         /// Stores the width to expand to when the <see cref="SideBar"/> is collapsed.
@@ -174,7 +174,7 @@ namespace ControlsXL
         public SideBar() : base()
         {
             
-            _OverflowMenuItems = new Collection<object>();
+            _OverflowMenuItems = new Collection<SideBarSection>();
             _CommonSection = new object();
 
             SetValue(OverflowMenuItemsPropertyKey, _OverflowMenuItems);
@@ -259,7 +259,7 @@ namespace ControlsXL
         /// <summary>
         /// Registers the specialized read only property to get the overflow menu items.
         /// </summary>
-        private static readonly DependencyPropertyKey OverflowMenuItemsPropertyKey = DependencyProperty.RegisterReadOnly("OverflowMenuItems", typeof(Collection<object>), typeof(SideBar), new UIPropertyMetadata(null));
+        private static readonly DependencyPropertyKey OverflowMenuItemsPropertyKey = DependencyProperty.RegisterReadOnly("OverflowMenuItems", typeof(Collection<SideBarSection>), typeof(SideBar), new UIPropertyMetadata(null));
 
         /// <summary>
         /// Registers the specialized read only property to get the <see cref="SideBarSection"/>'s content.
@@ -335,7 +335,7 @@ namespace ControlsXL
         /// </summary>
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public Collection<object> OverflowMenuItems
+        public Collection<SideBarSection> OverflowMenuItems
         {
             get { return _OverflowMenuItems; }
         }
@@ -519,7 +519,7 @@ namespace ControlsXL
         /// <param name="e"></param>
         private void OnSideBarCollapse(object sender, ExecutedRoutedEventArgs e)
         {
-            // Toggle the expanded state by an XOR boolean assignment
+            // Toggles the expanded state by an XOR boolean assignment
             this.IsExpanded ^= true;
         }
 
@@ -913,11 +913,11 @@ namespace ControlsXL
         /// </summary>
         private void InitializeOverflowMenu()
         {
-            Collection<object> overflowMenuItems = new Collection<object>();
+            Collection<SideBarSection> overflowMenuItems = new Collection<SideBarSection>();
 
             if(_OverflowMenuItems.Count > 0)
             {
-                foreach(object item in _OverflowMenuItems)
+                foreach(SideBarSection item in _OverflowMenuItems)
                 {
                     overflowMenuItems.Add(item);
                 }
@@ -1139,109 +1139,109 @@ namespace ControlsXL
         #endregion
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    public class SideBarCommonSection : HeaderedContentControl
-    {
-        #region Constructor
+//    / <summary>
+//    / 
+//    / </summary>
+//    public class SideBarCommonSection : HeaderedContentControl
+//    {
+//        #region Constructor
 
-        /// <summary>
-        /// Static constructor called before initializing an instance of <see cref="SideBarSection"/>.
-        /// </summary>
-        static SideBarCommonSection()
-        {
-            // Overrides the default style of the inherited HeaderedContentControl to use the SideBarSection style instead.
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(SideBarSection), new FrameworkPropertyMetadata(typeof(SideBarSection)));
-        }
+//        / <summary>
+//        / Static constructor called before initializing an instance of<see cref= "SideBarSection" />.
+//        / </ summary >
+//        static SideBarCommonSection()
+//        {
+//            Overrides the default style of the inherited HeaderedContentControl to use the SideBarSection style instead.
+//           DefaultStyleKeyProperty.OverrideMetadata(typeof(SideBarSection), new FrameworkPropertyMetadata(typeof(SideBarSection)));
+//        }
 
-        /// <summary>
-        /// Creates and initializes a new <see cref="SideBarSection"/> control.
-        /// </summary>
-        public SideBarCommonSection() : base()
-        {
-            // Add a mouse click event listener to the sidebar section
-            AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(SideBarCommonSectionClicked));
-        }
+//        / <summary>
+//        / Creates and initializes a new <see cref = "SideBarSection" /> control.
+//        / </ summary >
+//        public SideBarCommonSection() : base()
+//        {
+//            Add a mouse click event listener to the sidebar section
+//           AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(SideBarCommonSectionClicked));
+//        }
 
-        #endregion
+//        #endregion
 
-        #region Routed Events
+//        #region Routed Events
 
-        /// <summary>
-        /// Registers the event to raise when the <see cref="SideBarSection"/> is clicked.
-        /// </summary>
-        public static readonly RoutedEvent SideBarCommonSectionClickRoutedEvent = EventManager.RegisterRoutedEvent(nameof(SideBarCommonSectionClickRoutedEvent), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(SideBarSection));
+//        / <summary>
+//        / Registers the event to raise when the<see cref="SideBarSection"/> is clicked.
+//        / </summary>
+//        public static readonly RoutedEvent SideBarCommonSectionClickRoutedEvent = EventManager.RegisterRoutedEvent(nameof(SideBarCommonSectionClickRoutedEvent), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(SideBarSection));
 
-        /// <summary>
-        /// Defines the event raised when the <see cref="SideBarSection"/> is clicked.
-        /// </summary>
-        public event RoutedEventHandler Clicked
-        {
-            add { AddHandler(SideBarCommonSectionClickRoutedEvent, value); }
-            remove { RemoveHandler(SideBarCommonSectionClickRoutedEvent, value); }
-        }
+//        / <summary>
+//        / Defines the event raised when the<see cref="SideBarSection"/> is clicked.
+//        / </summary>
+//        public event RoutedEventHandler Clicked
+//    {
+//        add { AddHandler(SideBarCommonSectionClickRoutedEvent, value); }
+//        remove { RemoveHandler(SideBarCommonSectionClickRoutedEvent, value); }
+//    }
 
-        #endregion
+//        #endregion
 
-        #region Dependency Properties
+//        #region Dependency Properties
 
-        /// <summary>
-        /// Registers the property to set the <see cref="Image"/> of the <see cref="SideBarSection"/>.
-        /// </summary>
-        public static readonly DependencyProperty ImageProperty = DependencyProperty.Register(nameof(Image), typeof(ImageSource), typeof(SideBarSection), new UIPropertyMetadata(null));
+//        / <summary>
+//        / Registers the property to set the<see cref="Image"/> of the <see cref = "SideBarSection" />.
+//        / </ summary >
+//        public static readonly DependencyProperty ImageProperty = DependencyProperty.Register(nameof(Image), typeof(ImageSource), typeof(SideBarSection), new UIPropertyMetadata(null));
 
-        /// <summary>
-        /// Gets or sets the <see cref="Geometry"/> data for the <see cref="SideBarSection"/> button image.
-        /// </summary>
-        public static readonly DependencyProperty VectorProperty = DependencyProperty.Register(nameof(Vector), typeof(Geometry), typeof(SideBarSection), new UIPropertyMetadata(null));
+//        / <summary>
+//        / Gets or sets the<see cref="Geometry"/> data for the<see cref="SideBarSection"/> button image.
+//        / </summary>
+//        public static readonly DependencyProperty VectorProperty = DependencyProperty.Register(nameof(Vector), typeof(Geometry), typeof(SideBarSection), new UIPropertyMetadata(null));
 
-        #endregion
+//        #endregion
 
-        #region Properties
+//        #region Properties
 
-        /// <summary>
-        /// Gets or sets a reference to the parent of the <see cref="SideBarSection"/>.
-        /// </summary>
-        internal SideBar SideBar { get; set; }
+//        / <summary>
+//        / Gets or sets a reference to the parent of the<see cref="SideBarSection"/>.
+//        / </summary>
+//        internal SideBar SideBar { get; set; }
 
-        /// <summary>
-        /// Gets or sets the <see cref="ImageSource"/> of the <see cref="SideBarSection"/>'s image.
-        /// </summary>
-        /// <remarks><i>The <see cref="Image"/> property has priorty over the <see cref="Vector"/> property.</i></remarks>
-        public ImageSource Image
-        {
-            get { return (ImageSource)GetValue(ImageProperty); }
-            set { SetValue(ImageProperty, value); }
-        }
+//        / <summary>
+//        / Gets or sets the<see cref="ImageSource"/> of the <see cref = "SideBarSection" /> 's image.
+//        / </ summary >
+//        / < remarks >< i > The < see cref= "Image" /> property has priorty over the <see cref = "Vector" /> property.</ i ></ remarks >
+//        public ImageSource Image
+//    {
+//        get { return (ImageSource)GetValue(ImageProperty); }
+//        set { SetValue(ImageProperty, value); }
+//    }
 
-        /// <summary>
-        /// Gets or sets the vector <see cref="Geometry"/> of the <see cref="SideBarSection"/>'s image.
-        /// </summary>
-        /// <remarks><i>The <see cref="Image"/> property has priorty over the <see cref="Vector"/> property.</i></remarks>
-        public Geometry Vector
-        {
-            get { return (Geometry)GetValue(VectorProperty); }
-            set { SetValue(VectorProperty, value); }
-        }
+//        / <summary>
+//        / Gets or sets the vector<see cref="Geometry"/> of the<see cref="SideBarSection"/>'s image.
+//        / </summary>
+//        / <remarks><i>The<see cref="Image"/> property has priorty over the<see cref="Vector"/> property.</i></remarks>
+//        public Geometry Vector
+//    {
+//        get { return (Geometry)GetValue(VectorProperty); }
+//        set { SetValue(VectorProperty, value); }
+//    }
 
-        #endregion
+//        #endregion
 
-        #region Event Handlers
+//        #region Event Handlers
 
-        /// <summary>
-        /// Handles the <see cref="Clicked"/> event.
-        /// </summary>
-        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
-        /// <param name="e">A <see cref="RoutedEventArgs"/> containing event data.</param>
-        private void SideBarCommonSectionClicked(object sender, RoutedEventArgs e)
-        {
-            ToggleButton button = e.OriginalSource as ToggleButton;
+//        / <summary>
+//        / Handles the<see cref="Clicked"/> event.
+//        / </summary>
+//        / <param name = "sender" > The < see cref= "object" /> that raised the event.</param>
+//        / <param name = "e" > A < see cref= "RoutedEventArgs" /> containing event data.</param>
+//        private void SideBarCommonSectionClicked(object sender, RoutedEventArgs e)
+//    {
+//        ToggleButton button = e.OriginalSource as ToggleButton;
 
-            
-            RaiseEvent(new RoutedEventArgs(SideBarCommonSectionClickRoutedEvent));
-        }
 
-        #endregion
-    }
+//        RaiseEvent(new RoutedEventArgs(SideBarCommonSectionClickRoutedEvent));
+//    }
+
+//    #endregion
+//}
 }
