@@ -9,6 +9,14 @@ namespace ControlsXL
     /// A button with a vector based symbol inside.
     /// </summary>
     /// <remarks><i>When the <see cref="ButtonMode"/> is <see cref="ButtonModes.Standard"/> changing the <see cref="VectorButton"/>.IsChecked property has no effect and always returns false.</i></remarks>
+    /// <example>
+    /// Vector: M0,0 L4,4 0,8 M4,0 L8,4 4,8
+    /// Stroke: Blue
+    /// Fill: Red
+    /// StrokeThickness: 1
+    /// Scale: 0.8
+    /// ButtonMode: Standard, Toggle
+    /// </example>
     public class VectorButton : ToggleButton
     {
         #region Constants
@@ -130,7 +138,7 @@ namespace ControlsXL
 
         #endregion
 
-        #region Event Handlers
+        #region Overrides
 
         /// <summary>
         /// Handles the mouse click event.
@@ -142,6 +150,17 @@ namespace ControlsXL
             // Prevent checked state when the button mode is standard
             if (ButtonMode == ButtonModes.Standard)
                 IsChecked = false;
+        }
+
+        /// <summary>
+        /// Handles the checked event.
+        /// </summary>
+        /// <param name="e">A <see cref="RoutedEventArgs"/> containing event data.</param>
+        protected override void OnChecked(RoutedEventArgs e)
+        {
+            // Prevent checked state when the button mode is standard
+            if (ButtonMode == ButtonModes.Toggle)
+                base.OnChecked(e);
         }
 
         #endregion
