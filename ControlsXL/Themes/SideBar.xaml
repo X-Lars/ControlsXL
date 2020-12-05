@@ -16,13 +16,6 @@
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
         <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Skins, ForegroundBrush}}"/>
-        <Setter Property="LayoutTransform">
-            <Setter.Value>
-                <RotateTransform Angle="90" />
-            </Setter.Value>
-        </Setter>
-        <Setter Property="MinWidth" Value="50"/>
-        <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ButtonBase}">
@@ -32,7 +25,9 @@
                             Background="{TemplateBinding Background}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             BorderBrush="{TemplateBinding BorderBrush}">
+                        
 
+                        
                         <DockPanel>
                             <Border x:Name="SelectionIndicator"
                                     DockPanel.Dock="Bottom"
@@ -40,22 +35,11 @@
                                     Height="{x:Static xl:SideBar.SIDEBAR_SECTION_INDICATOR_WIDTH}"
                                     Focusable="False"/>
 
-
-                            <!-- Button border highlight -->
-                            <Border Background="Transparent" DockPanel.Dock="Bottom" Width="Auto">
-
-                                <!--<TextBlock x:Name="ButtonText" Text="{Binding Path=Content, RelativeSource={RelativeSource TemplatedParent}}"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Width="Auto"/>-->
-                                <ContentPresenter x:Name="Content" Focusable="False"
-                                              Margin="4,0,4,0"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                                  
+                            <ContentPresenter x:Name="Content"
+                                              Focusable="False"                        
                                               Content="{TemplateBinding Content}"
                                               ContentTemplate="{TemplateBinding ContentTemplate}"/>
-                            </Border>
+                            
                         </DockPanel>
                     </Border>
 
@@ -271,7 +255,7 @@
                                                   VerticalScrollBarVisibility="Hidden">
                                         
                                         <ContentPresenter x:Name="SideBarContent"
-                                                          Focusable="False"
+                                                          Focusable="True"
                                                           Content="{Binding SectionContent, RelativeSource={RelativeSource TemplatedParent}}"/>
                                         
                                     </ScrollViewer>
@@ -294,24 +278,36 @@
                                                 HorizontalAlignment="Right"  
                                                 Height="0"
                                                 Width="0"/>
-                                        
+
                                         <ToggleButton x:Name="PART_SideBarCollapsedContentButton"
                                                       ClickMode="Press"
                                                       Content="Show Content"
                                                       DockPanel.Dock="Top"
-                                                      IsChecked="{Binding IsCollapsedContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}"/>
-                                        
-                                        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                                      IsChecked="{Binding IsCollapsedContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}">
+
+                                            <ToggleButton.LayoutTransform>
+                                                <RotateTransform Angle="90"/>
+                                            </ToggleButton.LayoutTransform>
+                                        </ToggleButton>
+
+                                        <ScrollViewer 
+                                                      HorizontalScrollBarVisibility="Hidden"
                                                       VerticalScrollBarVisibility="Hidden">
 
+                                            <!-- TODO: Vertical button width is not automatically sized according to it's content -->
                                             <ItemsControl x:Name="SideBarCollapsedOptionButtons"
-                                                            ItemsSource="{TemplateBinding OptionButtons}">
+                                                          ItemsSource="{TemplateBinding OptionButtons}"
+                                                          RenderTransformOrigin="0, 1">
 
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
-                                                        <VirtualizingStackPanel Orientation="Vertical"/>
+                                                        <VirtualizingStackPanel Orientation="Horizontal"/>
                                                     </ItemsPanelTemplate>
                                                 </ItemsControl.ItemsPanel>
+                                                
+                                                <ItemsControl.LayoutTransform>
+                                                    <RotateTransform Angle="90"/>
+                                                </ItemsControl.LayoutTransform>
                                             </ItemsControl>
 
                                         </ScrollViewer>
@@ -322,7 +318,6 @@
                                             <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource SideBarVerticalToggleButton}"/>
                                         </DockPanel.Resources>
 
-                                        
                                     </DockPanel>
                                    
                                     <!-- SIDE BAR COLLAPSED SECTION CONTENT POPUP -->
@@ -343,9 +338,7 @@
                                                 <ContentPresenter Content="{Binding CollapsedContent, RelativeSource={RelativeSource TemplatedParent}}"/>
 
                                             </Border>
-                                            
                                         </Popup.Child>
-                                           
                                     </Popup>
                                 </Grid>
 

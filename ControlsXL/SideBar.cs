@@ -891,8 +891,9 @@ namespace ControlsXL
             bool isExpanded = (bool)e.NewValue;
 
             sideBar.InvalidateContentVisibility();
+            sideBar.InitializeOverflowMenu();
 
-            if(isExpanded)
+            if (isExpanded)
             {
                 sideBar.IsCollapsedContentPopupVisible = false;
                 sideBar.MaxWidth = sideBar._LastWidth;
@@ -903,9 +904,8 @@ namespace ControlsXL
                 sideBar._LastWidth = sideBar.MaxWidth;
                 sideBar.MaxWidth = sideBar.CollapsedWidth;
                 sideBar.RaiseEvent(new RoutedEventArgs(ExpandedRoutedEvent));
+                
             }
-
-            
         }
 
         /// <summary>
@@ -950,7 +950,9 @@ namespace ControlsXL
             SideBar sideBar = sender as SideBar;
 
             if (sideBar != null)
+            {
                 sideBar.InitializeSideBarSections();
+            }
         }
 
         /// <summary>
