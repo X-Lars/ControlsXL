@@ -1205,19 +1205,19 @@ namespace ControlsXL
 
         #endregion
 
-        //protected override IEnumerator LogicalChildren
-        //{
-        //    get
-        //    {
-        //        return GetLogicalChildren().GetEnumerator();
-        //    }
-        //}
+        protected override IEnumerator LogicalChildren
+        {
+            get
+            {
+                return GetLogicalChildren().GetEnumerator();
+            }
+        }
 
-        //protected virtual IEnumerable GetLogicalChildren()
-        //{
-        //    foreach (var section in Sections) yield return section;
-        //    if (SelectedSection != null) yield return SelectedSection.Content;
-        //}
+        protected virtual IEnumerable GetLogicalChildren()
+        {
+            foreach (var section in Sections) yield return section;
+            if (SelectedSection != null) yield return SelectedSection.Content;
+        }
 
     }
 

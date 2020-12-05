@@ -8,7 +8,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Skins, ForegroundBrush}}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 
@@ -36,6 +36,7 @@
                                               Content="{TemplateBinding Content}"
                                               ContentTemplate="{TemplateBinding ContentTemplate}"
                                               HorizontalAlignment="Center"
+                                              Margin="4, 0"
                                               VerticalAlignment="Center"/>
 
                         </DockPanel>

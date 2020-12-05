@@ -3,7 +3,7 @@
                     xmlns:xl="clr-namespace:ControlsXL">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Geometry.xaml" />    
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Geometry.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- Converts a boolean to visibility values -->
@@ -276,28 +276,31 @@
                                                          Vector="{StaticResource GeometryExpand}"
                                                          Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"/>
                                         
+                                        <!-- POPUP ANCHOR: Positions the popup, used because the show popup button is rotated -->
                                         <Border x:Name="PopupLocation"
                                                 DockPanel.Dock="Top" 
                                                 HorizontalAlignment="Right"  
                                                 Height="0"
                                                 Width="0"/>
 
-                                        <ToggleButton x:Name="PART_SideBarCollapsedContentButton"
-                                                      ClickMode="Press"
-                                                      Content="Show Content"
-                                                      DockPanel.Dock="Top"
-                                                      IsChecked="{Binding IsCollapsedContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}">
+                                        <!-- SIDE BAR SHOW COLLAPSED SECTION CONTENT BUTTON -->
+                                        <xl:MarkerButton x:Name="PART_SideBarCollapsedContentButton"
+                                                         ButtonMode="Toggle"
+                                                         ClickMode="Press"
+                                                         Content="Show Content"
+                                                         DockPanel.Dock="Top"
+                                                         IsChecked="{Binding IsCollapsedContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}">
 
                                             <ToggleButton.LayoutTransform>
                                                 <RotateTransform Angle="90"/>
                                             </ToggleButton.LayoutTransform>
-                                        </ToggleButton>
+                                            
+                                        </xl:MarkerButton>
 
-                                        <ScrollViewer 
-                                                      HorizontalScrollBarVisibility="Hidden"
+                                        <!-- SIDE BAR OPTIONAL BUTTONS -->
+                                        <ScrollViewer HorizontalScrollBarVisibility="Hidden"
                                                       VerticalScrollBarVisibility="Hidden">
 
-                                            <!-- TODO: Vertical button width is not automatically sized according to it's content -->
                                             <ItemsControl x:Name="SideBarCollapsedOptionButtons"
                                                           ItemsSource="{TemplateBinding OptionButtons}"
                                                           RenderTransformOrigin="0, 1">
@@ -311,16 +314,9 @@
                                                 <ItemsControl.LayoutTransform>
                                                     <RotateTransform Angle="90"/>
                                                 </ItemsControl.LayoutTransform>
+                                                
                                             </ItemsControl>
-
                                         </ScrollViewer>
-                                        
-                                        <!-- SIDE BAR COLLAPSED OPTION BUTTON STYLE -->
-                                        <DockPanel.Resources>
-                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource SideBarVerticalButtonBase}"/>
-                                            <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource SideBarVerticalToggleButton}"/>
-                                        </DockPanel.Resources>
-
                                     </DockPanel>
                                    
                                     <!-- SIDE BAR COLLAPSED SECTION CONTENT POPUP -->
@@ -437,21 +433,16 @@
                     <!-- SIDE BAR FUNCTIONALITY -->
                     <ControlTemplate.Triggers>
 
-                        <!-- SWITCHES THE VECTOR BUTTON IMAGE WHEN THE SIDE BAR IS COLLAPSED -->
+                        <!-- IS EXPANDED = FALSE: Collapses all visible items & shows option buttons. -->
                         <Trigger Property="IsExpanded" Value="False">
-                            <!--<Setter TargetName="SideBarHeaderCollapseButton" Property="Vector" Value="{StaticResource GeometryExpand}"/>-->
-                            <!--<Setter TargetName="SideBarCommonHeaderCollapseButton" Property="Vector" Value="{StaticResource GeometryExpand}"/>-->
                             <Setter TargetName="PART_SideBarCommon" Property="Visibility" Value="Collapsed"/>
-                            <!--<Setter TargetName="SideBarCommonHeaderCollapseButton" Property="Visibility" Value="Collapsed"/>-->
-                            <!--<Setter TargetName="SideBarCommonHeaderText" Property="Visibility" Value="Collapsed"/>-->
-                            <!--<Setter TargetName="SideBarCommonContent" Property="Visibility" Value="Collapsed"/>-->
                             <Setter TargetName="SideBarContent" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="SideBarHeader" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="SideBarHeaderText" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="SideBarCollapsedOptionButtonsContainer" Property="Visibility" Value="Visible"/>
                         </Trigger>
 
-                        <!-- DOCKS THE SIDE BAR RESIZE HANDLE AND COLLAPSE BUTTON TO THE LEFT WHEN THE SIDE BAR IS DOCKED RIGHT -->
+                        <!-- DOCKPOSITION = RIGHT: Switches all right aligned items to the left. -->
                         <Trigger Property="DockPosition" Value="Right">
                             <Setter TargetName="SideBarResizeHandle" Property="DockPanel.Dock" Value="Left"/>
                             <Setter TargetName="SideBarHeaderCollapseButton" Property="DockPanel.Dock" Value="Left"/>

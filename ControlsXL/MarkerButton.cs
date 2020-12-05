@@ -19,6 +19,12 @@ namespace ControlsXL
     /// <summary>
     /// A button with a marker bar.
     /// </summary>
+    /// <remarks><i>When the <see cref="ButtonMode"/> is <see cref="ButtonModes.Standard"/> changing the <see cref="MarkerButton"/>.IsChecked property has no effect and always returns false.</i></remarks>
+    /// <example>
+    /// ButtonMode: Standard, Toggle
+    /// MarkerPlacement: Left, Right, Top, Bottom
+    /// MarkerSize: 5
+    /// </example>
     public class MarkerButton : ToggleButton
     {
         #region Constants
@@ -107,6 +113,17 @@ namespace ControlsXL
             // Prevents setting the checked state if the marker button is used as a normal button            
             if (ButtonMode == ButtonModes.Standard)
                 IsChecked = false;
+        }
+
+        /// <summary>
+        /// Handles the checked event.
+        /// </summary>
+        /// <param name="e">A <see cref="RoutedEventArgs"/> containing event data.</param>
+        protected override void OnChecked(RoutedEventArgs e)
+        {
+            // Prevents setting the checked state if the marker button is used as a normal button            
+            if (ButtonMode == ButtonModes.Toggle)
+                base.OnChecked(e);
         }
 
         #endregion
