@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Converters.cs" />
+    <Compile Include="Common\Enumerations.cs" />
+    <Compile Include="MarkerButton.cs" />
     <Compile Include="VectorButton.cs" />
     <Page Include="Resources\Colors.xaml">
       <SubType>Designer</SubType>
@@ -69,6 +71,14 @@
     <Page Include="Skins\Default.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Skins\MarkerButton\MarkerButtonDark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Skins\MarkerButton\MarkerButtonDefault.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Skins\SideBar\SideBarDark.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -91,10 +101,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Compile Include="Common\Skins.cs" />
-    <Compile Include="Common\ThemeManager.cs" />
+    <Compile Include="Common\StyleManager.cs" />
     <Compile Include="SideBar.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Themes\MarkerButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\SideBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -38,7 +38,10 @@
                             <ContentPresenter x:Name="Content"
                                               Focusable="False"                        
                                               Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              HorizontalAlignment="Center"
+                                              Margin="4, 0"
+                                              VerticalAlignment="Center"/>
                             
                         </DockPanel>
                     </Border>
@@ -79,12 +82,12 @@
                             <!-- Button border highlight -->
                             <Border Background="Transparent" DockPanel.Dock="Bottom">
 
-                                <ContentPresenter Focusable="False"
-                                              Margin="4,0,4,0"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"/>
+                                <ContentPresenter Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  Focusable="False"
+                                                  Margin="4, 0"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
                             </Border>
                         </DockPanel>
                     </Border>
@@ -323,7 +326,7 @@
                                     <!-- SIDE BAR COLLAPSED SECTION CONTENT POPUP -->
                                     <Popup x:Name="PART_SideBarCollapsedContentPopup"
                                            AllowsTransparency="True"
-                                           Placement="Bottom"
+                                           Placement="Right"
                                            PlacementTarget="{Binding ElementName=PopupLocation}"
                                            PopupAnimation="Slide"
                                            StaysOpen="False">
@@ -390,7 +393,7 @@
                                                              Height="{x:Static xl:SideBar.SIDEBAR_SECTION_MINIMIZED_DIMENSIONS}"
                                                              HorizontalAlignment="Right"
                                                              IsChecked="{Binding IsOverflowMenuVisible, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                                             Mode="Toggle"
+                                                             ButtonMode="Toggle"
                                                              Scale="0.5"
                                                              Stroke="{TemplateBinding BorderBrush}"
                                                              StrokeThickness="2"

@@ -6,15 +6,6 @@ using System.Windows.Media;
 namespace ControlsXL
 {
     /// <summary>
-    /// Defines the possible modes of a <see cref="VectorButton"/>.
-    /// </summary>
-    public enum VectorButtonModes
-    {
-        Default,
-        Toggle
-    }
-
-    /// <summary>
     /// A button with a vector based symbol inside.
     /// </summary>
     public class VectorButton : ButtonBase
@@ -90,7 +81,8 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set the <see cref="VectorButton"/> mode.
         /// </summary>
-        public static readonly DependencyProperty ModeProperty = DependencyProperty.Register("Mode", typeof(VectorButtonModes), typeof(VectorButton), new UIPropertyMetadata(VectorButtonModes.Default));
+        /// <remarks><i>Defaults to <see cref="ButtonModes.Standard"/>.</i></remarks>
+        public static readonly DependencyProperty ModeProperty = DependencyProperty.Register("Mode", typeof(ButtonModes), typeof(VectorButton), new UIPropertyMetadata(ButtonModes.Standard));
         
         #endregion
 
@@ -153,9 +145,9 @@ namespace ControlsXL
         /// <summary>
         /// Gets or sets the <see cref="VectorButton"/> mode.
         /// </summary>
-        public VectorButtonModes Mode
+        public ButtonModes ButtonMode
         {
-            get { return (VectorButtonModes)GetValue(ModeProperty); }
+            get { return (ButtonModes)GetValue(ModeProperty); }
             set { SetValue(ModeProperty, value); }
         }
 
@@ -202,7 +194,7 @@ namespace ControlsXL
         /// <param name="e">A <see cref="RoutedEventArgs"/> containing event data.</param>
         protected virtual void VectorButtonClicked(object sender, RoutedEventArgs e)
         {
-            if (Mode == VectorButtonModes.Default)
+            if (ButtonMode == ButtonModes.Standard)
             {
                 RaiseEvent(new RoutedEventArgs(VectorButtonClickedRoutedEvent, sender));
             }

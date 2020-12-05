@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -1203,6 +1204,20 @@ namespace ControlsXL
 
 
         #endregion
+
+        //protected override IEnumerator LogicalChildren
+        //{
+        //    get
+        //    {
+        //        return GetLogicalChildren().GetEnumerator();
+        //    }
+        //}
+
+        //protected virtual IEnumerable GetLogicalChildren()
+        //{
+        //    foreach (var section in Sections) yield return section;
+        //    if (SelectedSection != null) yield return SelectedSection.Content;
+        //}
 
     }
 

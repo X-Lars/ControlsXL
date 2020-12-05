@@ -61,6 +61,7 @@
                             <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Skins, DisabledBorderBrush}}"/>
                         </Trigger>
 
+                        <!-- IS CHECKED -->
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Skins, CheckedBackgroundBrush}}"/>
                             <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Skins, CheckedForegroundBrush}}"/>

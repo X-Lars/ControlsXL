@@ -11,7 +11,7 @@ namespace ControlsXL
     /// <summary>
     /// Defines the available skins.
     /// </summary>
-    public enum SkinID
+    public enum SkinStyles
     {
         Default,
         Dark
@@ -20,22 +20,22 @@ namespace ControlsXL
     /// <summary>
     /// Manages the appearance of the custom controls at runtime.
     /// </summary>
-    public static class ThemeManager
+    public static class StyleManager
     {
         #region Fields
 
         /// <summary>
         /// Stores the applied skin ID.
         /// </summary>
-        private static SkinID _SkinID = SkinID.Default;
+        private static SkinStyles _SkinStyle = SkinStyles.Default;
 
         /// <summary>
-        /// Stores the <see cref="SkinID.Default"/> <see cref="ResourceDictionary"/> path.
+        /// Stores the <see cref="SkinStyles.Default"/> <see cref="ResourceDictionary"/> path.
         /// </summary>
         private static ResourceDictionary _Default;
 
         /// <summary>
-        /// Stores the <see cref="SkinID.Dark"/> <see cref="ResourceDictionary"/> path.
+        /// Stores the <see cref="SkinStyles.Dark"/> <see cref="ResourceDictionary"/> path.
         /// </summary>
         private static ResourceDictionary _Dark;
 
@@ -55,21 +55,21 @@ namespace ControlsXL
         /// <summary>
         /// Gets or set the skin to apply.
         /// </summary>
-        public static SkinID SkinID
+        public static SkinStyles SkinStyle
         {
-            get { return _SkinID; }
+            get { return _SkinStyle; }
             set
             {
-                if(_SkinID != value)
+                if(_SkinStyle != value)
                 {
-                    _SkinID = value;
-                    ApplySkin();
+                    _SkinStyle = value;
+                    ApplySkinStyle();
                 }
             }
         }
 
         /// <summary>
-        /// Gets the <see cref="ResourceDictionary"/> containing the references of the custom control dictionaries for the <see cref="SkinID.Default"/> skin.
+        /// Gets the <see cref="ResourceDictionary"/> containing the references of the custom control dictionaries for the <see cref="SkinStyles.Default"/> skin.
         /// </summary>
         private static ResourceDictionary Default 
         { 
@@ -86,7 +86,7 @@ namespace ControlsXL
         }
 
         /// <summary>
-        /// Gets the <see cref="ResourceDictionary"/> containing the references of the custom control dictionaries for the <see cref="SkinID.Dark"/> skin.
+        /// Gets the <see cref="ResourceDictionary"/> containing the references of the custom control dictionaries for the <see cref="SkinStyles.Dark"/> skin.
         /// </summary>
         private static ResourceDictionary Dark
         {
@@ -109,20 +109,20 @@ namespace ControlsXL
         /// <summary>
         /// Applies the currently selected skin ID.
         /// </summary>
-        private static void ApplySkin()
+        private static void ApplySkinStyle()
         {
             Collection<ResourceDictionary> dictionaries = Application.Current.Resources.MergedDictionaries;
 
             dictionaries.Remove(Default);
             dictionaries.Remove(Dark);
 
-            switch (_SkinID)
+            switch (_SkinStyle)
             {
-                case SkinID.Default:
+                case SkinStyles.Default:
                     dictionaries.Add(Default);
                     break;
 
-                case SkinID.Dark:
+                case SkinStyles.Dark:
                     dictionaries.Add(Dark);
                     break;
             }
