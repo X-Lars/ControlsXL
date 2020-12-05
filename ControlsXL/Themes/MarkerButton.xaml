@@ -3,36 +3,66 @@
                     xmlns:xl="clr-namespace:ControlsXL">
 
     <Style TargetType="{x:Type xl:MarkerButton}">
+        
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
         <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Skins, ForegroundBrush}}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
         <Setter Property="BorderThickness" Value="1"/>
+        
         <Setter Property="Template">
             <Setter.Value>
+                
                 <ControlTemplate TargetType="{x:Type xl:MarkerButton}">
+                    
+                    <!-- MARKER BUTTON BORDER -->
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
+                        
+                        <!-- MARKER BUTTON CONTENT -->
                         <DockPanel>
+                            
+                            <!-- MARKER -->
                             <Border x:Name="Marker"
                                     DockPanel.Dock="{Binding MarkerPlacement, RelativeSource={RelativeSource TemplatedParent}}"
                                     Background="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"
-                                    Height="5"
-                                    Focusable="False"
-                                    Margin="4, 0"/>
+                                    Height="{Binding MarkerSize, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Width="{Binding MarkerSize, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Focusable="False"/>
 
+                            <!-- TEXT -->
                             <ContentPresenter x:Name="Content"
                                               Focusable="False"                        
                                               Content="{TemplateBinding Content}"
                                               ContentTemplate="{TemplateBinding ContentTemplate}"
                                               HorizontalAlignment="Center"
-                                              Margin="4, 0"
                                               VerticalAlignment="Center"/>
 
                         </DockPanel>
                     </Border>
+                    
                     <ControlTemplate.Triggers>
-                        
+
+                        <!-- MARKER DOCK POSITION LEFT -->
+                        <Trigger SourceName="Marker" Property="DockPanel.Dock" Value="Left"> 
+                            <Setter TargetName="Marker" Property="Height" Value="{Binding ActualHeight}"/>
+                        </Trigger>
+
+                        <!-- MARKER DOCK POSITION RIGHT -->
+                        <Trigger SourceName="Marker" Property="DockPanel.Dock" Value="Right">
+                            <Setter TargetName="Marker" Property="Height" Value="{Binding ActualHeight}"/>
+                        </Trigger>
+
+                        <!-- MARKER DOCK POSITION TOP -->
+                        <Trigger SourceName="Marker" Property="DockPanel.Dock" Value="Top">
+                            <Setter TargetName="Marker" Property="Width" Value="{Binding ActualWidth}"/>
+                        </Trigger>
+
+                        <!-- MARKER DOCK POSITION BOTTOM -->
+                        <Trigger SourceName="Marker"  Property="DockPanel.Dock" Value="Bottom">
+                            <Setter TargetName="Marker" Property="Width" Value="{Binding ActualWidth}"/>
+                        </Trigger>
+
                         <!-- IS CHECKED -->
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, CheckedBackgroundBrush}}"/>

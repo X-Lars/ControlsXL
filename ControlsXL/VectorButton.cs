@@ -8,7 +8,7 @@ namespace ControlsXL
     /// <summary>
     /// A button with a vector based symbol inside.
     /// </summary>
-    public class VectorButton : ButtonBase
+    public class VectorButton : ToggleButton
     {
         #region Constants
 
@@ -17,7 +17,7 @@ namespace ControlsXL
         /// </summary>
         /// <remarks><i>Displays a square with a cross inside.</i></remarks>
         public const string DEFAULT_VECTOR_GRAPHIC = "F1 M 22,54L 22,22L 54,22L 54,54L 22,54 Z M 26,26L 26,50L 50,50L 50,26L 26,26 Z M 30.755,27.65L 38,34.895L 45.2449,27.6501L 48.3499,30.7551L 41.105,38L 48.35,45.245L 45.245,48.35L 38,41.105L 30.755,48.35L 27.65,45.245L 34.895,38L 27.65,30.755L 30.755,27.65 Z";
-        
+
         #endregion
 
         #region Constructor
@@ -27,18 +27,8 @@ namespace ControlsXL
         /// </summary>
         static VectorButton()
         {
-            // Overrides the default style of the inherited ButtonBase to use the VectorButton style instead.
+            // Overrides the default style of the inherited ToggleButton to use the VectorButton style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(VectorButton), new FrameworkPropertyMetadata(typeof(VectorButton)));
-        }
-
-        /// <summary>
-        /// Creates and initializes a new <see cref="VectorButton"/> control.
-        /// </summary>
-        public VectorButton() : base()
-        {
-            // Register the mouse click event handler
-            AddHandler(ClickEvent, new RoutedEventHandler(VectorButtonClicked));
-            
         }
 
         #endregion
@@ -74,16 +64,11 @@ namespace ControlsXL
         public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(nameof(Scale), typeof(double), typeof(VectorButton), new UIPropertyMetadata(1.0));
 
         /// <summary>
-        /// Registers the property to determine the button checked state.
-        /// </summary>
-        public static readonly DependencyProperty IsCheckedProperty = DependencyProperty.Register("IsChecked", typeof(bool), typeof(VectorButton), new UIPropertyMetadata(false));
-
-        /// <summary>
         /// Registers the property to set the <see cref="VectorButton"/> mode.
         /// </summary>
         /// <remarks><i>Defaults to <see cref="ButtonModes.Standard"/>.</i></remarks>
-        public static readonly DependencyProperty ModeProperty = DependencyProperty.Register("Mode", typeof(ButtonModes), typeof(VectorButton), new UIPropertyMetadata(ButtonModes.Standard));
-        
+        public static readonly DependencyProperty ButtonModeProperty = DependencyProperty.Register(nameof(ButtonMode), typeof(ButtonModes), typeof(VectorButton), new UIPropertyMetadata(ButtonModes.Standard));
+
         #endregion
 
         #region Properties
@@ -134,53 +119,12 @@ namespace ControlsXL
         }
 
         /// <summary>
-        /// Gets or sets the checked state of the <see cref="VectorButton"/>.
-        /// </summary>
-        public bool IsChecked
-        {
-            get { return (bool)GetValue(IsCheckedProperty); }
-            set { SetValue(IsCheckedProperty, value); }
-        }
-
-        /// <summary>
         /// Gets or sets the <see cref="VectorButton"/> mode.
         /// </summary>
         public ButtonModes ButtonMode
         {
-            get { return (ButtonModes)GetValue(ModeProperty); }
-            set { SetValue(ModeProperty, value); }
-        }
-
-        #endregion
-
-        #region Events
-
-        /// <summary>
-        /// Registers an event to capture mouse click events.
-        /// </summary>
-        private static readonly RoutedEvent VectorButtonClickedRoutedEvent = EventManager.RegisterRoutedEvent("VectorButtonClickedEvent", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VectorButton));
-
-        /// <summary>
-        /// Registers an event to capture state change events.
-        /// </summary>
-        private static readonly RoutedEvent VectorButtonStateChangedRoutedEvent = EventManager.RegisterRoutedEvent("VectorButtonStateChangedEvent", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VectorButton));
-
-        /// <summary>
-        /// Exposes the vector button mouse click event.
-        /// </summary>
-        public event RoutedEventHandler VectorButtonClickedEvent
-        {
-            add { AddHandler(VectorButtonClickedRoutedEvent, value); }
-            remove { RemoveHandler(VectorButtonClickedRoutedEvent, value); }
-        }
-
-        /// <summary>
-        /// Exposes the vector button state change event.
-        /// </summary>
-        public event RoutedEventHandler StateChanged
-        {
-            add { AddHandler(VectorButtonStateChangedRoutedEvent, value); }
-            remove { RemoveHandler(VectorButtonStateChangedRoutedEvent, value); }
+            get { return (ButtonModes)GetValue(ButtonModeProperty); }
+            set { SetValue(ButtonModeProperty, value); }
         }
 
         #endregion
@@ -188,31 +132,228 @@ namespace ControlsXL
         #region Event Handlers
 
         /// <summary>
-        /// Handles the vector button mouse click event.
+        /// Handles the mouse click event.
         /// </summary>
-        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
-        /// <param name="e">A <see cref="RoutedEventArgs"/> containing event data.</param>
-        protected virtual void VectorButtonClicked(object sender, RoutedEventArgs e)
+        protected override void OnClick()
         {
-            if (ButtonMode == ButtonModes.Standard)
-            {
-                RaiseEvent(new RoutedEventArgs(VectorButtonClickedRoutedEvent, sender));
-            }
-            else
-            {
-                IsChecked ^= true;
+            base.OnClick();
 
-                // Switch the checked state
-                RaiseEvent(new RoutedEventArgs(VectorButtonClickedRoutedEvent, sender));
-                RaiseEvent(new RoutedEventArgs(VectorButtonStateChangedRoutedEvent, sender));
-            }
+            // Prevent checked state when the button mode is standard
+            if (ButtonMode == ButtonModes.Standard)
+                IsChecked = false;
         }
 
         #endregion
-
-        #region Callbacks
-
- 
-        #endregion
     }
+
+    ///// <summary>
+    ///// A button with a vector based symbol inside.
+    ///// </summary>
+    //public class VectorButton : ButtonBase
+    //{
+    //    #region Constants
+
+    //    /// <summary>
+    //    /// The default image vector shown when no vector is supplied by the user.
+    //    /// </summary>
+    //    /// <remarks><i>Displays a square with a cross inside.</i></remarks>
+    //    public const string DEFAULT_VECTOR_GRAPHIC = "F1 M 22,54L 22,22L 54,22L 54,54L 22,54 Z M 26,26L 26,50L 50,50L 50,26L 26,26 Z M 30.755,27.65L 38,34.895L 45.2449,27.6501L 48.3499,30.7551L 41.105,38L 48.35,45.245L 45.245,48.35L 38,41.105L 30.755,48.35L 27.65,45.245L 34.895,38L 27.65,30.755L 30.755,27.65 Z";
+
+    //    #endregion
+
+    //    #region Constructor
+
+    //    /// <summary>
+    //    /// Static constructor called before initializing an instance of <see cref="VectorButton"/>.
+    //    /// </summary>
+    //    static VectorButton()
+    //    {
+    //        // Overrides the default style of the inherited ButtonBase to use the VectorButton style instead.
+    //        DefaultStyleKeyProperty.OverrideMetadata(typeof(VectorButton), new FrameworkPropertyMetadata(typeof(VectorButton)));
+    //    }
+
+    //    /// <summary>
+    //    /// Creates and initializes a new <see cref="VectorButton"/> control.
+    //    /// </summary>
+    //    public VectorButton() : base()
+    //    {
+    //        // Register the mouse click event handler
+    //        AddHandler(ClickEvent, new RoutedEventHandler(VectorButtonClicked));
+
+    //    }
+
+    //    #endregion
+
+    //    #region Dependency Properties
+
+    //    /// <summary>
+    //    /// Registers a property to set the <see cref="Geometry"/> path defining the vector graphic.
+    //    /// </summary>
+    //    /// <remarks><i>Defaults to <see cref="DEFAULT_VECTOR_GRAPHIC"/>.</i></remarks>
+    //    public static readonly DependencyProperty VectorProperty = DependencyProperty.Register("Vector", typeof(Geometry), typeof(VectorButton), new FrameworkPropertyMetadata(Geometry.Parse(DEFAULT_VECTOR_GRAPHIC), FrameworkPropertyMetadataOptions.AffectsRender));
+
+    //    /// <summary>
+    //    /// Registers a property to set the brush to stroke the vector graphic.
+    //    /// </summary>
+    //    public static readonly DependencyProperty StrokeProperty = DependencyProperty.Register("Stroke", typeof(Brush), typeof(VectorButton), new UIPropertyMetadata(null));
+
+    //    /// <summary>
+    //    /// Registers a property to set the brush to fill the vector graphic.
+    //    /// </summary>
+    //    public static readonly DependencyProperty FillProperty = DependencyProperty.Register("Fill", typeof(Brush), typeof(VectorButton), new UIPropertyMetadata(null));
+
+    //    /// <summary>
+    //    /// Registers a property to set the stroke thickness of the vector graphic.
+    //    /// </summary>
+    //    /// <remarks><i>Defaults to 1.</i></remarks>
+    //    public static readonly DependencyProperty StrokeThicknessProperty = DependencyProperty.Register("StrokeThickness", typeof(double), typeof(VectorButton), new UIPropertyMetadata(1.0));
+
+    //    /// <summary>
+    //    /// Registers a property to set the scale of the vector graphic.
+    //    /// </summary>
+    //    /// <remarks><i>Defaults to 1.</i></remarks>
+    //    public static readonly DependencyProperty ScaleProperty = DependencyProperty.Register(nameof(Scale), typeof(double), typeof(VectorButton), new UIPropertyMetadata(1.0));
+
+    //    /// <summary>
+    //    /// Registers the property to determine the button checked state.
+    //    /// </summary>
+    //    public static readonly DependencyProperty IsCheckedProperty = DependencyProperty.Register("IsChecked", typeof(bool), typeof(VectorButton), new UIPropertyMetadata(false));
+
+    //    /// <summary>
+    //    /// Registers the property to set the <see cref="VectorButton"/> mode.
+    //    /// </summary>
+    //    /// <remarks><i>Defaults to <see cref="ButtonModes.Standard"/>.</i></remarks>
+    //    public static readonly DependencyProperty ModeProperty = DependencyProperty.Register("Mode", typeof(ButtonModes), typeof(VectorButton), new UIPropertyMetadata(ButtonModes.Standard));
+
+    //    #endregion
+
+    //    #region Properties
+
+    //    /// <summary>
+    //    /// Gets or sets the <see cref="Geometry"/> path defining the vector to display inside the button.
+    //    /// </summary>
+    //    public Geometry Vector
+    //    {
+    //        get { return (Geometry)GetValue(VectorProperty); }
+    //        set { SetValue(VectorProperty, value); }
+    //    }
+
+    //    /// <summary>
+    //    /// Gets or sets the <see cref="Brush"/> to stroke the vector graphic.
+    //    /// </summary>
+    //    public Brush Stroke
+    //    {
+    //        get { return (Brush)GetValue(StrokeProperty); }
+    //        set { SetValue(StrokeProperty, value); }
+    //    }
+
+    //    /// <summary>
+    //    /// Gets or sets the <see cref="Brush"/> to fill the vector graphic.
+    //    /// </summary>
+    //    public Brush Fill
+    //    {
+    //        get { return (Brush)GetValue(FillProperty); }
+    //        set { SetValue(FillProperty, value); }
+    //    }
+
+    //    /// <summary>
+    //    /// Gets or sets the stroke thickness of the vector graphic.
+    //    /// </summary>
+    //    public double StrokeThickness
+    //    {
+    //        get { return (double)GetValue(StrokeThicknessProperty); }
+    //        set { SetValue(StrokeThicknessProperty, value); }
+    //    }
+
+    //    /// <summary>
+    //    /// Gets or sets the scale of the vector graphic.
+    //    /// </summary>
+    //    public double Scale
+    //    {
+    //        get { return (double)GetValue(ScaleProperty); }
+    //        set { SetValue(ScaleProperty, value); }
+    //    }
+
+    //    /// <summary>
+    //    /// Gets or sets the checked state of the <see cref="VectorButton"/>.
+    //    /// </summary>
+    //    public bool IsChecked
+    //    {
+    //        get { return (bool)GetValue(IsCheckedProperty); }
+    //        set { SetValue(IsCheckedProperty, value); }
+    //    }
+
+    //    /// <summary>
+    //    /// Gets or sets the <see cref="VectorButton"/> mode.
+    //    /// </summary>
+    //    public ButtonModes ButtonMode
+    //    {
+    //        get { return (ButtonModes)GetValue(ModeProperty); }
+    //        set { SetValue(ModeProperty, value); }
+    //    }
+
+    //    #endregion
+
+    //    #region Events
+
+    //    /// <summary>
+    //    /// Registers an event to capture mouse click events.
+    //    /// </summary>
+    //    private static readonly RoutedEvent VectorButtonClickedRoutedEvent = EventManager.RegisterRoutedEvent("VectorButtonClickedEvent", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VectorButton));
+
+    //    /// <summary>
+    //    /// Registers an event to capture state change events.
+    //    /// </summary>
+    //    private static readonly RoutedEvent VectorButtonStateChangedRoutedEvent = EventManager.RegisterRoutedEvent("VectorButtonStateChangedEvent", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(VectorButton));
+
+    //    /// <summary>
+    //    /// Exposes the vector button mouse click event.
+    //    /// </summary>
+    //    public event RoutedEventHandler VectorButtonClickedEvent
+    //    {
+    //        add { AddHandler(VectorButtonClickedRoutedEvent, value); }
+    //        remove { RemoveHandler(VectorButtonClickedRoutedEvent, value); }
+    //    }
+
+    //    /// <summary>
+    //    /// Exposes the vector button state change event.
+    //    /// </summary>
+    //    public event RoutedEventHandler StateChanged
+    //    {
+    //        add { AddHandler(VectorButtonStateChangedRoutedEvent, value); }
+    //        remove { RemoveHandler(VectorButtonStateChangedRoutedEvent, value); }
+    //    }
+
+    //    #endregion
+
+    //    #region Event Handlers
+
+    //    /// <summary>
+    //    /// Handles the vector button mouse click event.
+    //    /// </summary>
+    //    /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+    //    /// <param name="e">A <see cref="RoutedEventArgs"/> containing event data.</param>
+    //    protected virtual void VectorButtonClicked(object sender, RoutedEventArgs e)
+    //    {
+    //        if (ButtonMode == ButtonModes.Standard)
+    //        {
+    //            RaiseEvent(new RoutedEventArgs(VectorButtonClickedRoutedEvent, sender));
+    //        }
+    //        else
+    //        {
+    //            IsChecked ^= true;
+
+    //            // Switch the checked state
+    //            RaiseEvent(new RoutedEventArgs(VectorButtonClickedRoutedEvent, sender));
+    //            RaiseEvent(new RoutedEventArgs(VectorButtonStateChangedRoutedEvent, sender));
+    //        }
+    //    }
+
+    //    #endregion
+
+    //    #region Callbacks
+
+
+    //    #endregion
+    //}
 }
