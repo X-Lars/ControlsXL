@@ -3,117 +3,18 @@
                     xmlns:xl="clr-namespace:ControlsXL">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Geometry.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Geometry.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-
+    
     <!-- Converts a boolean to visibility values -->
     <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
-
-
-    <!-- SIDE BAR VERTICAL BUTTON STYLE -->
-    <Style TargetType="{x:Type ButtonBase}" x:Key="SideBarVerticalButtonBase">
-
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Skins, ForegroundBrush}}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ButtonBase}">
-
-                    <Border x:Name="Border" 
-                            Focusable="False"
-                            Background="{TemplateBinding Background}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}">
-                        
-
-                        
-                        <DockPanel>
-                            <Border x:Name="SelectionIndicator"
-                                    DockPanel.Dock="Bottom"
-                                    Background="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"
-                                    Height="{x:Static xl:SideBar.SIDEBAR_SECTION_INDICATOR_WIDTH}"
-                                    Focusable="False"/>
-
-                            <ContentPresenter x:Name="Content"
-                                              Focusable="False"                        
-                                              Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              HorizontalAlignment="Center"
-                                              Margin="4, 0"
-                                              VerticalAlignment="Center"/>
-                            
-                        </DockPanel>
-                    </Border>
-
-                    <ControlTemplate.Triggers>
-
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="SelectionIndicator" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, HighlightBrush}}" />
-                        </Trigger>
-
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <!-- SIDE BAR VERTICAL TOGGLE BUTTON STYLE -->
-    <Style TargetType="{x:Type ToggleButton}" x:Key="SideBarVerticalToggleButton" BasedOn="{StaticResource SideBarVerticalButtonBase}">
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ToggleButton}">
-
-                    <Border x:Name="Border" 
-                            Focusable="False"
-                            Background="{TemplateBinding Background}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}">
-
-                        <DockPanel>
-                            <Border x:Name="SelectionIndicator"
-                                    DockPanel.Dock="Bottom"
-                                    Background="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"
-                                    Height="{x:Static xl:SideBar.SIDEBAR_SECTION_INDICATOR_WIDTH}"
-                                    Focusable="False"/>
-
-
-                            <!-- Button border highlight -->
-                            <Border Background="Transparent" DockPanel.Dock="Bottom">
-
-                                <ContentPresenter Content="{TemplateBinding Content}"
-                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                  Focusable="False"
-                                                  Margin="4, 0"
-                                                  HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"/>
-                            </Border>
-                        </DockPanel>
-                    </Border>
-
-                    <ControlTemplate.Triggers>
-
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="SelectionIndicator" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, HighlightBrush}}" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="SelectionIndicator" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, HighlightBrush}}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-            
-        </Setter>
-        
-    </Style>
-
+    
     <!-- SIDE BAR STYLE -->
     <Style TargetType="{x:Type xl:SideBar}">
         
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}"/>
         
         <Setter Property="Template">
             <Setter.Value>
@@ -220,7 +121,7 @@
 
                                 <!-- SIDE BAR HEADER AREA -->
                                 <Border x:Name="SideBarHeader"
-                                        Background="{DynamicResource {ComponentResourceKey xl:Skins, HighlightBrush}}"
+                                        Background="{DynamicResource ResourceKey=HighlightBrush}"
                                         DockPanel.Dock="Top"
                                         Grid.Row="1"
                                         Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
@@ -487,11 +388,12 @@
     <!-- SIDE BAR SECTION STYLE -->
     <Style TargetType="{x:Type xl:SideBarSection}">
 
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Skins, ForegroundBrush}}"/>
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
         
         <Setter Property="Height" Value="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}"/>
+        <Setter Property="BorderThickness" Value="0"/>
         
         <Setter Property="Template">
             <Setter.Value>
@@ -515,7 +417,7 @@
                             <DockPanel>
 
                                 <Border x:Name="SideBarSectionIndicator"
-                                        Background="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"
+                                        Background="{TemplateBinding BorderBrush}"
                                         BorderThickness="0"
                                         DockPanel.Dock="Left"
                                         Focusable="False"
@@ -544,7 +446,9 @@
                                           Fill="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"
                                           RenderTransformOrigin="0.5, 0.5"
                                           Stretch="Uniform"
-                                          Stroke="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
+                                          Stroke="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}">
+                                        
+                                    </Path>
 
                                 </Grid>
                                 
@@ -575,7 +479,7 @@
                         </Trigger>
                         
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="SideBarSectionIndicator" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, HighlightBrush}}"/>
+                            <Setter TargetName="SideBarSectionIndicator" Property="Background" Value="{DynamicResource HighlightBrush}"/>
                             <Setter TargetName="SideBarSectionIndicator" Property="Visibility" Value="Visible"/>
                         </Trigger>
                         
