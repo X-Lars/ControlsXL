@@ -78,8 +78,7 @@ namespace ControlsXL
         /// </summary>
         static StyleManager()
         {
-            ApplySkinStyle();
-            ApplyAppearance();
+            
         }
 
         #endregion

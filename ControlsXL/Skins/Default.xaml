@@ -5,26 +5,24 @@
     <ResourceDictionary.MergedDictionaries>
 
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Colors.xaml"/>
-        
+        <!--<ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/MarkerButton/MarkerButtonDefault.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/VectorButton/VectorButtonDefault.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/SideBar/SideBarDefault.xaml"/>-->
     </ResourceDictionary.MergedDictionaries>
     
     <!-- TODO: All default color keys here? -->
 
 
-    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource DefaultControlBackgroundColor}" />
-    <SolidColorBrush x:Key="BorderBrush" Color="{StaticResource DefaultControlBorderColor}" />
-
-    <SolidColorBrush x:Key="DisabledBackgroundBrush" Color="{StaticResource DefaultControlDisabledBackgroundColor}" />
-    <SolidColorBrush x:Key="DisabledBorderBrush" Color="{StaticResource DefaultControlDisabledBorderColor}" />
-    <SolidColorBrush x:Key="DisabledForegroundBrush" Color="{StaticResource DefaultControlDisabledTextColor}" />
-
-    <SolidColorBrush x:Key="MouseOverBackgroundBrush" Color="{StaticResource DefaultControlMouseOverBackgroundColor}"/>
-    <SolidColorBrush x:Key="MouseOverBorderBrush" Color="{StaticResource DefaultMouseOverBorderColor}"/>
-
-    <SolidColorBrush x:Key="PressedBackgroundBrush" Color="{StaticResource DefaultControlPressedBackgroundColor}"/>
-    <SolidColorBrush x:Key="PressedBorderBrush" Color="{StaticResource DefaultControlPressedBorderColor}"/>
-
-    <SolidColorBrush x:Key="CheckedBackgroundBrush" Color="{StaticResource DefaultHighlightColor}"/>
-    <SolidColorBrush x:Key="CheckedForegroundBrush" Color="{StaticResource DefaultHighlightTextColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, BackgroundBrush}" Color="{StaticResource DefaultControlBackgroundColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, BorderBrush}" Color="{StaticResource DefaultControlBorderColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, DisabledBackgroundBrush}" Color="{StaticResource DefaultControlDisabledBackgroundColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, DisabledBorderBrush}" Color="{StaticResource DefaultControlDisabledBorderColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, DisabledForegroundBrush}" Color="{StaticResource DefaultControlDisabledTextColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, MouseOverBackgroundBrush}" Color="{StaticResource DefaultControlMouseOverBackgroundColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, MouseOverBorderBrush}" Color="{StaticResource DefaultMouseOverBorderColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, PressedBackgroundBrush}" Color="{StaticResource DefaultControlPressedBackgroundColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, PressedBorderBrush}" Color="{StaticResource DefaultControlPressedBorderColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, CheckedBackgroundBrush}" Color="{StaticResource DefaultHighlightColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, CheckedForegroundBrush}" Color="{StaticResource DefaultHighlightTextColor}"/>
     
 </ResourceDictionary>

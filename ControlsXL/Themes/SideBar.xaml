@@ -12,9 +12,9 @@
     <!-- SIDE BAR STYLE -->
     <Style TargetType="{x:Type xl:SideBar}">
         
-        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource BorderThickness}"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, TestBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Appearance, BorderThickness}}"/>
         
         <Setter Property="Template">
             <Setter.Value>
@@ -121,7 +121,7 @@
 
                                 <!-- SIDE BAR HEADER AREA -->
                                 <Border x:Name="SideBarHeader"
-                                        Background="{DynamicResource ResourceKey=HighlightBrush}"
+                                        Background="{DynamicResource {ComponentResourceKey xl:Skins, HighlightBrush}}"
                                         DockPanel.Dock="Top"
                                         Grid.Row="1"
                                         Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
@@ -388,9 +388,9 @@
     <!-- SIDE BAR SECTION STYLE -->
     <Style TargetType="{x:Type xl:SideBarSection}">
 
-        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
-        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Skins, ForegroundBrush}}"/>
         
         <Setter Property="Height" Value="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -479,7 +479,7 @@
                         </Trigger>
                         
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="SideBarSectionIndicator" Property="Background" Value="{DynamicResource HighlightBrush}"/>
+                            <Setter TargetName="SideBarSectionIndicator" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, HighlightBrush}}"/>
                             <Setter TargetName="SideBarSectionIndicator" Property="Visibility" Value="Visible"/>
                         </Trigger>
                         

@@ -1,5 +1,4 @@
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:xl="clr-namespace:ControlsXL">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
 
     <!-- Merges the specified dictionaries containing custom control styles into Themes\Generic.xaml -->
@@ -14,12 +13,14 @@
 
         <!-- MERGE THE DEFAULT APPEARANCE -->
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Appearance/Default.xaml"/>
-        
+
         <!-- MERGE THE CUSTOM CONTROL STYLES -->
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/MarkerButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/VectorButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/SideBar.xaml"/>
-        
+
+
+
     </ResourceDictionary.MergedDictionaries>
     
     

@@ -10,7 +10,7 @@
 
     </ResourceDictionary.MergedDictionaries>
 
-    <Thickness x:Key="BorderThickness">0</Thickness>
+    <Thickness x:Key="{ComponentResourceKey xl:Appearance, BorderThickness}">0</Thickness>
     <!--<sys:Double x:Key="BorderThickness">1</sys:Double>-->
     
 </ResourceDictionary>
