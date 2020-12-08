@@ -339,3 +339,5 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /Test
+/ControlsXL/Resources/Fonts/Tahoma Bold.ttf
+/ControlsXL/Resources/Fonts/Tahoma Regular.ttf

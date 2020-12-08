@@ -130,7 +130,7 @@ namespace ControlsXL
 
             dictionaries.Remove(_CurrentStyle);
 
-            _CurrentStyle.Source = new Uri($"/ControlsXL;Component/Styles/{Style}.xaml", UriKind.Relative);
+            _CurrentStyle.Source = new Uri($"/ControlsXL;Component/Resources/Styles/{Style}.xaml", UriKind.Relative);
 
             dictionaries.Add(_CurrentStyle);            
 
@@ -150,7 +150,7 @@ namespace ControlsXL
 
             dictionaries.Remove(_CurrentAppearance);
 
-            _CurrentAppearance.Source = new Uri($"/ControlsXL;Component/Appearances/{Appearance}.xaml", UriKind.Relative);
+            _CurrentAppearance.Source = new Uri($"/ControlsXL;Component/Resources/Appearances/{Appearance}.xaml", UriKind.Relative);
 
             dictionaries.Add(_CurrentAppearance);
 

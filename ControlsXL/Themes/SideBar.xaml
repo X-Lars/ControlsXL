@@ -71,6 +71,7 @@
 
                                         <!-- SIDE BAR COMMON AREA HEADER -->
                                         <Border x:Name="SideBarCommonHeader"
+                                                Background="{TemplateBinding Background}"
                                                 DockPanel.Dock="Top"
                                                 Grid.Row="0"
                                                 Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
@@ -101,6 +102,7 @@
 
                                         <!-- SIDE BAR COMMON AREA CONTENT -->
                                         <Grid x:Name="SideBarCommonContent"
+                                              Background="{DynamicResource {ComponentResourceKey xl:Styles, WindowBackgroundBrush}}"
                                               Grid.Row="1">
                                             
                                             <Grid.RowDefinitions>
@@ -142,7 +144,6 @@
 
                                 <!-- SIDE BAR HEADER AREA -->
                                 <Border x:Name="SideBarHeader"
-                                        Background="{DynamicResource {ComponentResourceKey xl:Styles, HighlightBrush}}"
                                         DockPanel.Dock="Top"
                                         Grid.Row="1"
                                         Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
@@ -151,6 +152,7 @@
 
                                         <!-- SIDE BAR HEADER COLLAPSE BUTTON -->
                                         <xl:VectorButton x:Name="SideBarHeaderCollapseButton"
+                                                         Background="{TemplateBinding Background}"
                                                          Command="{x:Static xl:SideBar.CollapseSideBarCommand}"
                                                          DockPanel.Dock="Right"
                                                          Height="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"
@@ -172,6 +174,7 @@
 
                                 <!-- SIDE BAR CONTENT AREA -->
                                 <Grid x:Name="SideBarContentArea"
+                                      Background="{DynamicResource {ComponentResourceKey xl:Styles, WindowBackgroundBrush}}"
                                       Grid.Row="2">
 
                                     <!-- SIDE BAR EXPANDED CONTENT -->
@@ -191,6 +194,7 @@
 
                                         <!-- SIDE BAR HEADER COLLAPSE BUTTON -->
                                         <xl:VectorButton x:Name="SideBarOptionsCollapseButton"
+                                                         Background="{TemplateBinding Background}"
                                                          Command="{x:Static xl:SideBar.CollapseSideBarCommand}"
                                                          DockPanel.Dock="Top"
                                                          Height="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"
@@ -286,6 +290,7 @@
                                     
                                     <!-- SIDE BAR MAXIMIZED SECTIONS -->
                                     <ItemsControl x:Name="SideBarMaximizedSections"
+                                                  Background="{TemplateBinding Background}"
                                                   BorderBrush="{TemplateBinding BorderBrush}"
                                                   ItemsSource="{TemplateBinding MaximizedSections}"/>
                                     

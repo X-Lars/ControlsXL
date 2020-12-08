@@ -51,6 +51,7 @@
     <Compile Include="Common\Converters.cs" />
     <Compile Include="Common\DesignTimeResourceDictionary.cs" />
     <Compile Include="Common\Enumerations.cs" />
+    <Compile Include="LinkButton.cs" />
     <Compile Include="MarkerButton.cs" />
     <Compile Include="VectorButton.cs" />
     <Page Include="Resources\Colors.xaml">
@@ -69,19 +70,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\Dark.xaml">
+    <Page Include="Resources\Styles\Dark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\Default.xaml">
+    <Page Include="Resources\Styles\Default.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Appearances\Flat.xaml">
+    <Page Include="Resources\Appearances\Flat.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Appearances\Default.xaml">
+    <Page Include="Resources\Appearances\Default.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -94,6 +95,10 @@
     <Compile Include="SideBar.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Themes\LinkButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\MarkerButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,6 +134,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\Fonts\Tahoma Regular.ttf" />
+    <Resource Include="Resources\Fonts\Tahoma Bold.ttf" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

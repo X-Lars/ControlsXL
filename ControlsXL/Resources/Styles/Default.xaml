@@ -25,5 +25,6 @@
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, PressedBorderBrush}" Color="{StaticResource DefaultControlPressedBorderColor}"/>
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, CheckedBackgroundBrush}" Color="{StaticResource DefaultHighlightColor}"/>
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, CheckedForegroundBrush}" Color="{StaticResource DefaultHighlightTextColor}"/>
-    
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, WindowBackgroundBrush}" Color="{StaticResource DefaultWindowBackgroundColor}"/>
+
 </ResourceDictionary>
