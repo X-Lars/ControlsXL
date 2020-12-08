@@ -9,10 +9,10 @@
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Fonts.xaml"/>
 
         <!-- MERGE THE DEFAULT SKIN -->
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/Default.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Styles/Default.xaml"/>
 
         <!-- MERGE THE DEFAULT APPEARANCE -->
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Appearance/Default.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Appearances/Default.xaml"/>
 
         <!-- MERGE THE CUSTOM CONTROL STYLES -->
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/MarkerButton.xaml"/>

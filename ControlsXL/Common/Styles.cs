@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace ControlsXL
 {
-    public static class Skins { }
+    internal static class Styles { }
 }

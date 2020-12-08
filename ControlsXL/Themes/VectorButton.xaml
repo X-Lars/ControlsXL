@@ -5,13 +5,10 @@
     <Style TargetType="{x:Type xl:VectorButton}">
 
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
 
-        <Setter Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
-        <Setter Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
-
-        <Setter Property="Height" Value="Auto"/>
-        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, BackgroundBrush}}"/>
+        <Setter Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -28,6 +25,7 @@
                               Data="{TemplateBinding Vector}"
                               DataContext="{Binding DataContext, RelativeSource={RelativeSource TemplatedParent}}"
                               Fill="{TemplateBinding Fill}"
+                              SnapsToDevicePixels="True"
                               Stroke="{TemplateBinding Stroke}"
                               StrokeThickness="{TemplateBinding StrokeThickness}"
                               Stretch="Uniform"
@@ -39,33 +37,32 @@
                             </Path.RenderTransform>
                             
                         </Path>
-
                     </Border>
 
                     <ControlTemplate.Triggers>
 
                         <!-- MOUSE OVER -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Skins, MouseOverBackgroundBrush}}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Skins, MouseOverBorderBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, MouseOverBackgroundBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, MouseOverBorderBrush}}"/>
                         </Trigger>
 
                         <!-- MOUSE PRESS -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Skins, PressedBackgroundBrush}}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Skins, PressedBorderBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, PressedBackgroundBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, PressedBorderBrush}}"/>
                         </Trigger>
                         
                         <!-- DISABLED -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Skins, DisabledBackgroundBrush}}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Skins, DisabledBorderBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, DisabledBackgroundBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, DisabledBorderBrush}}"/>
                         </Trigger>
 
                         <!-- IS CHECKED -->
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Skins, CheckedBackgroundBrush}}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Skins, CheckedForegroundBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, CheckedBackgroundBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, CheckedForegroundBrush}}"/>
                         </Trigger>
                         
                     </ControlTemplate.Triggers>

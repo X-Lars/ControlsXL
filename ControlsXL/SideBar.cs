@@ -91,13 +91,13 @@ namespace ControlsXL
         /// The minimum width of the <see cref="SideBar"/> before it collapses.
         /// </summary>
         /// <remarks><i>The value is in device independent units (1/96th inch per unit).</i></remarks>
-        private const double SIDEBAR_COLLAPSE_WIDTH = 100;
+        private const double SIDEBAR_COLLAPSE_WIDTH = 50;
 
-        /// <summary>
-        /// The width of the <see cref="SideBarSection"/>s selection indicator.
-        /// </summary>
-        /// <remarks><i>The value is in device independent units (1/96th inch per unit).</i></remarks>
-        public const double SIDEBAR_SECTION_INDICATOR_WIDTH = 5;
+        ///// <summary>
+        ///// The width of the <see cref="SideBarSection"/>s selection indicator.
+        ///// </summary>
+        ///// <remarks><i>The value is in device independent units (1/96th inch per unit).</i></remarks>
+        //public const double SIDEBAR_SECTION_INDICATOR_WIDTH = 5;
 
         #endregion
 
@@ -681,9 +681,6 @@ namespace ControlsXL
             this.PreviewMouseMove += new MouseEventHandler(ResizeCommon);
         }
 
-        
-
-
         /// <summary>
         /// Removes event listeners that have been possibly set at the beginning of a resize command.
         /// </summary>
@@ -767,14 +764,13 @@ namespace ControlsXL
             
             if(e.LeftButton == MouseButtonState.Pressed)
             {
-                // TODO: Resize sections function
                 Point mousePosition = e.GetPosition(this);
 
                 double height = this.ActualHeight - SIDEBAR_SECTION_HEIGHT - mousePosition.Y - 1;
 
                 // TODO:
                 if(mousePosition.Y > _PARTSideBarCommon.ActualHeight)
-                this.VisibleSections = (int)(height / SIDEBAR_SECTION_HEIGHT);
+                    this.VisibleSections = (int)(height / SIDEBAR_SECTION_HEIGHT);
             }
             else
             {
@@ -1045,9 +1041,15 @@ namespace ControlsXL
                 section.SideBar = this;
                 section.Height = SIDEBAR_SECTION_HEIGHT;
 
+                // Reset the status flags
+                section.StatusFlags = SectionStatusFlags.None;
+                section.StatusFlags |= this.IsExpanded == true ? SectionStatusFlags.Expanded : SectionStatusFlags.Collapsed;
+
                 if(maximizedSections > 0)
                 {
-                    section.IsMaximized = true;
+                    // Maximized section logic
+                    section.StatusFlags |= SectionStatusFlags.Maximized;
+                    section.Height = SIDEBAR_SECTION_HEIGHT;
 
                     // Add the section to the maximized section collection
                     _MaximizedSideBarSections.Add(section);
@@ -1056,7 +1058,10 @@ namespace ControlsXL
                 }
                 else
                 {
-                    section.IsMaximized = false;
+                    // Minimized section logic
+                    section.StatusFlags |= SectionStatusFlags.Minimized;
+                    section.Height = SIDEBAR_SECTION_IMAGE_DIMENSIONS;
+                    section.ToolTip = section.Header;
 
                     if (this._MinimizedSideBarSections.Count < minimizedSections)
                     {
@@ -1099,7 +1104,14 @@ namespace ControlsXL
                 SideBarSection section = _SideBarSections[i];
 
                 section.Clicked += new RoutedEventHandler(MenuItemClickedEventHandler);
-                section.IsMaximized = true;
+
+                section.StatusFlags &= ~SectionStatusFlags.Minimized;
+                section.StatusFlags |= SectionStatusFlags.Maximized;
+                section.StatusFlags &= ~SectionStatusFlags.Collapsed;
+                section.StatusFlags |= SectionStatusFlags.Expanded;
+                section.StatusFlags |= SectionStatusFlags.Overflow;
+                section.ToolTip = null;
+
                 overflowMenuItems.Add(section);
             }
 
@@ -1116,9 +1128,9 @@ namespace ControlsXL
                 return 0;
             
             return (int)Math.Floor((_PARTSideBarMinimizedSections.ActualWidth
-                                    - (SelectedSection.IsMaximized ? 0 : SIDEBAR_SECTION_INDICATOR_WIDTH) 
-                                    - SIDEBAR_SECTION_MINIMIZED_DIMENSIONS) 
-                                    / SIDEBAR_SECTION_MINIMIZED_DIMENSIONS);
+                                    /*- (SelectedSection.IsMaximized ? 0 : SIDEBAR_SECTION_INDICATOR_WIDTH) */
+                                    - SIDEBAR_SECTION_IMAGE_DIMENSIONS - 2) 
+                                    / SIDEBAR_SECTION_IMAGE_DIMENSIONS);
         }
 
         /// <summary>
@@ -1128,9 +1140,10 @@ namespace ControlsXL
         private int GetMinimumSideBarSectionsAreaHeight()
         {
             return (int)(_MaximizedSideBarSections.Count * SIDEBAR_SECTION_HEIGHT) + 
-                   (int)(_MinimizedSideBarSections.Count > 0 ? (1 * SIDEBAR_SECTION_MINIMIZED_DIMENSIONS) : 0) + 
-                   (int)SIDEBAR_SECTION_INDICATOR_WIDTH * 2 +
-                   (int)SIDEBAR_SECTION_HEIGHT;
+                   (int)SIDEBAR_SECTION_IMAGE_DIMENSIONS + 
+                   
+                   /*(int)SIDEBAR_SECTION_INDICATOR_WIDTH * 2 +*/
+                   (int)SIDEBAR_SECTION_HEIGHT + 5;
         }
 
         /// <summary>
@@ -1220,6 +1233,22 @@ namespace ControlsXL
 
     }
 
+    //
+    /// <summary>
+    /// Defines all possible <see cref="SideBarSection"/>'s <see cref="SideBarSection.StatusFlags"/> values.
+    /// </summary>
+    [Flags]
+    [TypeConverter(typeof(EnumConverter))]
+    public enum SectionStatusFlags
+    {
+        None      = 0,
+        Maximized = 1,
+        Minimized = 2,
+        Overflow  = 4,
+        Expanded  = 8,
+        Collapsed = 16
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -1268,11 +1297,6 @@ namespace ControlsXL
         #region Dependency Properties
 
         /// <summary>
-        /// Registers the property to check if the <see cref="SideBarSection"/> is maximized.
-        /// </summary>
-        public static readonly DependencyProperty IsMaximizedProperty = DependencyProperty.Register(nameof(IsMaximized), typeof(bool), typeof(SideBarSection), new UIPropertyMetadata(true));
-
-        /// <summary>
         /// Registers the property to check if the <see cref="SideBarSection"/> is selected.
         /// </summary>
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(nameof(IsSelected), typeof(bool), typeof(SideBarSection), new UIPropertyMetadata(false, IsSelectedChangedCallback));
@@ -1283,9 +1307,14 @@ namespace ControlsXL
         public static readonly DependencyProperty ImageProperty = DependencyProperty.Register(nameof(Image), typeof(ImageSource), typeof(SideBarSection), new UIPropertyMetadata(null));
 
         /// <summary>
-        /// Gets or sets the <see cref="Geometry"/> data for the <see cref="SideBarSection"/> button image.
+        /// Registers the property to set the <see cref="Geometry"/> data for the <see cref="SideBarSection"/> button image.
         /// </summary>
         public static readonly DependencyProperty VectorProperty = DependencyProperty.Register(nameof(Vector), typeof(Geometry), typeof(SideBarSection), new UIPropertyMetadata(null));
+
+        /// <summary>
+        /// Registers the property to set the <see cref="StatusFlags"/> of the <see cref="SideBarSection"/>.
+        /// </summary>
+        public static readonly DependencyProperty StatusFlagsProperty = DependencyProperty.Register(nameof(StatusFlags), typeof(SectionStatusFlags), typeof(SideBarSection), new PropertyMetadata(SectionStatusFlags.None));
 
         #endregion
 
@@ -1294,15 +1323,15 @@ namespace ControlsXL
         /// <summary>
         /// Gets or sets a reference to the parent of the <see cref="SideBarSection"/>.
         /// </summary>
-        internal SideBar SideBar { get; set; }
+        public SideBar SideBar { get; internal set; }
 
         /// <summary>
-        /// Gets or sets whether the <see cref="SideBarSection"/> is maximized.
+        /// Gets or sets the <see cref="SideBarSection"/>'s status flags.
         /// </summary>
-        public bool IsMaximized
+        public SectionStatusFlags StatusFlags
         {
-            get { return (bool)GetValue(IsMaximizedProperty); }
-            set { SetValue(IsMaximizedProperty, value); }
+            get { return (SectionStatusFlags)GetValue(StatusFlagsProperty); }
+            internal set { SetValue(StatusFlagsProperty, value); }
         }
 
         /// <summary>
@@ -1375,114 +1404,7 @@ namespace ControlsXL
             RaiseEvent(new RoutedEventArgs(SideBarSectionClickRoutedEvent));
         }
 
-      
-
         #endregion
     }
 
-    //    / <summary>
-    //    / 
-    //    / </summary>
-    //    public class SideBarCommonSection : HeaderedContentControl
-    //    {
-    //        #region Constructor
-
-    //        / <summary>
-    //        / Static constructor called before initializing an instance of<see cref= "SideBarSection" />.
-    //        / </ summary >
-    //        static SideBarCommonSection()
-    //        {
-    //            Overrides the default style of the inherited HeaderedContentControl to use the SideBarSection style instead.
-    //           DefaultStyleKeyProperty.OverrideMetadata(typeof(SideBarSection), new FrameworkPropertyMetadata(typeof(SideBarSection)));
-    //        }
-
-    //        / <summary>
-    //        / Creates and initializes a new <see cref = "SideBarSection" /> control.
-    //        / </ summary >
-    //        public SideBarCommonSection() : base()
-    //        {
-    //            Add a mouse click event listener to the sidebar section
-    //           AddHandler(ButtonBase.ClickEvent, new RoutedEventHandler(SideBarCommonSectionClicked));
-    //        }
-
-    //        #endregion
-
-    //        #region Routed Events
-
-    //        / <summary>
-    //        / Registers the event to raise when the<see cref="SideBarSection"/> is clicked.
-    //        / </summary>
-    //        public static readonly RoutedEvent SideBarCommonSectionClickRoutedEvent = EventManager.RegisterRoutedEvent(nameof(SideBarCommonSectionClickRoutedEvent), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(SideBarSection));
-
-    //        / <summary>
-    //        / Defines the event raised when the<see cref="SideBarSection"/> is clicked.
-    //        / </summary>
-    //        public event RoutedEventHandler Clicked
-    //    {
-    //        add { AddHandler(SideBarCommonSectionClickRoutedEvent, value); }
-    //        remove { RemoveHandler(SideBarCommonSectionClickRoutedEvent, value); }
-    //    }
-
-    //        #endregion
-
-    //        #region Dependency Properties
-
-    //        / <summary>
-    //        / Registers the property to set the<see cref="Image"/> of the <see cref = "SideBarSection" />.
-    //        / </ summary >
-    //        public static readonly DependencyProperty ImageProperty = DependencyProperty.Register(nameof(Image), typeof(ImageSource), typeof(SideBarSection), new UIPropertyMetadata(null));
-
-    //        / <summary>
-    //        / Gets or sets the<see cref="Geometry"/> data for the<see cref="SideBarSection"/> button image.
-    //        / </summary>
-    //        public static readonly DependencyProperty VectorProperty = DependencyProperty.Register(nameof(Vector), typeof(Geometry), typeof(SideBarSection), new UIPropertyMetadata(null));
-
-    //        #endregion
-
-    //        #region Properties
-
-    //        / <summary>
-    //        / Gets or sets a reference to the parent of the<see cref="SideBarSection"/>.
-    //        / </summary>
-    //        internal SideBar SideBar { get; set; }
-
-    //        / <summary>
-    //        / Gets or sets the<see cref="ImageSource"/> of the <see cref = "SideBarSection" /> 's image.
-    //        / </ summary >
-    //        / < remarks >< i > The < see cref= "Image" /> property has priorty over the <see cref = "Vector" /> property.</ i ></ remarks >
-    //        public ImageSource Image
-    //    {
-    //        get { return (ImageSource)GetValue(ImageProperty); }
-    //        set { SetValue(ImageProperty, value); }
-    //    }
-
-    //        / <summary>
-    //        / Gets or sets the vector<see cref="Geometry"/> of the<see cref="SideBarSection"/>'s image.
-    //        / </summary>
-    //        / <remarks><i>The<see cref="Image"/> property has priorty over the<see cref="Vector"/> property.</i></remarks>
-    //        public Geometry Vector
-    //    {
-    //        get { return (Geometry)GetValue(VectorProperty); }
-    //        set { SetValue(VectorProperty, value); }
-    //    }
-
-    //        #endregion
-
-    //        #region Event Handlers
-
-    //        / <summary>
-    //        / Handles the<see cref="Clicked"/> event.
-    //        / </summary>
-    //        / <param name = "sender" > The < see cref= "object" /> that raised the event.</param>
-    //        / <param name = "e" > A < see cref= "RoutedEventArgs" /> containing event data.</param>
-    //        private void SideBarCommonSectionClicked(object sender, RoutedEventArgs e)
-    //    {
-    //        ToggleButton button = e.OriginalSource as ToggleButton;
-
-
-    //        RaiseEvent(new RoutedEventArgs(SideBarCommonSectionClickRoutedEvent));
-    //    }
-
-    //    #endregion
-    //}
 }

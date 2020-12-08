@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:xl="clr-namespace:ControlsXL">
+
+    <ResourceDictionary.MergedDictionaries>
+
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Colors.xaml"/>
+        <!--<ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/MarkerButton/MarkerButtonDefault.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/VectorButton/VectorButtonDefault.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/SideBar/SideBarDefault.xaml"/>-->
+    </ResourceDictionary.MergedDictionaries>
+    
+    <!-- TODO: All default color keys here? -->
+
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TestBrush}" Color="DeepPink"/>
+    
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, BackgroundBrush}" Color="{StaticResource DefaultControlBackgroundColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, BorderBrush}" Color="{StaticResource DefaultControlBorderColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, DisabledBackgroundBrush}" Color="{StaticResource DefaultControlDisabledBackgroundColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, DisabledBorderBrush}" Color="{StaticResource DefaultControlDisabledBorderColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, DisabledForegroundBrush}" Color="{StaticResource DefaultControlDisabledTextColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, MouseOverBackgroundBrush}" Color="{StaticResource DefaultControlMouseOverBackgroundColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, MouseOverBorderBrush}" Color="{StaticResource DefaultMouseOverBorderColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, PressedBackgroundBrush}" Color="{StaticResource DefaultControlPressedBackgroundColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, PressedBorderBrush}" Color="{StaticResource DefaultControlPressedBorderColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, CheckedBackgroundBrush}" Color="{StaticResource DefaultHighlightColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, CheckedForegroundBrush}" Color="{StaticResource DefaultHighlightTextColor}"/>
+    
+</ResourceDictionary>

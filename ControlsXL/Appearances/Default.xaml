@@ -5,12 +5,12 @@
 
     <ResourceDictionary.MergedDictionaries>
 
-        <!-- Merges the specified dictionaries containing custom control appearances into Flat.xaml -->
+        <!-- Merges the specified dictionaries containing custom control appearances into Default.xaml -->
         <!--<ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Appearance.xaml"/>-->
 
     </ResourceDictionary.MergedDictionaries>
 
-    <Thickness x:Key="{ComponentResourceKey xl:Appearance, BorderThickness}">0</Thickness>
-    <!--<sys:Double x:Key="BorderThickness">1</sys:Double>-->
+    <Thickness x:Key="{ComponentResourceKey xl:Styles, BorderThickness}">1</Thickness>
+    <CornerRadius x:Key="{ComponentResourceKey xl:Styles, CornerRadius}">0</CornerRadius>
     
 </ResourceDictionary>

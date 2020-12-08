@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,20 +10,20 @@ using System.Windows;
 namespace ControlsXL
 {
     /// <summary>
-    /// Defines the available skins.
+    /// Defines the available control styles.
     /// </summary>
-    /// <remarks><i><b>IMPORTANT: </b> The name of the enumeration values are use in the <see cref="ResourceDictionary.Source"/> uri and have to match the file names in the skins folder.</i></remarks>
-    public enum SkinStyles
+    /// <remarks><i><b>IMPORTANT: </b> The name of the enumeration values are use in the <see cref="ResourceDictionary.Source"/> uri and have to match the file names in the styles folder.</i></remarks>
+    public enum ControlStyle
     {
         Default,
         Dark
     }
 
     /// <summary>
-    /// Defines the available appearances.
+    /// Defines the available control appearances.
     /// </summary>
-    /// <remarks><i><b>IMPORTANT: </b> The name of the enumeration values are use in the <see cref="ResourceDictionary.Source"/> uri and have to match the file names in the appearance folder.</i></remarks>
-    public enum Appearances
+    /// <remarks><i><b>IMPORTANT: </b> The name of the enumeration values are use in the <see cref="ResourceDictionary.Source"/> uri and have to match the file names in the appearances folder.</i></remarks>
+    public enum ControlAppearance
     {
         Default,
         Flat
@@ -36,19 +37,19 @@ namespace ControlsXL
         #region Fields
 
         /// <summary>
-        /// Stores the applied skin.
+        /// Stores the applied style.
         /// </summary>
-        private static SkinStyles _SkinStyle = SkinStyles.Default;
+        private static ControlStyle _Style = ControlStyle.Default;
 
         /// <summary>
         /// Stores the applied appearance.
         /// </summary>
-        private static Appearances _Appearance = Appearances.Default;
+        private static ControlAppearance _Appearance = ControlAppearance.Default;
 
         /// <summary>
-        /// Stores the <see cref="ResourceDictionary"/> containing the dictionary keys for the current skin.
+        /// Stores the <see cref="ResourceDictionary"/> containing the dictionary keys for the current style.
         /// </summary>
-        private static ResourceDictionary _CurrentSkin = new ResourceDictionary();
+        private static ResourceDictionary _CurrentStyle = new ResourceDictionary();
 
         /// <summary>
         /// Stores the <see cref="ResourceDictionary"/> containing the dictionary keys for the current appearance.
@@ -60,9 +61,9 @@ namespace ControlsXL
         #region Events
 
         /// <summary>
-        /// Defines the event to raise when the applied skin style is changed.
+        /// Defines the event to raise when the applied style is changed.
         /// </summary>
-        public static event EventHandler SkinChanged;
+        public static event EventHandler StyleChanged;
 
         /// <summary>
         /// Defines the event to raise when the applied appearance is changed.
@@ -78,7 +79,6 @@ namespace ControlsXL
         /// </summary>
         static StyleManager()
         {
-            
         }
 
         #endregion
@@ -86,16 +86,16 @@ namespace ControlsXL
         #region Properties
 
         /// <summary>
-        /// Gets or sets the skin to apply.
+        /// Gets or sets the style to apply.
         /// </summary>
-        public static SkinStyles SkinStyle
+        public static ControlStyle Style
         {
-            get { return _SkinStyle; }
+            get { return _Style; }
             set
             {
-                if (_SkinStyle != value)
+                if (_Style != value)
                 {
-                    _SkinStyle = value;
+                    _Style = value;
                     ApplySkinStyle();
                 }
             }
@@ -104,7 +104,7 @@ namespace ControlsXL
         /// <summary>
         /// Gets or sets the appearance to apply.
         /// </summary>
-        public static Appearances Appearance
+        public static ControlAppearance Appearance
         {
             get { return _Appearance; }
             set
@@ -128,16 +128,16 @@ namespace ControlsXL
         {
             Collection<ResourceDictionary> dictionaries = Application.Current.Resources.MergedDictionaries;
 
-            dictionaries.Remove(_CurrentSkin);
+            dictionaries.Remove(_CurrentStyle);
 
-            _CurrentSkin.Source = new Uri($"/ControlsXL;Component/Skins/{SkinStyle}.xaml", UriKind.Relative);
+            _CurrentStyle.Source = new Uri($"/ControlsXL;Component/Styles/{Style}.xaml", UriKind.Relative);
 
-            dictionaries.Add(_CurrentSkin);            
+            dictionaries.Add(_CurrentStyle);            
 
             // Raise the skin changed event
-            if (SkinChanged != null)
+            if (StyleChanged != null)
             {
-                SkinChanged(null, EventArgs.Empty);
+                StyleChanged(null, EventArgs.Empty);
             }
         }
 
@@ -150,7 +150,7 @@ namespace ControlsXL
 
             dictionaries.Remove(_CurrentAppearance);
 
-            _CurrentAppearance.Source = new Uri($"/ControlsXL;Component/Appearance/{Appearance}.xaml", UriKind.Relative);
+            _CurrentAppearance.Source = new Uri($"/ControlsXL;Component/Appearances/{Appearance}.xaml", UriKind.Relative);
 
             dictionaries.Add(_CurrentAppearance);
 

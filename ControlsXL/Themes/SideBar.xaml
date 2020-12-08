@@ -8,14 +8,17 @@
     
     <!-- Converts a boolean to visibility values -->
     <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
-    
+    <xl:ThicknessConverter x:Key="ThicknessConverter"/>
+    <xl:BorderThicknessConverter x:Key="BorderThicknessConverter"/>
+    <xl:FlagsConverter x:Key="FlagsConverter"/>
+
     <!-- SIDE BAR STYLE -->
-    <Style TargetType="{x:Type xl:SideBar}">
+    <Style TargetType="{x:Type xl:SideBar}" x:Name="SideBarStyle">
         
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, TestBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Appearance, BorderThickness}}"/>
-        
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, BackgroundBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
+        <Setter Property="Width" Value="150"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:SideBar}">
@@ -25,15 +28,22 @@
 
                         <!-- SIDE BAR RESIZE HANDLE -->
                         <Button x:Name="SideBarResizeHandle" 
-                                Background="Transparent"
-                                BorderBrush="Transparent"
                                 ClickMode="Press"
                                 Command="{x:Static xl:SideBar.ResizeSideBarCommand}"
                                 Cursor="SizeWE"
                                 DockPanel.Dock="Right"
                                 Focusable="False"
-                                Width="5"/>
-
+                                Width="5">
+                            
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border Background="Transparent">
+                                        <ContentPresenter/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        
                         <!-- SIDE BAR BORDER -->
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
@@ -82,7 +92,9 @@
                                                            FontWeight="Bold"
                                                            HorizontalAlignment="Center"
                                                            Text="{Binding Path=Header, RelativeSource={RelativeSource TemplatedParent}}"
-                                                           VerticalAlignment="Center"/>
+                                                           TextTrimming="CharacterEllipsis"
+                                                           VerticalAlignment="Center"
+                                                           Margin="{Binding Source={x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}, Converter={StaticResource ThicknessConverter}, ConverterParameter='1 0 0 0'}"/>
 
                                             </DockPanel>
                                         </Border>
@@ -102,26 +114,35 @@
                                                           VerticalScrollBarVisibility="Hidden">
                                             
                                                 <ContentPresenter x:Name="CommonContent"
-                                                                  Content="{Binding CommonSection, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                  Content="{Binding CommonSection, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                  Margin="5"/>
 
                                             </ScrollViewer>
                                             
                                             <!-- SIDE BAR COMMON AREA RESIZE HANDLE -->
-                                            <Button x:Name="SideBarCommonSectionResizeHandle"
-                                                    Background="Transparent"
+                                            <Button x:Name="SideBarCommonSectionResizeHandle" 
+                                                    Grid.Row="1"
                                                     ClickMode="Press"
                                                     Command="{x:Static xl:SideBar.ResizeCommonCommand}"
                                                     Cursor="SizeNS"
-                                                    Grid.Row="1"
-                                                    Height="5"/>
+                                                    Focusable="False"
+                                                    Height="5">
 
+                                                <Button.Template>
+                                                    <ControlTemplate>
+                                                        <Border Background="Transparent">
+                                                            <ContentPresenter/>
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
                                         </Grid>
                                     </Grid>
                                 </Border>
 
                                 <!-- SIDE BAR HEADER AREA -->
                                 <Border x:Name="SideBarHeader"
-                                        Background="{DynamicResource {ComponentResourceKey xl:Skins, HighlightBrush}}"
+                                        Background="{DynamicResource {ComponentResourceKey xl:Styles, HighlightBrush}}"
                                         DockPanel.Dock="Top"
                                         Grid.Row="1"
                                         Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
@@ -141,13 +162,12 @@
                                         <TextBlock x:Name="SideBarHeaderText"
                                                    FontWeight="Bold"
                                                    HorizontalAlignment="Center"
+                                                   Margin="{Binding Source={x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}, Converter={StaticResource ThicknessConverter}, ConverterParameter='1 0 0 0'}"
                                                    Text="{Binding Path=SelectedSection.Header, RelativeSource={RelativeSource TemplatedParent}}"
-                                                   VerticalAlignment="Center">
-                                            
-                                        </TextBlock>
-                                        
+                                                   TextTrimming="CharacterEllipsis"
+                                                   VerticalAlignment="Center"/>
+
                                     </DockPanel>
-                                    
                                 </Border>
 
                                 <!-- SIDE BAR CONTENT AREA -->
@@ -160,7 +180,8 @@
                                         
                                         <ContentPresenter x:Name="SideBarContent"
                                                           Focusable="True"
-                                                          Content="{Binding SectionContent, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                          Content="{Binding SectionContent, RelativeSource={RelativeSource TemplatedParent}}"
+                                                          Margin="5"/>
                                         
                                     </ScrollViewer>
 
@@ -188,7 +209,7 @@
                                         <xl:MarkerButton x:Name="PART_SideBarCollapsedContentButton"
                                                          ButtonMode="Toggle"
                                                          ClickMode="Press"
-                                                         Content="Show Content"
+                                                         Content="{Binding Path=SelectedSection.Header, RelativeSource={RelativeSource TemplatedParent}}"
                                                          DockPanel.Dock="Top"
                                                          IsChecked="{Binding IsCollapsedContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}">
 
@@ -247,23 +268,34 @@
                                             Grid.Row="3">
 
                                     <!-- SIDE BAR SECTIONS RESIZE HANDLE -->
-                                    <Button x:Name="SideBarSectionsResizeHandle"
-                                            Background="Transparent"
+                                    <Button x:Name="SideBarSectionsResizeHandle" 
                                             ClickMode="Press"
                                             Command="{x:Static xl:SideBar.ResizeSectionsCommand}"
                                             Cursor="SizeNS"
                                             Focusable="False"
-                                            Height="5"/>
-
+                                            Height="5">
+                                        
+                                        <Button.Template>
+                                            <ControlTemplate>
+                                                <Border Background="Transparent">
+                                                    <ContentPresenter/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
+                                    
                                     <!-- SIDE BAR MAXIMIZED SECTIONS -->
                                     <ItemsControl x:Name="SideBarMaximizedSections"
+                                                  BorderBrush="{TemplateBinding BorderBrush}"
                                                   ItemsSource="{TemplateBinding MaximizedSections}"/>
                                     
                                     <!-- SIDE BAR MINIMIZED SECTIONS AREA -->
                                     <Border x:Name="PART_SideBarMinimizedSections"
                                             Background="{TemplateBinding Background}"
                                             BorderBrush="{TemplateBinding BorderBrush}"
-                                            Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
+                                            BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource BorderThicknessConverter}, ConverterParameter='0 1 0 0'}"
+                                            Height="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"
+                                            MinHeight="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}">
                                         
                                         <DockPanel>
                                             
@@ -283,20 +315,20 @@
                                             <xl:VectorButton x:Name="SideBarOverflowMenuButton"
                                                              Background="{TemplateBinding Background}"
                                                              BorderBrush="{TemplateBinding BorderBrush}"
-                                                             BorderThickness="0"
+                                                             BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource BorderThicknessConverter}, ConverterParameter='0 0 0 0'}"
                                                              ClickMode="Press"
                                                              DockPanel.Dock="Right"
-                                                             Fill="{TemplateBinding Background}"
-                                                             Height="{x:Static xl:SideBar.SIDEBAR_SECTION_MINIMIZED_DIMENSIONS}"
+                                                             Height="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"
                                                              HorizontalAlignment="Right"
                                                              IsChecked="{Binding IsOverflowMenuVisible, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                                              ButtonMode="Toggle"
                                                              Scale="0.5"
-                                                             Stroke="{TemplateBinding BorderBrush}"
-                                                             StrokeThickness="2"
+                                                             StrokeThickness="4"
+                                                             HorizontalContentAlignment="Center"
                                                              Vector="{StaticResource GeometryStack}"
                                                              Visibility="{Binding IsOverflowMenuButtonVisible, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource VisibilityConverter}}"
-                                                             Width="{x:Static xl:SideBar.SIDEBAR_SECTION_MINIMIZED_DIMENSIONS}"/>
+                                                             Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"/>
+
 
                                         </DockPanel>
                                     </Border>
@@ -350,6 +382,11 @@
                             <Setter TargetName="SideBarCommonHeaderCollapseButton" Property="DockPanel.Dock" Value="Left"/>
                             <Setter TargetName="PART_SideBarCollapsedContentPopup" Property="Placement" Value="Left"/>
                             <Setter TargetName="PopupLocation" Property="HorizontalAlignment" Value="Left"/>
+                            <Setter TargetName="SideBarHeaderCollapseButton" Property="Vector" Value="{StaticResource GeometryExpand}"/>
+                            <Setter TargetName="SideBarCommonHeaderCollapseButton" Property="Vector" Value="{StaticResource GeometryExpand}"/>
+                            <Setter TargetName="SideBarOptionsCollapseButton" Property="Vector" Value="{StaticResource GeometryCollapse}"/>
+                            <Setter TargetName="SideBarCommonHeaderText" Property="Margin" Value="{Binding Source={x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}, Converter={StaticResource ThicknessConverter}, ConverterParameter='0 0 1 0'}"/>
+                            <Setter TargetName="SideBarHeaderText" Property="Margin" Value="{Binding Source={x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}, Converter={StaticResource ThicknessConverter}, ConverterParameter='0 0 1 0'}"/>
                         </Trigger>
 
                         <Trigger Property="ShowSections" Value="False">
@@ -362,24 +399,10 @@
 
                         <Trigger Property="ShowCommon" Value="True">
                             <Setter TargetName="SideBarHeaderCollapseButton" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="SideBarHeaderText" Property="Margin" Value="0"/>
                         </Trigger>
                         
-                        <!-- TOGGLES THE DIRECTION OF THE COLLAPSE BUTTON WHEN THE SIDE BAR IS LEFT ALIGNED -->
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="{x:Static xl:SideBar.IsExpandendProperty}" Value="True"/>
-                                <Condition Property="{x:Static xl:SideBar.DockPositionProperty}" Value="Left"/>
-                            </MultiTrigger.Conditions>
-                        </MultiTrigger>
-
-                        <!-- TOGGLES THE DIRECTION OF THE COLLAPSE BUTTON WHEN THE SIDE BAR IS RIGHT ALIGNED -->
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="{x:Static xl:SideBar.DockPositionProperty}" Value="Right"/>
-                            </MultiTrigger.Conditions>
-                        </MultiTrigger>
                     </ControlTemplate.Triggers>
-                    
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -388,108 +411,163 @@
     <!-- SIDE BAR SECTION STYLE -->
     <Style TargetType="{x:Type xl:SideBarSection}">
 
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Skins, ForegroundBrush}}"/>
-        
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, BackgroundBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ForegroundBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Height" Value="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:SideBarSection}">
 
+                    <!-- SIDE BAR SECTION BUTTON -->
                     <ToggleButton x:Name="SideBarSectionButton"
                                   Background="{TemplateBinding Background}"
                                   BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource BorderThicknessConverter}, ConverterParameter='0 1 0 0'}"
                                   ClickMode="Press"
                                   Focusable="True"
                                   Foreground="{TemplateBinding Foreground}"
                                   Height="{TemplateBinding Height}"
-                                  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                   HorizontalContentAlignment="Left"
                                   IsChecked="{Binding Path=IsSelected, RelativeSource={RelativeSource TemplatedParent}}"
-                                  VerticalAlignment="Center"
-                                  VerticalContentAlignment="Center">
+                                  Padding="0"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}">
 
                         <ToggleButton.Content>
                             
                             <DockPanel>
 
-                                <Border x:Name="SideBarSectionIndicator"
-                                        Background="{TemplateBinding BorderBrush}"
-                                        BorderThickness="0"
-                                        DockPanel.Dock="Left"
-                                        Focusable="False"
-                                        Width="{x:Static xl:SideBar.SIDEBAR_SECTION_INDICATOR_WIDTH}"/>
-
+                                <!-- SIDE BAR SECTION IMAGE -->
                                 <Image x:Name="SideBarSectionImage"
                                        DockPanel.Dock="Left"
                                        Focusable="False"
                                        Height="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"
                                        RenderTransformOrigin="0.5, 0.5"
                                        Source="{TemplateBinding Image}"
-                                       Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"/>
+                                       Stretch="Uniform"
+                                       Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}">
 
-                                <Grid x:Name="SideBarSectionVector"
-                                      Background="Transparent"
-                                      ClipToBounds="True"
-                                      DockPanel.Dock="Left"
-                                      Focusable="False"
-                                      Height="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"
-                                      Visibility="Collapsed"
-                                      Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}">
+                                    <Image.RenderTransform>
+                                        
+                                        <ScaleTransform ScaleX="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_SCALE_FACTOR}" 
+                                                        ScaleY="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_SCALE_FACTOR}"/>
+                                        
+                                    </Image.RenderTransform>
+                                </Image>
 
+                                <!-- SIDE BAR SECTION VECTOR IMAGE -->
+                                <Border x:Name="SideBarSectionVector"
+                                        BorderThickness="0"
+                                        Background="Transparent"
+                                        ClipToBounds="True"
+                                        DockPanel.Dock="Left"
+                                        Focusable="False"
+                                        Height="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"
+                                        Visibility="Collapsed"
+                                        Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}">
+
+                                    <!-- SIDE BAR SECTION VECTOR IMAGE PATH -->
                                     <Path x:Name="SideBarSectionVectorData"
                                           Data="{TemplateBinding Vector}"
                                           DockPanel.Dock="Left"
-                                          Fill="{DynamicResource {ComponentResourceKey xl:Skins, BackgroundBrush}}"
+                                          Fill="{DynamicResource {ComponentResourceKey xl:Styles, BackgroundBrush}}"
+                                          Focusable="False"
                                           RenderTransformOrigin="0.5, 0.5"
                                           Stretch="Uniform"
-                                          Stroke="{DynamicResource {ComponentResourceKey xl:Skins, BorderBrush}}">
-                                        
-                                    </Path>
+                                          Stroke="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}">
 
-                                </Grid>
+                                        <Path.RenderTransform>
+                                            
+                                            <ScaleTransform ScaleX="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_SCALE_FACTOR}" 
+                                                            ScaleY="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_SCALE_FACTOR}"/>
+                                            
+                                        </Path.RenderTransform>
+                                    </Path>
+                                </Border>
                                 
-                                <ContentPresenter x:Name="Content"
-                                                  Content="{TemplateBinding Header}"
-                                                  HorizontalAlignment="Left"
-                                                  VerticalAlignment="Center"/>
+                                <!-- SIDE BAR SECTION CAPTION -->
+                                <TextBlock x:Name="Content"
+                                           Focusable="False"
+                                           Text="{TemplateBinding Header}"
+                                           TextTrimming="CharacterEllipsis"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"/>
                                 
                             </DockPanel>
-                            
                         </ToggleButton.Content>
                     </ToggleButton>
 
                     <!-- SIDE BAR SECTION FUNCTIONALITY -->
                     <ControlTemplate.Triggers>
 
-                        <!-- Colapses the sidebar section image if no image source is provided and expands the side bar section vector -->
+                        <!-- SECTION IMAGE = NULL: Colapses the sidebar section image if no image source is provided and expands the side bar section vector -->
                         <DataTrigger Binding="{Binding ElementName=SideBarSectionImage, Path=Source}" Value="{x:Null}">
                             <Setter TargetName="SideBarSectionImage" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="SideBarSectionVector" Property="Visibility" Value="Visible"/>
                         </DataTrigger>
 
-                        <!-- Hides the section header and indicator if the section is minimized -->
-                        <Trigger Property="IsMaximized" Value="False">
+                        <!-- STATUS FLAGS MINIMIZED: Minimized -->
+                        <DataTrigger Binding="{Binding StatusFlags, RelativeSource={RelativeSource Self}, Converter={StaticResource FlagsConverter}, ConverterParameter={x:Static xl:SectionStatusFlags.Minimized}}" Value="True">
                             <Setter TargetName="Content" Property="Visibility" Value="Collapsed"/>
-                            <Setter TargetName="SideBarSectionIndicator" Property="Visibility" Value="Collapsed"/>
                             <Setter Property="MinWidth" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
-                        </Trigger>
-                        
+                            <Setter Property="Height" Value="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"/>
+                            <Setter TargetName="SideBarSectionButton" Property="BorderThickness" Value="{Binding BorderThickness, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BorderThicknessConverter}, ConverterParameter='0 0 1 0'}"/>
+                        </DataTrigger>
+
+                        <!-- STATUS FLAGS OVERFLOW: Overflow -->
+                        <DataTrigger Binding="{Binding StatusFlags, RelativeSource={RelativeSource Self}, Converter={StaticResource FlagsConverter}, ConverterParameter={x:Static xl:SectionStatusFlags.Overflow}}" Value="True">
+                            <Setter TargetName="Content" Property="Margin" Value="{Binding Source={x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}, Converter={StaticResource ThicknessConverter}, ConverterParameter='0 0 1 0'}"/>
+                        </DataTrigger>
+
+                        <!-- STATUS FLAGS COLLAPSED: Collapsed -->
+                        <DataTrigger Binding="{Binding StatusFlags, RelativeSource={RelativeSource Self}, Converter={StaticResource FlagsConverter}, ConverterParameter={x:Static xl:SectionStatusFlags.Collapsed}}" Value="True">
+                            <Setter TargetName="Content" Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="MaxHeight" Value="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"/>
+                            <Setter TargetName="SideBarSectionButton" Property="MaxHeight" Value="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"/>
+                        </DataTrigger>
+
+                        <!-- STATUS FLAGS MAXIMIZED: Maximized -->
+                        <DataTrigger Binding="{Binding StatusFlags, RelativeSource={RelativeSource Self}, Converter={StaticResource FlagsConverter}, ConverterParameter={x:Static xl:SectionStatusFlags.Maximized}}" Value="True">
+                            
+                        </DataTrigger>
+
+                        <!-- STATUS FLAGS EXPANDED: Expanded -->
+                        <DataTrigger Binding="{Binding StatusFlags, RelativeSource={RelativeSource Self}, Converter={StaticResource FlagsConverter}, ConverterParameter={x:Static xl:SectionStatusFlags.Expanded}}" Value="True">
+
+                        </DataTrigger>
+
+                        <!-- SECTION SELECTED -->
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="SideBarSectionIndicator" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Skins, HighlightBrush}}"/>
-                            <Setter TargetName="SideBarSectionIndicator" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="SideBarSectionVectorData" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, CheckedForegroundBrush}}"/>
+                            <Setter TargetName="SideBarSectionVectorData" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, CheckedForegroundBrush}}"/>
                         </Trigger>
-                        
+
+                        <!-- MOUSE OVER -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, MouseOverBackgroundBrush}}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, MouseOverBorderBrush}}"/>
+                            <Setter TargetName="SideBarSectionVectorData" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, MouseOverBorderBrush}}"/>
+                            <Setter TargetName="SideBarSectionVectorData" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, MouseOverBorderBrush}}"/>
+                        </Trigger>
+
+                        <!-- DISABLED -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, DisabledBackgroundBrush}}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, DisabledBorderBrush}}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, DisabledForegroundBrush}}"/>
+                            <Setter TargetName="SideBarSectionVectorData" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, DisabledForegroundBrush}}"/>
+                            <Setter TargetName="SideBarSectionVectorData" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, DisabledForegroundBrush}}"/>
+                        </Trigger>
+
                     </ControlTemplate.Triggers>
-                    
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
-
-    
     
 </ResourceDictionary>

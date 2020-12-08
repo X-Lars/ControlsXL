@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using ControlsXL.Common;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
@@ -20,7 +21,7 @@ namespace ControlsXL
         /// <summary>
         /// Default width or height of the marker depending on the <see cref="MarkerPlacement"/> property.
         /// </summary>
-        private const double DEFAULT_MARKER_SIZE = 5;
+        private const double DEFAULT_MARKER_SIZE = 3;
 
         #endregion
 

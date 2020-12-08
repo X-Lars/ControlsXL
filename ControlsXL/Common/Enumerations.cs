@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ControlsXL
+namespace ControlsXL.Common
 {
     /// <summary>
     /// Defines the possible modes of a button.

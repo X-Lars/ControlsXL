@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +38,7 @@ namespace ControlsXL
             {
                 this._DesignTimeSource = value;
 
+                // Prevents adding of the resource dictionary at runtime
                 if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue)
                 {
                     base.Source = _DesignTimeSource;
@@ -62,21 +62,12 @@ namespace ControlsXL
             {
                 this._DesignTimeSource = value;
 
+                // Prevents adding of the resource dictionary at runtime
                 if ((bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue)
                 {
                     base.Source = _DesignTimeSource;
                 }
             }
-            //get
-            //{
-            //    return base.Source;
-            //}
-
-            //set
-            //{
-
-            //    throw new Exception("Use DesignTimeSource instead Source!");
-            //}
         }
 
         #endregion

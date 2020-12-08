@@ -12,10 +12,11 @@
         
     </ResourceDictionary.MergedDictionaries>
 
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, TestBrush}" Color="Pink"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, BackgroundBrush}" Color="{StaticResource DefaultControlDarkColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, BorderBrush}" Color="{StaticResource DefaultControlDarkDarkColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, ForegroundBrush}" Color="{StaticResource DefaultControlTextColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Skins, HighlightBrush}" Color="{StaticResource DefaultControlHighlightColor}" />
+    <SolidColorBrush x:Key="TestBrush" Color="DeepPink"/>
+    
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, BackgroundBrush}" Color="{StaticResource DefaultControlDarkColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, BorderBrush}" Color="{StaticResource DefaultControlDarkDarkColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ForegroundBrush}" Color="{StaticResource DefaultControlTextColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, HighlightBrush}" Color="{StaticResource DefaultControlHighlightColor}" />
     
 </ResourceDictionary>
