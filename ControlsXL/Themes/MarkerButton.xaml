@@ -10,6 +10,8 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Width" Value="Auto"/>
+        
         <Setter Property="Template">
             <Setter.Value>
                 
@@ -29,18 +31,15 @@
                                     Background="{TemplateBinding BorderBrush}"
                                     Height="{Binding MarkerSize, RelativeSource={RelativeSource TemplatedParent}}"
                                     Width="{Binding MarkerSize, RelativeSource={RelativeSource TemplatedParent}}"
-                                    Focusable="False">
-                                
-                            </Border>
+                                    Focusable="False"/>
 
                             <!-- TEXT -->
-                            <ContentPresenter x:Name="Content"
-                                              Focusable="False"                        
-                                              Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              Margin="4, 0"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <TextBlock x:Name="Content"
+                                       Focusable="False"            
+                                       Text="{TemplateBinding Content}"
+                                       TextTrimming="CharacterEllipsis"
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                       Margin="4, 0"/>
 
                         </DockPanel>
                     </Border>
@@ -49,22 +48,22 @@
 
                         <!-- MARKER DOCK POSITION LEFT -->
                         <Trigger SourceName="Marker" Property="DockPanel.Dock" Value="Left"> 
-                            <Setter TargetName="Marker" Property="Height" Value="{Binding ActualHeight}"/>
+                            <Setter TargetName="Marker" Property="Height" Value="{Binding Height, RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Trigger>
 
                         <!-- MARKER DOCK POSITION RIGHT -->
                         <Trigger SourceName="Marker" Property="DockPanel.Dock" Value="Right">
-                            <Setter TargetName="Marker" Property="Height" Value="{Binding ActualHeight}"/>
+                            <Setter TargetName="Marker" Property="Height" Value="{Binding Height, RelativeSource={RelativeSource TemplatedParent}}"/>
                         </Trigger>
 
                         <!-- MARKER DOCK POSITION TOP -->
                         <Trigger SourceName="Marker" Property="DockPanel.Dock" Value="Top">
-                            <Setter TargetName="Marker" Property="Width" Value="{Binding ActualWidth}"/>
+                            <Setter TargetName="Marker" Property="Width" Value="{Binding ElementName=Content, Path=Width}"/>
                         </Trigger>
 
                         <!-- MARKER DOCK POSITION BOTTOM -->
                         <Trigger SourceName="Marker"  Property="DockPanel.Dock" Value="Bottom">
-                            <Setter TargetName="Marker" Property="Width" Value="{Binding ActualWidth}"/>
+                            <Setter TargetName="Marker" Property="Width" Value="{Binding ElementName=Content, Path=Width}"/>
                         </Trigger>
 
                         <!-- IS CHECKED -->
