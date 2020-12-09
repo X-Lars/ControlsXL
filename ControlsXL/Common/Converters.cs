@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace ControlsXL
+namespace ControlsXL.Common
 {
     /// <summary>
     /// Converts a <see cref="null"/> value to a <see cref="bool"/>.
@@ -154,7 +154,7 @@ namespace ControlsXL
     /// Converts a <see cref="Thickness"/> to a new <see cref="Thickness"/> containing only the specified borders.
     /// </summary>
     /// <remarks><i>Maintains the provided border thickness, only hides the specified borders, used for dynamic styling.</i></remarks>
-    public class BorderThicknessConverter : IValueConverter
+    public class AddaptiveThicknessConverter : IValueConverter
     {
         /// <summary>
         /// Converts the <see cref="Thickness"/> to a new <see cref="Thickness"/> containing only the specified borders.

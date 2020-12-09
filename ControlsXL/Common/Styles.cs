@@ -6,5 +6,9 @@ using System.Threading.Tasks;
 
 namespace ControlsXL
 {
-    internal static class Styles { }
+ 
+    internal static class Styles 
+    {
+        internal const string BorderThickness = "BorderThickness";
+    }
 }

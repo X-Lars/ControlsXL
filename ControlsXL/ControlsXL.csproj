@@ -134,8 +134,19 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Resource Include="Resources\Fonts\Tahoma Regular.ttf" />
-    <Resource Include="Resources\Fonts\Tahoma Bold.ttf" />
+    <Resource Include="Resources\Fonts\Lucida Console Regular.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Black Italic.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Black.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Bold Italic.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Bold.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Italic.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Light Italic.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Light.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Regular.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Semi Bold Italic.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Semi Bold.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Semi Light Italic.ttf" />
+    <Resource Include="Resources\Fonts\Segoe UI Semi Light.ttf" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

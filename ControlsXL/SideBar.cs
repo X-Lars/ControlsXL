@@ -1,22 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ControlsXL
 {
@@ -28,11 +17,14 @@ namespace ControlsXL
     [TemplatePart(Name = PART_SIDEBAR_MINIMIZED_SECTIONS)]
     [TemplatePart(Name = PART_SIDEBAR_OVERFLOW_MENU)]
     [TemplatePart(Name = PART_SIDEBAR_COMMON)]
+    [TemplatePart(Name = PART_SIDEBAR_HEADER)]
     [TemplatePart(Name = PART_SIDEBAR_COLLAPSED_CONTENT_POPUP)]
     [TemplatePart(Name = PART_SIDEBAR_COLLAPSED_CONTENT_BUTTON)]
     public class SideBar : HeaderedItemsControl
     {
         #region Constants
+
+        #region Constants: Template Parts
 
         /// <summary>
         /// The template part name of the minimized sections in xaml.
@@ -58,6 +50,13 @@ namespace ControlsXL
         /// The template part name of the collapsed side bar content button in xaml.
         /// </summary>
         private const string PART_SIDEBAR_COLLAPSED_CONTENT_BUTTON = "PART_SideBarCollapsedContentButton";
+
+        /// <summary>
+        /// The template part name of the side bar header button in xaml.
+        /// </summary>
+        private const string PART_SIDEBAR_HEADER = "PART_SideBarHeader";
+
+        #endregion
 
         /// <summary>
         /// The height of <see cref="SideBarSection"/>s.
@@ -93,11 +92,9 @@ namespace ControlsXL
         /// <remarks><i>The value is in device independent units (1/96th inch per unit).</i></remarks>
         private const double SIDEBAR_COLLAPSE_WIDTH = 50;
 
-        ///// <summary>
-        ///// The width of the <see cref="SideBarSection"/>s selection indicator.
-        ///// </summary>
-        ///// <remarks><i>The value is in device independent units (1/96th inch per unit).</i></remarks>
-        //public const double SIDEBAR_SECTION_INDICATOR_WIDTH = 5;
+        public const double SIDEBAR_DIMENSION_CONSTANT = 32;
+
+        public const double SIDEBAR_HANDLE_DIMENSION_CONSTANT = 5;
 
         #endregion
 
@@ -122,6 +119,8 @@ namespace ControlsXL
         #endregion
 
         #region Fields
+
+        #region Fields: Collections
 
         /// <summary>
         /// Stores all <see cref="SideBarSection"/>s.
@@ -148,20 +147,14 @@ namespace ControlsXL
         /// </summary>
         private Collection<ButtonBase> _OptionButtons;
 
-        /// <summary>
-        /// Stores the width to expand to when the <see cref="SideBar"/> is collapsed.
-        /// </summary>
-        private double _LastWidth = double.PositiveInfinity;
+        #endregion
+
+        #region Fields: Partials
 
         /// <summary>
-        /// Stores a reference to the template part in xaml.
+        /// Stores a reference to the collapsed content button template part in xaml.
         /// </summary>
-        private FrameworkElement _PARTSideBarMinimizedSections;
-
-        /// <summary>
-        /// Stores a reference to the overflow menu popup template part in xaml.
-        /// </summary>
-        private Popup _PARTOverflowMenu;
+        private ToggleButton _PARTCollapsedContentButton;
 
         /// <summary>
         /// Stores a reference to the collapsed content popup template part in xaml.
@@ -169,19 +162,37 @@ namespace ControlsXL
         private Popup _PARTCollapsedContentPopup;
 
         /// <summary>
+        /// Stores a reference to the overflow menu popup template part in xaml.
+        /// </summary>
+        private Popup _PARTOverflowMenu;
+
+        /// <summary>
         /// Stores a reference to the side bar common template part in xaml.
         /// </summary>
         private FrameworkElement _PARTSideBarCommon;
 
         /// <summary>
+        /// Stores a reference to the template side bar minimized sections part in xaml.
+        /// </summary>
+        private FrameworkElement _PARTSideBarMinimizedSections;
+
+        /// <summary>
+        /// Stores a reference to the side bar header template part in xaml.
+        /// </summary>
+        private Button _PARTSideBarHeader;
+
+        #endregion
+
+        /// <summary>
+        /// Stores the width to expand to when the <see cref="SideBar"/> is collapsed.
+        /// </summary>
+        private double _LastWidth = double.PositiveInfinity;
+
+
+        /// <summary>
         /// Stores the common section.
         /// </summary>
         private object _CommonSection;
-
-        /// <summary>
-        /// Stores a reference to the collapsed content button template part in xaml.
-        /// </summary>
-        private ToggleButton _PARTCollapsedContentButton;
 
         #endregion
 
@@ -286,6 +297,50 @@ namespace ControlsXL
 
         #region Dependency Properties
 
+        #region Dependency Properties: Collections
+
+        /// <summary>
+        /// Registers the specialized read only property to get the maximized <see cref="SideBarSection"/>s.
+        /// </summary>
+        private static readonly DependencyPropertyKey MaximizedSectionsPropertyKey = DependencyProperty.RegisterReadOnly("MaximizedSections", typeof(Collection<SideBarSection>), typeof(SideBar), new UIPropertyMetadata(null));
+        
+        /// <summary>
+        /// Registers the property to get the maximized <see cref="SideBarSection"/>s.
+        /// </summary>
+        public static readonly DependencyProperty MaximizedSectionsProperty = MaximizedSectionsPropertyKey.DependencyProperty;
+
+        /// <summary>
+        /// Registers the specialized read only property to get the minimized <see cref="SideBarSection"/>s.
+        /// </summary>
+        public static readonly DependencyPropertyKey MinimizedSectionsPropertyKey = DependencyProperty.RegisterReadOnly("MinimizedSections", typeof(Collection<SideBarSection>), typeof(SideBar), new UIPropertyMetadata(null));
+
+        /// <summary>
+        /// Registers the property to get the minimized <see cref="SideBarSection"/>s.
+        /// </summary>
+        public static readonly DependencyProperty MinimizedSectionsProperty = MinimizedSectionsPropertyKey.DependencyProperty;
+
+        /// <summary>
+        /// Registers the specialized read only property to get the overflow menu items.
+        /// </summary>
+        private static readonly DependencyPropertyKey OverflowMenuItemsPropertyKey = DependencyProperty.RegisterReadOnly("OverflowMenuItems", typeof(Collection<SideBarSection>), typeof(SideBar), new UIPropertyMetadata(null));
+        
+        /// <summary>
+        /// Registers the property to get the overflow menu items.
+        /// </summary>
+        public static readonly DependencyProperty OverflowMenuItemsProperty = OverflowMenuItemsPropertyKey.DependencyProperty;
+
+        /// <summary>
+        /// Registers the specialized read only property to get the option buttons.
+        /// </summary>
+        private static readonly DependencyPropertyKey OptionButtonsPropertyKey = DependencyProperty.RegisterReadOnly("OptionButtons", typeof(Collection<ButtonBase>), typeof(SideBar), new UIPropertyMetadata(null));
+
+        /// <summary>
+        /// Registers the property to get the option buttons.
+        /// </summary>
+        public static readonly DependencyProperty OptionButtonsProperty = OptionButtonsPropertyKey.DependencyProperty;
+
+        #endregion
+
         /// <summary>
         /// Registers the property to set the dock position of the <see cref="SideBar"/>.
         /// </summary>
@@ -310,27 +365,7 @@ namespace ControlsXL
         /// Registers the property to get the overflow menu visibility..
         /// </summary>
         public static readonly DependencyProperty IsOverflowMenuVisibleProperty = DependencyProperty.Register("IsOverflowMenuVisible", typeof(bool), typeof(SideBar), new UIPropertyMetadata(false, IsOverflowMenuVisibleChangedCallback));
-
-        /// <summary>
-        /// Registers the specialized read only property to get the maximized <see cref="SideBarSection"/>s.
-        /// </summary>
-        private static readonly DependencyPropertyKey MaximizedSectionsPropertyKey = DependencyProperty.RegisterReadOnly("MaximizedSections", typeof(Collection<SideBarSection>), typeof(SideBar), new UIPropertyMetadata(null));
-
-        /// <summary>
-        /// Registers the specialized read only property to get the minimized <see cref="SideBarSection"/>s.
-        /// </summary>
-        public static readonly DependencyPropertyKey MinimizedSectionsPropertyKey = DependencyProperty.RegisterReadOnly("MinimizedSections", typeof(Collection<SideBarSection>), typeof(SideBar), new UIPropertyMetadata(null));
-
-        /// <summary>
-        /// Registers the specialized read only property to get the overflow menu items.
-        /// </summary>
-        private static readonly DependencyPropertyKey OverflowMenuItemsPropertyKey = DependencyProperty.RegisterReadOnly("OverflowMenuItems", typeof(Collection<SideBarSection>), typeof(SideBar), new UIPropertyMetadata(null));
-
-        /// <summary>
-        /// Registers the specialized read only property to get the option buttons.
-        /// </summary>
-        private static readonly DependencyPropertyKey OptionButtonsPropertyKey = DependencyProperty.RegisterReadOnly("OptionButtons", typeof(Collection<ButtonBase>), typeof(SideBar), new UIPropertyMetadata(null));
-
+       
         /// <summary>
         /// Registers the property to set the overflow menu button visibility.
         /// </summary>
@@ -377,41 +412,24 @@ namespace ControlsXL
         public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register(nameof(SelectedIndex), typeof(int), typeof(SideBar), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SelectedIndexChangedCallback));
 
         /// <summary>
-        /// Registers the property to get the maximized <see cref="SideBarSection"/>s.
-        /// </summary>
-        public static readonly DependencyProperty MaximizedSectionsProperty = MaximizedSectionsPropertyKey.DependencyProperty;
-
-        /// <summary>
-        /// Registers the property to get the minimized <see cref="SideBarSection"/>s.
-        /// </summary>
-        public static readonly DependencyProperty MinimizedSectionsProperty = MinimizedSectionsPropertyKey.DependencyProperty;
-
-        /// <summary>
         /// Registers the property to get the <see cref="SideBarSection"/>'s content.
         /// </summary>
         public static readonly DependencyProperty SectionContentProperty = SectionContentPropertyKey.DependencyProperty;
-
-        /// <summary>
-        /// Registers the property to get the overflow menu items.
-        /// </summary>
-        public static readonly DependencyProperty OverflowMenuItemsProperty = OverflowMenuItemsPropertyKey.DependencyProperty;
-
+        
         /// <summary>
         /// Registers the property to get the content of collapsed <see cref="SideBarSection"/>s.
         /// </summary>
         public static readonly DependencyProperty CollapsedContentProperty = CollapsedContentPropertyKey.DependencyProperty;
 
-        /// <summary>
-        /// Registers the property to get the option buttons.
-        /// </summary>
-        public static readonly DependencyProperty OptionButtonsProperty = OptionButtonsPropertyKey.DependencyProperty;
 
         #endregion
 
         #region Properties
 
+        #region Properties: Bindable
+
         /// <summary>
-        /// Gets the collection of <see cref="SideBarSection"/>'s.
+        /// Gets the collection of all <see cref="SideBarSection"/>'s.
         /// </summary>
         [Bindable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
@@ -440,6 +458,32 @@ namespace ControlsXL
             get { return (Collection<ButtonBase>)GetValue(OptionButtonsProperty); }
         }
 
+        #endregion
+
+        #region Properties: Internal
+
+        /// <summary>
+        /// Gets or sets the content of collapsed <see cref="SideBarSection"/>s.
+        /// </summary>
+        internal object CollapsedContent
+        {
+            get { return GetValue(CollapsedContentProperty); }
+            set { SetValue(CollapsedContentPropertyKey, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the content of the selected <see cref="SideBarSection"/>.
+        /// </summary>
+        internal object SectionContent
+        {
+            get { return GetValue(SectionContentProperty); }
+            set { SetValue(SectionContentPropertyKey, value); }
+        }
+
+        #endregion
+
+        #region Properties: Public
+
         /// <summary>
         /// Gets or sets whether the collapsed content popup is visible.
         /// </summary>
@@ -465,24 +509,6 @@ namespace ControlsXL
         {
             get { return (double)GetValue(CollapsedWidthProperty); }
             set { SetValue(CollapsedWidthProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the content of the selected <see cref="SideBarSection"/>.
-        /// </summary>
-        internal object SectionContent
-        {
-            get { return GetValue(SectionContentProperty); }
-            set { SetValue(SectionContentPropertyKey, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the content of collapsed <see cref="SideBarSection"/>s.
-        /// </summary>
-        internal object CollapsedContent
-        {
-            get { return GetValue(CollapsedContentProperty); }
-            set { SetValue(CollapsedContentPropertyKey, value); }
         }
 
         /// <summary>
@@ -566,50 +592,71 @@ namespace ControlsXL
             get { return (bool)GetValue(IsOverflowMenuButtonVisibleProperty); }
             set { SetValue(IsOverflowMenuButtonVisibleProperty, value); }
         }
+        #endregion
 
         #endregion
 
         #region Commands
 
+        #region Commands: Registration
+
         /// <summary>
         /// Defines the command to collapse the side bar.
         /// </summary>
-        private static RoutedUICommand _RoutedUICommandCollapseSideBar = new RoutedUICommand("CollapseSideBar", nameof(CollapseSideBarCommand), typeof(SideBar));
+        private static RoutedUICommand _RoutedUICommandCollapseSideBar = new RoutedUICommand(nameof(CollapseSideBarCommand), nameof(CollapseSideBarCommand), typeof(SideBar));
 
         /// <summary>
         /// Defines the command to resize the side bar.
         /// </summary>
-        private static RoutedUICommand _RoutedUICommandResizeSideBar = new RoutedUICommand("ResizeSideBar", nameof(ResizeSideBarCommand), typeof(SideBar));
+        private static RoutedUICommand _RoutedUICommandResizeSideBar = new RoutedUICommand(nameof(ResizeSideBarCommand), nameof(ResizeSideBarCommand), typeof(SideBar));
 
         /// <summary>
         /// Defines the command to resize the side bar sections.
         /// </summary>
-        private static RoutedUICommand _RoutedUICommandResizeSections = new RoutedUICommand("ResizeSections", nameof(ResizeSectionsCommand), typeof(SideBar));
+        private static RoutedUICommand _RoutedUICommandResizeSections = new RoutedUICommand(nameof(ResizeSectionsCommand), nameof(ResizeSectionsCommand), typeof(SideBar));
 
         /// <summary>
         /// Defines the command to resize the side bar common area.
         /// </summary>
-        private static RoutedUICommand _RoutedUICommandResizeCommon = new RoutedUICommand("ResizeCommon", nameof(ResizeCommonCommand), typeof(SideBar));
+        private static RoutedUICommand _RoutedUICommandResizeCommon = new RoutedUICommand(nameof(ResizeCommonCommand), nameof(ResizeCommonCommand), typeof(SideBar));
+
+        #endregion
+
+        #region Commands: Properties
 
         /// <summary>
         /// Gets the command to collapse the <see cref="SideBar"/>.
         /// </summary>
-        public static RoutedUICommand CollapseSideBarCommand { get { return _RoutedUICommandCollapseSideBar; } }
+        public static RoutedUICommand CollapseSideBarCommand 
+        { 
+            get { return _RoutedUICommandCollapseSideBar; } 
+        }
 
         /// <summary>
         /// Gets the command to resize the <see cref="SideBar"/>.
         /// </summary>
-        public static RoutedUICommand ResizeSideBarCommand { get { return _RoutedUICommandResizeSideBar; } }
+        public static RoutedUICommand ResizeSideBarCommand 
+        { 
+            get { return _RoutedUICommandResizeSideBar; } 
+        }
 
         /// <summary>
         /// Gets the command to resize the <see cref="SideBar"/> common area.
         /// </summary>
-        public static RoutedUICommand ResizeCommonCommand { get { return _RoutedUICommandResizeCommon; } }
+        public static RoutedUICommand ResizeCommonCommand 
+        { 
+            get { return _RoutedUICommandResizeCommon; } 
+        }
 
         /// <summary>
         /// Gets the command to resize the sections.
         /// </summary>
-        public static RoutedUICommand ResizeSectionsCommand { get { return _RoutedUICommandResizeSections; } }
+        public static RoutedUICommand ResizeSectionsCommand 
+        { 
+            get { return _RoutedUICommandResizeSections; } 
+        }
+
+        #endregion
 
         #endregion
 
@@ -761,16 +808,25 @@ namespace ControlsXL
         /// <param name="e">A <see cref="MouseEventArgs"/> containing event data.</param>
         private void ResizeSections(object sender, MouseEventArgs e)
         {
-            
+            Console.WriteLine("Resizing Sections");
             if(e.LeftButton == MouseButtonState.Pressed)
             {
                 Point mousePosition = e.GetPosition(this);
 
-                double height = this.ActualHeight - SIDEBAR_SECTION_HEIGHT - mousePosition.Y - 1;
+                // Get dynamic applied border thickness style value
+                Thickness border = (Thickness)StyleManager.GetStyleValue(Styles.BorderThickness);
+
+                double height = this.ActualHeight - SIDEBAR_DIMENSION_CONSTANT - mousePosition.Y;
 
                 // TODO:
-                if(mousePosition.Y > _PARTSideBarCommon.ActualHeight)
-                    this.VisibleSections = (int)(height / SIDEBAR_SECTION_HEIGHT);
+                if (mousePosition.Y > (_PARTSideBarCommon.ActualHeight + SIDEBAR_DIMENSION_CONSTANT))
+                {
+                    this.VisibleSections = (int)(height / SIDEBAR_DIMENSION_CONSTANT);
+                }
+                else
+                {
+                    
+                }
             }
             else
             {
@@ -786,9 +842,14 @@ namespace ControlsXL
         /// <param name="e">A <see cref="MouseEventArgs"/> containing event data.</param>
         private void ResizeCommon(object sender, MouseEventArgs e)
         {
+
             if(e.LeftButton == MouseButtonState.Pressed)
             {
                 Point mousePosition = e.GetPosition(this);
+                //mousePosition.Offset(0, e.GetPosition(_PARTSideBarHeader).Y);
+
+                //Console.WriteLine(e.GetPosition(_PARTSideBarHeader));
+                //double offset = e.GetPosition(_PARTSideBarHeader).Y;
 
                 double height = mousePosition.Y;
 
@@ -986,6 +1047,7 @@ namespace ControlsXL
             _PARTSideBarCommon = GetTemplateChild(PART_SIDEBAR_COMMON) as FrameworkElement;
             _PARTCollapsedContentPopup = GetTemplateChild(PART_SIDEBAR_COLLAPSED_CONTENT_POPUP) as Popup;
             _PARTCollapsedContentButton = GetTemplateChild(PART_SIDEBAR_COLLAPSED_CONTENT_BUTTON) as ToggleButton;
+            _PARTSideBarHeader = GetTemplateChild(PART_SIDEBAR_HEADER) as Button;
 
             if(_PARTCollapsedContentPopup != null)
             {
@@ -1126,24 +1188,27 @@ namespace ControlsXL
         {
             if (_PARTSideBarMinimizedSections == null)
                 return 0;
-            
-            return (int)Math.Floor((_PARTSideBarMinimizedSections.ActualWidth
-                                    /*- (SelectedSection.IsMaximized ? 0 : SIDEBAR_SECTION_INDICATOR_WIDTH) */
-                                    - SIDEBAR_SECTION_IMAGE_DIMENSIONS - 2) 
-                                    / SIDEBAR_SECTION_IMAGE_DIMENSIONS);
+
+            // Get dynamic applied border thickness style value
+            Thickness border = (Thickness)StyleManager.GetStyleValue(Styles.BorderThickness);
+
+            return (int)Math.Floor((_PARTSideBarMinimizedSections.ActualWidth - SIDEBAR_SECTION_IMAGE_DIMENSIONS) 
+                                  / (SIDEBAR_SECTION_IMAGE_DIMENSIONS + border.Right));
         }
 
         /// <summary>
         /// Calculates the minimum height of the side bar sections area to show all visible <see cref="SideBarSection"/>s.
         /// </summary>
-        /// <returns></returns>
-        private int GetMinimumSideBarSectionsAreaHeight()
+        /// <returns>An <see cref="double"/> containing the height to maintain visibility of all maximized <see cref="SideBarSection"/>s.</returns>
+        private double GetMinimumSideBarSectionsAreaHeight()
         {
-            return (int)(_MaximizedSideBarSections.Count * SIDEBAR_SECTION_HEIGHT) + 
-                   (int)SIDEBAR_SECTION_IMAGE_DIMENSIONS + 
-                   
-                   /*(int)SIDEBAR_SECTION_INDICATOR_WIDTH * 2 +*/
-                   (int)SIDEBAR_SECTION_HEIGHT + 5;
+            // Get dynamic applied border thickness style value
+            Thickness border = (Thickness)StyleManager.GetStyleValue(Styles.BorderThickness);
+
+            return (_MaximizedSideBarSections.Count * SIDEBAR_DIMENSION_CONSTANT + border.Top)
+                   + SIDEBAR_SECTION_IMAGE_DIMENSIONS + border.Top 
+                   + SIDEBAR_DIMENSION_CONSTANT + border.Top 
+                   + SIDEBAR_HANDLE_DIMENSION_CONSTANT;
         }
 
         /// <summary>
@@ -1153,14 +1218,14 @@ namespace ControlsXL
         private void InvalidateContentVisibility()
         {
             // Store the selected section content temporary
-            object tempContent = SelectedSection != null ? SelectedSection.Content : null;
+            object tempContent = this.SelectedSection != null ? this.SelectedSection.Content : null;
 
             // Reset the section content
-            SectionContent = null;
+            this.SectionContent = null;
 
             // Reassign the section content
-            CollapsedContent = IsExpanded ? null : tempContent;
-            SectionContent = IsExpanded ? tempContent : null;
+            this.CollapsedContent = this.IsExpanded ? null : tempContent;
+            this.SectionContent = this.IsExpanded ? tempContent : null;
         }
 
         #endregion
@@ -1254,6 +1319,7 @@ namespace ControlsXL
     /// </summary>
     public class SideBarSection : HeaderedContentControl
     {
+
         #region Constructor
 
         /// <summary>
@@ -1300,7 +1366,7 @@ namespace ControlsXL
         /// Registers the property to check if the <see cref="SideBarSection"/> is selected.
         /// </summary>
         public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(nameof(IsSelected), typeof(bool), typeof(SideBarSection), new UIPropertyMetadata(false, IsSelectedChangedCallback));
-
+        
         /// <summary>
         /// Registers the property to set the <see cref="Image"/> of the <see cref="SideBarSection"/>.
         /// </summary>

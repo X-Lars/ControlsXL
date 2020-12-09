@@ -2,17 +2,18 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:xl="clr-namespace:ControlsXL">
 
-    <FontFamily x:Key="TahomaRegular">pack://application;,,,/ControlsXL;Component/Resources/Fonts/#Tahoma Regular</FontFamily>
-    <FontFamily x:Key="TahomaBold">pack://application;,,,/ControlsXL;Component/Resources/Fonts/#Tahoma Bold</FontFamily>
-
+    <FontFamily x:Key="Lucida">pack://application;,,,/ControlsXL;Component/Resources/Fonts/#Lucida Console Regular</FontFamily>
+    <FontFamily x:Key="SegoeUI">pack://application;,,,/ControlsXL;Component/Resources/Fonts/#Segoe UI Regular</FontFamily>
+    <FontFamily x:Key="SegoeUIBold">pack://application;,,,/ControlsXL;Component/Resources/Fonts/#Segoe UI Bold</FontFamily>
+    
     <!-- Apply default font style to all controls -->
     <Style TargetType="{x:Type Control}" x:Key="BaseStyle">
-        <Setter Property="FontFamily" Value="{StaticResource TahomaRegular}"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeUI}"/>
     </Style>
 
     <!-- Apply specific default style for a text block control -->
     <Style TargetType="{x:Type TextBlock}" x:Key="BaseTextBlockStyle">
-        <Setter Property="FontFamily" Value="{StaticResource TahomaRegular}"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeUI}"/>
     </Style>
 
     <!-- Apply default font style to controls that don't automatically inherit the base style -->

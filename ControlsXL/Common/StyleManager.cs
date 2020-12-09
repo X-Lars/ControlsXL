@@ -122,6 +122,16 @@ namespace ControlsXL
         #region Methods
 
         /// <summary>
+        /// Gets the value of the specified component resource from the current application runtime resources.
+        /// </summary>
+        /// <param name="ID">A <see cref="string"/> specifying the component resource key ID.</param>
+        /// <returns>A <see cref="object"/> containing the requested component's value.</returns>
+        internal static object GetStyleValue(string ID)
+        {
+            return Application.Current.FindResource(new ComponentResourceKey(typeof(Styles), ID));
+        }
+
+        /// <summary>
         /// Applies the currently selected skin.
         /// </summary>
         private static void ApplySkinStyle()
