@@ -1,113 +1,88 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ControlsXL
 {
-    [TemplatePart(Name = PART_MDIHOST_HEADER)]
-    [TemplatePart(Name = PART_MDIHOST_CONTENT)]
-    [TemplatePart(Name = PART_MDIHOST_MINIMIZED_CONTENT)]
-    [TemplatePart(Name = PART_MDIHOST_CONTENT_VIEWER)]
+    [TemplatePart(Name = PART_MDIHOST_WINDOWS_MENU)]
     public class MDIHost : ItemsControl
     {
-        private const string PART_MDIHOST_HEADER = "PART_MDIHostHeader";
-        private const string PART_MDIHOST_CONTENT = "PART_MDIHostContent";
-        private const string PART_MDIHOST_MINIMIZED_CONTENT = "PART_MDIHostMinimizedContent";
-        private const string PART_MDIHOST_CONTENT_VIEWER = "PART_MDIHostContentViewer";
+        #region Constants
 
+        #region Constants: Template Parts
+
+        /// <summary>
+        /// The template part name of the MDI child windows menu section in xaml.
+        /// </summary>
+        private const string PART_MDIHOST_WINDOWS_MENU  = "PART_MDIHostWindowsMenu";
+
+        #endregion
+
+        /// <summary>
+        /// Specifies the height of the <see cref="MDIHost"/> title bar.
+        /// </summary>
+        public const double MDIHOST_HEADER_HEIGHT = 24;
+
+        #endregion
+
+        #region Fields
+
+        /// <summary>
+        /// Contains a reference to the <see cref="ScrollViewer"/> to show a menu item for all opend <see cref="MDIChild"/> windows.
+        /// </summary>
+        private ScrollViewer _MDIWindowsMenu;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Static constructor called before initializing an instance of <see cref="MDIHost"/>.
+        /// </summary>
         static MDIHost()
         {
+            // Overrides the default style of the inherited ItemsControl to use the MDIHost style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MDIHost), new FrameworkPropertyMetadata(typeof(MDIHost)));
         }
         
+        /// <summary>
+        /// Creates and initializes a new instance of <see cref="MDIHost"/> control.
+        /// </summary>
         public MDIHost()
         {
-            MinimizedCollection.Add(new Button { Content = "Very long title" });
-            MinimizedCollection.Add(new Button { Content = "Very long title" });
-            MinimizedCollection.Add(new Button { Content = "Very long title" });
-            MinimizedCollection.Add(new Button { Content = "Very long title" });
-            MinimizedCollection.Add(new Button { Content = "Very long title" });
-            MinimizedCollection.Add(new Button { Content = "Very long title" });
-            MinimizedCollection.Add(new Button { Content = "Very long title" });
-            MinimizedCollection.Add(new Button { Content = "Very long title" });
-            MinimizedCollection.Add(new Button { Content = "Very long title" });
-
-            SizeChanged += MDIHost_SizeChanged;
-            Loaded += MDIHost_Loaded;
-
-           
+            // REMOVE!!!
+            MinimizedCollection.Add(new MenuItem { Header = "Very long title" });
+            MinimizedCollection.Add(new MenuItem { Header = "Very long title" });
+            MinimizedCollection.Add(new MenuItem { Header = "Very long title" });
+            MinimizedCollection.Add(new MenuItem { Header = "Very long title" });
+            MinimizedCollection.Add(new MenuItem { Header = "Very long title" });
+            MinimizedCollection.Add(new MenuItem { Header = "Very long title" });
+            MinimizedCollection.Add(new MenuItem { Header = "Very long title" });
+            MinimizedCollection.Add(new MenuItem { Header = "Very long title" });
+            MinimizedCollection.Add(new MenuItem { Header = "Very long title" });
         }
 
+        #endregion
 
-
-        private void MDIHost_Loaded(object sender, RoutedEventArgs e)
-        {
-            Window window = Window.GetWindow(this);
-
-            //if (window != null)
-            //{
-            //    window.Activated += MDIHostActivated;
-            //    window.Deactivated += MDIHostDeactivated;
-            //}
-
-            //_Canvas.Width = _Canvas.ActualWidth;
-            //_Canvas.Height = _Canvas.ActualHeight;
-
-            //_Canvas.HorizontalAlignment = HorizontalAlignment.Left;
-            //_Canvas.VerticalAlignment = VerticalAlignment.Top;
-
-            //InvalidateContentSize();
-            //InvalidateMeasure();
-        }
-
-        private void MDIHost_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //_Canvas.InvalidateMeasure();
-        }
-
-        public ObservableCollection<MDIChild> Children { get; set; } = new ObservableCollection<MDIChild>();
-        public ObservableCollection<Button> MinimizedCollection { get; set; } = new ObservableCollection<Button>();
-        private MDICanvas _Canvas;
-        private ScrollViewer _Viewer;
        
+        public ObservableCollection<MenuItem> MinimizedCollection { get; set; } = new ObservableCollection<MenuItem>();
         public override void OnApplyTemplate()
         {
-            //_Element = GetTemplateChild(PART_MDIHOST_MINIMIZED_CONTENT) as UIElement;
-            //_Element.PreviewMouseWheel += _Element_PreviewMouseWheel;
-
-            _Canvas = GetTemplateChild(PART_MDIHOST_CONTENT) as MDICanvas;
-            _Viewer = GetTemplateChild(PART_MDIHOST_CONTENT_VIEWER) as ScrollViewer;
-
-            if (_Canvas == null)
-            {
-                Console.WriteLine("No CANVAS!");
-                return;
-            }
-
-            //InvalidateContentSize();
+            _MDIWindowsMenu = GetTemplateChild(PART_MDIHOST_WINDOWS_MENU) as ScrollViewer;
 
 
+            _MDIWindowsMenu.PreviewMouseWheel += MDIWindowsMenuPreviewMouseWheel;
             base.OnApplyTemplate();
         }
 
-        private void _Element_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void MDIWindowsMenuPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             ScrollViewer viewer = (ScrollViewer)sender;
 
@@ -120,57 +95,12 @@ namespace ControlsXL
                 viewer.LineRight();
 
             e.Handled = true;
-
-            
         }
 
+      
+        //public ObservableCollection<MDIChild> Children { get; set; } = new ObservableCollection<MDIChild>();
+        
        
-
-        /// <summary>
-        /// Invalidates the content area size to ensure all content is visible.
-        /// </summary>
-        internal void InvalidateContentSize()
-        {
-            Point trackingPoint = new Point(0, 0);
-
-            // Get the minimum dimensions
-            for (int i = 0; i < Children.Count; i++)
-            {
-                MDIChild child = this.Children[i];
-
-                Point maxChildPoint = child.Position;
-
-                // Get the bottom right corner of the window
-                maxChildPoint.X += child.Width;
-                maxChildPoint.Y += child.Height;
-
-                if (maxChildPoint.X > trackingPoint.X)
-                    trackingPoint.X = maxChildPoint.X;
-
-                if (maxChildPoint.Y > trackingPoint.Y)
-                    trackingPoint.Y = maxChildPoint.Y;
-            }
-
-
-            // Apply the minimum dimensions
-            if (_Canvas.Width != trackingPoint.X)
-                _Canvas.Width = trackingPoint.X;
-
-            if (_Canvas.Height != trackingPoint.Y)
-                _Canvas.Height = trackingPoint.Y;
-
-            
-            //_Canvas.Measure(new Size(0, 0));
-
-            //_Viewer.CanContentScroll = true;
-            //_Viewer.InvalidateMeasure();
-            //_Viewer.InvalidateArrange();
-            //_Viewer.InvalidateScrollInfo();
-            //_Viewer.InvalidateVisual();
-            //InvalidateArrange();
-            //InvalidateMeasure();
-            //_Canvas.InvalidateMeasure();
-        }
 
 
 
@@ -486,121 +416,87 @@ namespace ControlsXL
     /// 
     /// </summary>
     [TemplatePart(Name = PART_MDICHILD_HEADER)]
-    public class MDIChild : UserControl, INotifyPropertyChanged
+    public class MDIChild : UserControl
     {
+        #region Constants
+
+        #region Constants: Template Parts
+
+        /// <summary>
+        /// The template part name of the <see cref="MDIChild"/> window header in xaml.
+        /// </summary>
         private const string PART_MDICHILD_HEADER = "PART_MDIChildHeader";
+
+        #endregion
+
+        /// <summary>
+        /// Defines the height of the <see cref="MDIChild"/> window header.
+        /// </summary>
         public const double MDICHILD_HEADER_HEIGHT = 24;
 
+        #endregion
 
-       
+        #region Constructor
+
+        /// <summary>
+        /// Static constructor called before initializing an instance of <see cref="MDIChild"/>.
+        /// </summary>
         static MDIChild()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MDIChild), new FrameworkPropertyMetadata(typeof(MDIChild)));
         }
 
+        #endregion
+
+        #region Dependency Properties
+
+        /// <summary>
+        /// Registers the property to set the <see cref="MDIChild"/>'s windows title.
+        /// </summary>
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(MDIChild), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange));
 
-        //public static readonly DependencyProperty ContentProperty = DependencyProperty.Register("Content", typeof(UIElement), typeof(MDIChild), new PropertyMetadata(null));
-        //public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(Point), typeof(MDIChild), new PropertyMetadata(new Point(0, 0)));
+        /// <summary>
+        /// Registers the property to set the position of the <see cref="MDIChild"/> window.
+        /// </summary>
+        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register(nameof(Position), typeof(Point), typeof(MDIChild), new FrameworkPropertyMetadata(new Point(0.0, 0.0), FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsParentMeasure | FrameworkPropertyMetadataOptions.AffectsParentArrange));
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets a reference to the <see cref="MDIHost"/> containing the <see cref="MDIChild"/> window.
+        /// </summary>
+        public MDIHost Host { get; internal set; }
+
+        /// <summary>
+        /// Gets or sets the <see cref="MDIChild"/>'s window title.
+        /// </summary>
         public string Title
         {
             get { return (string)GetValue(TitleProperty); }
             set { SetValue(TitleProperty, value); }
         }
-        //public UIElement Content
-        //{
-        //    get { return (UIElement)GetValue(ContentProperty); }
-        //    set { SetValue(ContentProperty, value); }
-        //}
+
+        /// <summary>
+        /// Gets or sets the position of the <see cref="MDIChild"/> window.
+        /// </summary>
         public Point Position
         {
             get { return (Point)GetValue(PositionProperty); }
-            set
-            {
-                //Margin = new Thickness(value.X, value.Y, 0, 0);
-                SetValue(PositionProperty, value);
-                //X = value.X;
-                //Y = value.Y;
-                //SetValue(XProperty, value.X);
-                //SetValue(YProperty, value.Y);
-                //NotifyPropertyChanged(nameof(Position));
-                //NotifyPropertyChanged(nameof(X));
-                //NotifyPropertyChanged(nameof(Y));
-            }
+            set { SetValue(PositionProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Point.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register(nameof(Position), typeof(Point), typeof(MDIChild), new FrameworkPropertyMetadata(new Point(0.0, 0.0), FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsParentMeasure | FrameworkPropertyMetadataOptions.AffectsParentArrange));
+        #endregion
 
+        #region Methods
 
-
-        //public double X
-        //{
-        //    get { return (double)GetValue(XProperty); }
-        //    set
-        //    {
-        //        SetValue(XProperty, value);
-        //        //Position = new Point(value, Position.Y);
-        //        SetValue(PositionProperty, new Point(value, Position.Y));
-        //        //NotifyPropertyChanged(nameof(Position));
-        //        //NotifyPropertyChanged(nameof(X));
-        //    }
-        //}
-
-        //// Using a DependencyProperty as the backing store for X.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty XProperty =
-        //    DependencyProperty.Register(nameof(X), typeof(double), typeof(MDIChild), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsParentMeasure | FrameworkPropertyMetadataOptions.AffectsParentArrange | FrameworkPropertyMetadataOptions.AffectsArrange));
-
-
-
-        //public double Y
-        //{
-        //    get { return (double)GetValue(YProperty); }
-        //    set
-        //    {
-        //        SetValue(YProperty, value);
-        //        Position = new Point(Position.X, value);
-        //        //SetValue(PositionProperty, new Point(Position.X, value));
-        //        //NotifyPropertyChanged(nameof(Position));
-        //        //NotifyPropertyChanged(nameof(X));
-        //    }
-        //}
-
-        //// Using a DependencyProperty as the backing store for Y.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty YProperty =
-        //    DependencyProperty.Register(nameof(Y), typeof(double), typeof(MDIChild), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsParentMeasure | FrameworkPropertyMetadataOptions.AffectsParentArrange));
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public MDIHost Host { get; internal set; }
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            Thumb header = (Thumb)Template.FindName("HeaderThumb", this);
-
-            if (header != null)
-            {
-                header.DragStarted += Header_DragStarted;
-                header.DragDelta += Header_DragDelta;
-                header.DragCompleted += Header_DragCompleted;
-            }
-            else
-            {
-                Console.WriteLine("Header Thumb not found!");
-            }
-            
-        }
-
-        private void Header_DragCompleted(object sender, DragCompletedEventArgs e)
-        {
-        }
-
-        private void Header_DragDelta(object sender, DragDeltaEventArgs e)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void HeaderDragDelta(object sender, DragDeltaEventArgs e)
         {
             Console.WriteLine("Drag Delta");
 
@@ -614,17 +510,33 @@ namespace ControlsXL
                 posY = 0;
 
             Position = new Point(posX, posY);
-
-            UpdateLayout();
         }
 
-        
+        #endregion
 
-        private void Header_DragStarted(object sender, DragStartedEventArgs e)
+        #region Overrides
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public override void OnApplyTemplate()
         {
-            Console.WriteLine("Drag Start");
+            base.OnApplyTemplate();
+
+            Thumb header = (Thumb)Template.FindName("HeaderThumb", this);
+
+            if (header != null)
+            {
+                header.DragDelta += HeaderDragDelta;
+            }
+            else
+            {
+                Console.WriteLine("Header Thumb not found!");
+            }
+
         }
 
+        #endregion
 
         //#region Constants
 
@@ -843,7 +755,7 @@ namespace ControlsXL
     /// <summary>
     /// 
     /// </summary>
-    public class MDICanvas : Canvas, IScrollInfo
+    internal class MDICanvas : Canvas, IScrollInfo
     {
         #region Constants
 
