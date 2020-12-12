@@ -26,5 +26,7 @@
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, CheckedBackgroundBrush}" Color="{StaticResource DefaultHighlightColor}"/>
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, CheckedForegroundBrush}" Color="{StaticResource DefaultHighlightTextColor}"/>
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, WindowBackgroundBrush}" Color="{StaticResource DefaultWindowBackgroundColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, WindowActiveHeaderBrush}" Color="{StaticResource DefaultWindowActiveHeaderColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, WindowInactiveHeaderBrush}" Color="{StaticResource DefaultWindowInactiveHeaderColor}"/>
 
 </ResourceDictionary>

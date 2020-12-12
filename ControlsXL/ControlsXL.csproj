@@ -53,6 +53,7 @@
     <Compile Include="Common\Enumerations.cs" />
     <Compile Include="LinkButton.cs" />
     <Compile Include="MarkerButton.cs" />
+    <Compile Include="MultipleDocumentInterface.cs" />
     <Compile Include="VectorButton.cs" />
     <Page Include="Resources\Colors.xaml">
       <SubType>Designer</SubType>
@@ -100,6 +101,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\MarkerButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\MultipleDocumentInterface.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

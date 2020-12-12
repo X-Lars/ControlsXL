@@ -1,0 +1,426 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:xl="clr-namespace:ControlsXL">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Geometry.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Fonts.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/VectorButton.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="{x:Type xl:MDIHost}">
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <!--<Setter Property="ItemsSource" Value="{Binding Children}"/>-->
+
+        <!--<Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <xl:MDICanvas/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>-->
+        <!--<Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <xl:MDIChild/>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>-->
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xl:MDIHost}">
+
+                    <Border Name="Border">
+
+                        <DockPanel>
+
+                            <!--<Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>-->
+                            <DockPanel DockPanel.Dock="Top">
+                                <Border x:Name="MDIHostButtons"
+                                            DockPanel.Dock="Right">
+
+
+                                    <StackPanel x:Name="WindowButtons"
+                                                DockPanel.Dock="Right"
+                                                Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                                HorizontalAlignment="Right"
+                                                Orientation="Horizontal">
+
+                                        <xl:VectorButton x:Name="MinimizeButton"
+                                                         Scale="0.8"
+                                                         StrokeThickness="0"
+                                                         Vector="{StaticResource GeometryMinimize}"/>
+
+                                        <xl:VectorButton x:Name="RestoreButton"
+                                                         MinHeight="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                                                         MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                                                         Scale="0.8"
+                                                         StrokeThickness="0"
+                                                         Vector="{StaticResource GeometryRestore}"/>
+
+                                        <xl:VectorButton x:Name="MaximizeButton"
+                                                         Scale="0.8"
+                                                         StrokeThickness="0"
+                                                         Vector="{StaticResource GeometryMaximize}"/>
+
+                                        <xl:VectorButton x:Name="CloseButton"
+                                                         Scale="0.8"
+                                                         StrokeThickness="0"
+                                                         Vector="{StaticResource GeometryCross}"/>
+
+
+                                    </StackPanel>
+
+
+                                </Border>
+                            </DockPanel>
+
+                            
+                            
+                            <ScrollViewer x:Name="PART_MDIHostMinimizedContent" 
+                             
+                                          HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Stretch"
+                                          DockPanel.Dock="Bottom"
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Disabled">
+
+                                <ItemsControl ItemsSource="{Binding MinimizedCollection, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+
+
+
+                            </ScrollViewer>
+                            
+                            <!-- Can content scroll informs scrollviewer that the canvas implements IScrollInfo -->
+                            <ScrollViewer x:Name="PART_MDIHostContentViewer" 
+                                          CanContentScroll="True"
+                                          HorizontalScrollBarVisibility="Visible"
+                                          VerticalScrollBarVisibility="Visible">
+
+                                <xl:MDICanvas IsItemsHost="True" CanVerticallyScroll="False" CanHorizontallyScroll="False"/>
+                                <!--<xl:MDICanvas x:Name="PART_MDIHostContent" 
+                                              Background="LightCoral" 
+                                              ScrollOwner="{x:Reference Name=PART_MDIHostContentViewer}"
+                                              IsItemsHost="True"
+                                              CanHorizontallyScroll="True"/>-->
+                            </ScrollViewer>
+
+                        </DockPanel>
+                    </Border>
+                    
+                        <!--<Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Width="100"
+                            Height="100">
+                            <ContentPresenter />
+                        </Border>
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+
+                        <Canvas IsItemsHost="True"/>
+                        <Grid>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/> 
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <DockPanel x:Name="PART_MDIHostHeader"
+                                        Grid.Row="0">
+
+                                <Border x:Name="MDIHostMenu"
+                                        DockPanel.Dock="Left">
+                                    
+                                </Border>
+                                
+                                <Border x:Name="MDIHostButtons"
+                                        DockPanel.Dock="Right">
+
+
+                                    <StackPanel x:Name="WindowButtons"
+                                            DockPanel.Dock="Right"
+                                            Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
+
+                                        <xl:VectorButton x:Name="MinimizeButton"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryMinimize}"/>
+
+                                        <xl:VectorButton x:Name="RestoreButton"
+                                                     MinHeight="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                                                     MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryRestore}"/>
+
+
+                                        <xl:VectorButton x:Name="MaximizeButton"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryMaximize}"/>
+
+                                        <xl:VectorButton x:Name="CloseButton"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryCross}"/>
+                                    
+
+                                </StackPanel>
+                                    
+                                    
+                                </Border>
+                                
+                            </DockPanel>
+                            
+                            <Canvas x:Name="PART_MDIHostContent" Grid.Row="1" Width="800" Height="600" IsItemsHost="True"/>
+
+                            
+                            <ScrollViewer x:Name="PART_MDIHostMinimizedContent" 
+                                          Grid.Row="2" 
+                                          HorizontalScrollBarVisibility="Hidden"
+                                          VerticalScrollBarVisibility="Disabled">
+
+                                <ItemsControl ItemsSource="{Binding MinimizedCollection, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                                    <Button>Minimized area start</Button>
+                                    <Button>Minimized area</Button>
+                                    <Button>Minimized area</Button>
+                                    <Button>Minimized area</Button>
+                                    <Button>Minimized area</Button>
+                                    <Button>Minimized area</Button>
+                                    <Button>Minimized area</Button>
+                                    <Button>Minimized area end</Button>
+                                
+                            </ScrollViewer>
+                            
+                        </Grid>
+                    </Border>-->
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type xl:MDIChild}" x:Name="ChildStyle">
+
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
+        <Setter Property="Background" Value="DeepPink"/>
+        <!--<Setter Property="Canvas.Left" Value="{Binding X, RelativeSource={RelativeSource Self}}"/>
+        <Setter Property="Canvas.Top" Value="{Binding Y, RelativeSource={RelativeSource Self}}"/>-->
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="100"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xl:MDIChild}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+
+                        <DockPanel x:Name="PART_MDIChildHeader" 
+                                       DockPanel.Dock="Top">
+
+                            <StackPanel x:Name="WindowButtons"
+                                            DockPanel.Dock="Right"
+                                            Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
+
+                                <xl:VectorButton x:Name="MinimizeButton"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryMinimize}"/>
+
+                                <xl:VectorButton x:Name="RestoreButton"
+                                                     MinHeight="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                                                     MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryRestore}"/>
+
+
+                                <xl:VectorButton x:Name="MaximizeButton"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryMaximize}"/>
+
+                                <xl:VectorButton x:Name="CloseButton"
+                                                     OverridesDefaultStyle="True"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryCross}">
+
+                                    <xl:VectorButton.Resources>
+                                        <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, MouseOverBackgroundBrush}" Color="White"/>
+                                        <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, MouseOverBorderBrush}" Color="White"/>
+                                    </xl:VectorButton.Resources>
+
+                                    <xl:VectorButton.Style>
+                                        <Style TargetType="{x:Type xl:VectorButton}" BasedOn="{StaticResource {x:Type xl:VectorButton}}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="Red"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </xl:VectorButton.Style>
+
+                                </xl:VectorButton>
+
+
+                            </StackPanel>
+
+                            <xl:VectorButton x:Name="SystemButton"
+                                                 DockPanel.Dock="Left"
+                                                 Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                                 Scale="0.8"
+                                                 StrokeThickness="0"
+                                                 Vector="{StaticResource GeometryWindows}"/>
+
+                            <Grid DockPanel.Dock="Left">
+
+                                <Thumb x:Name="HeaderThumb" Height="30" VerticalAlignment="Top" Opacity="0.5"/>
+                                <TextBlock x:Name="WindowTitle"
+                                           Grid.Row="0"
+                                           HorizontalAlignment="Left"
+                                           Text="{TemplateBinding Title}"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center"/>
+                            </Grid>
+                        </DockPanel>
+
+
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+
+        <!--<Setter Property="Background" Value="DeepPink"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xl:MDIChild}">
+                    
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}">
+
+                        --><!--<ContentPresenter/>--><!--
+
+                        
+        <DockPanel x:Name="WindowLayout">
+
+                            <DockPanel x:Name="PART_MDIChildHeader" 
+                                       DockPanel.Dock="Top">
+                                
+                                <StackPanel x:Name="WindowButtons"
+                                            DockPanel.Dock="Right"
+                                            Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
+
+                                    <xl:VectorButton x:Name="MinimizeButton"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryMinimize}"/>
+
+                                    <xl:VectorButton x:Name="RestoreButton"
+                                                     MinHeight="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"
+                                                     MinWidth="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryRestore}"/>
+
+
+                                    <xl:VectorButton x:Name="MaximizeButton"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryMaximize}"/>
+
+                                    <xl:VectorButton x:Name="CloseButton"
+                                                     OverridesDefaultStyle="True"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryCross}">
+                                        
+                                        <xl:VectorButton.Resources>
+                                            <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, MouseOverBackgroundBrush}" Color="White"/>
+                                            <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, MouseOverBorderBrush}" Color="White"/>
+                                        </xl:VectorButton.Resources>
+                                        
+                                        <xl:VectorButton.Style>
+                                            <Style TargetType="{x:Type xl:VectorButton}" BasedOn="{StaticResource {x:Type xl:VectorButton}}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="Red"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </xl:VectorButton.Style>
+                                            
+                                    </xl:VectorButton>
+                                    
+
+                                </StackPanel>
+
+                                <xl:VectorButton x:Name="SystemButton"
+                                                 DockPanel.Dock="Left"
+                                                 Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                                 Scale="0.8"
+                                                 StrokeThickness="0"
+                                                 Vector="{StaticResource GeometryWindows}"/>
+                                
+                                <TextBlock x:Name="WindowTitle"
+                                           Grid.Row="0"
+                                           HorizontalAlignment="Left"
+                                           Text="{TemplateBinding Title}"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center"/>
+
+                            </DockPanel>
+
+                            
+        --><!--<Canvas IsItemsHost="True"/>--><!--
+        
+                            <ContentControl x:Name="Content"
+                                            Grid.Row="1"
+                                            Content="{TemplateBinding Content}"/>
+                            <ContentPresenter/>
+
+                        </DockPanel>
+        
+
+                    </Border>-->
+                    
+                <!--</ControlTemplate>
+            </Setter.Value>
+        </Setter>-->
+    </Style>
+
+</ResourceDictionary>
