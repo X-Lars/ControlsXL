@@ -48,6 +48,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\Converters.cs" />
     <Compile Include="Common\DesignTimeResourceDictionary.cs" />
     <Compile Include="Common\Enumerations.cs" />
@@ -152,6 +153,9 @@
     <Resource Include="Resources\Fonts\Segoe UI Semi Bold.ttf" />
     <Resource Include="Resources\Fonts\Segoe UI Semi Light Italic.ttf" />
     <Resource Include="Resources\Fonts\Segoe UI Semi Light.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Information.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

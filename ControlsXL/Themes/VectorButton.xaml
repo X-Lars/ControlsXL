@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:xl="clr-namespace:ControlsXL">
+                    xmlns:xl="clr-namespace:ControlsXL"
+                    xmlns:common="clr-namespace:ControlsXL.Common">
 
     <Style TargetType="{x:Type xl:VectorButton}">
 
@@ -9,6 +10,12 @@
 
         <Setter Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, BackgroundBrush}}"/>
         <Setter Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
+
+        <Setter Property="Height" Value="{x:Static common:Constants.DEFAULT_CONTROL_HEIGHT}"/>
+        <Setter Property="Width" Value="{x:Static common:Constants.DEFAULT_CONTROL_HEIGHT}"/>
+        
+        <Setter Property="MaxHeight" Value="{Binding Width, RelativeSource={RelativeSource Self}}"/>
+        <Setter Property="MaxWidth" Value="{Binding Height, RelativeSource={RelativeSource Self}}"/>
 
         <Setter Property="Template">
             <Setter.Value>

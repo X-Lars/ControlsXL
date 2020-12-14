@@ -21,4 +21,13 @@ namespace ControlsXL.Common
         /// </summary>
         Toggle
     }
+
+    public enum ThumbNames
+    {
+        Header,
+        ThumbLeft,
+        ThumbRight,
+        ThumbTop,
+        ThumbBottom
+    }
 }

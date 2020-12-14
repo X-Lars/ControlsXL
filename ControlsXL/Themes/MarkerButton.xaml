@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:xl="clr-namespace:ControlsXL">
+                    xmlns:xl="clr-namespace:ControlsXL"
+                    xmlns:common="clr-namespace:ControlsXL.Common">
 
     <Style TargetType="{x:Type xl:MarkerButton}">
 
@@ -36,6 +37,7 @@
                             <!-- TEXT -->
                             <TextBlock x:Name="Content"
                                        Focusable="False"            
+                                       Height="{TemplateBinding Height}"
                                        Text="{TemplateBinding Content}"
                                        TextTrimming="CharacterEllipsis"
                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
