@@ -2,25 +2,69 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:xl="clr-namespace:ControlsXL">
+
+    <!-- DEFAULT CONTROLS XL COLORS -->
+    <Color x:Key="DefaultControl">#DDDDDD</Color>
+    <Color x:Key="DefaultControlActive">#BEE6FD</Color>
+    <Color x:Key="DefaultControlDisabled">#F4F4F4</Color>
+    <Color x:Key="DefaultControlPressed">#C4E5F6</Color>
+    <Color x:Key="DefaultControlSelected">#3399FF</Color>
+    
+    <Color x:Key="DefaultControlBorder">#707070</Color>
+    <Color x:Key="DefaultControlBorderActive">#FF3C7FB1</Color>
+    <Color x:Key="DefaultControlBorderDisabled">#ADB2B5</Color>
+    <Color x:Key="DefaultControlBorderPressed">#2C628B</Color>
+    <Color x:Key="DefaultControlBorderSelected">#FFFFFF</Color>
+    
+    <Color x:Key="DefaultApp">#FFFFFF</Color>
+    <Color x:Key="DefaultAppBorder">#707070</Color>
+    <Color x:Key="DefaultAppBorderActive">#646464</Color>
+    <Color x:Key="DefaultAppHeader">#BFCDDB</Color>
+    <Color x:Key="DefaultAppHeaderActive">#99B4D1</Color>
+    <Color x:Key="DefaultAppHeaderDisabled">#707070</Color>
+    <Color x:Key="DefaultAppHeaderSelected">#007ACC</Color>
+    <Color x:Key="DefaultAppWorkspace">#ABABAB</Color>
+    
+    <Color x:Key="DefaultText">#000000</Color>
+    <Color x:Key="DefaultTextActive">#000000</Color>
+    <Color x:Key="DefaultTextDisabled">#838383</Color>
+    <Color x:Key="DefaultTextSelected">#FFFFFF</Color>
+    
+    <!-- DEFAULT WINDOWS SYSTEM COLORS -->
+    <Color x:Key="WindowsSystemControlColor">#E3E3E3</Color>
+    <Color x:Key="WindowsSystemControlLightColor">#F0F0F0</Color>
+    <Color x:Key="WindowsSystemControlLightLightColor">#FFFFFF</Color>
+    <Color x:Key="WindowsSystemControlDark">#A0A0A0</Color>
+    <Color x:Key="WindowsSystemControlDarkDarkColor">#696969</Color>
+    <Color x:Key="WindowsSystemActiveBorder">#B4B4B4</Color>
+    <Color x:Key="WindowsSystemActiveCaption">#99B4D1</Color>
+    <Color x:Key="WindowsSystemActiveCaptionText">#000000</Color>
+    <Color x:Key="WindowsSystemAppWorkspace">#ABABAB</Color>
+    <Color x:Key="WindowsSystemControlText">#000000</Color>
+    <Color x:Key="WindowsSystemDesktop">#FFFFFF</Color>
+    <Color x:Key="WindowsSystemGradientActiveCaption">#B9D1EA</Color>
+    <Color x:Key="WindowsSystemGradientInactiveCaption">#D7E4F2</Color>
+    <Color x:Key="WindowsSystemGrayText">#6D6D6D</Color>
+    <Color x:Key="WindowsSystemHighlight">#3399FF</Color>
+    <Color x:Key="WindowsSystemHighlightText">#FFFFFF</Color>
+    <Color x:Key="WindowsSystemHotTrack">#0066CC</Color>
+    <Color x:Key="WindowsSystemInactiveBorder">#F4F7FC</Color>
+    <Color x:Key="WindowsSystemInactiveCaption">#BFCDDB</Color>
+    <Color x:Key="WindowsSystemInactiveCaptionText">#434E54</Color>
+    <Color x:Key="WindowsSystemInfo">#FDFBE2</Color>
+    <Color x:Key="WindowsSystemInfoText">#000000</Color>
+    <Color x:Key="WindowsSystemMenu">#F0F0F0</Color>
+    <Color x:Key="WindowsSystemMenuBar">#F0F0F0</Color>
+    <Color x:Key="WindowsSystemMenuHighlight">#3399FF</Color>
+    <Color x:Key="WindowsSystemMenuText">#000000</Color>
+    <Color x:Key="WindowsSystemScrollBar">#C8C8C8</Color>
+    <Color x:Key="WindowsSystemWindow">#FFFFFF</Color>
+    <Color x:Key="WindowsSystemWindowFrame">#646464</Color>
+    <Color x:Key="WindowsSystemWindowText">#000000</Color>
     
     <!-- Resource dictionary specifying the default Windows colors -->
-    <Color x:Key="DefaultControlMouseOverBackgroundColor">#BEE6FD</Color>
-    <Color x:Key="DefaultControlMouseOverBorderColor">#3C7FB1</Color>
-    <Color x:Key="DefaultControlPressedBackgroundColor">#BCDDEE</Color>
-    <Color x:Key="DefaultControlPressedBorderColor">#245A83</Color>
-    <Color x:Key="DefaultControlBackgroundColor">#DDDDDD</Color>
-    <Color x:Key="DefaultControlBorderColor">#707070</Color>
-    <Color x:Key="DefaultControlDisabledBackgroundColor">#F4F4F4</Color>
-    <Color x:Key="DefaultControlDisabledBorderColor">#ADB2B5</Color>
-    <Color x:Key="DefaultControlTextColor">#000000</Color>
-    <Color x:Key="DefaultControlSelectedTextColor">#FFFFFF</Color>
-    <Color x:Key="DefaultControlDisabledTextColor">#838383</Color>
-    <Color x:Key="DefaultControlHighlightColor">#007ACC</Color>
-
-    <Color x:Key="DefaultWindowBackgroundColor">#FFFFFF</Color>
-    <Color x:Key="DefaultWindowActiveHeaderColor">#007ACC</Color>
-    <Color x:Key="DefaultWindowInactiveHeaderColor">#707070</Color>
-
+    
+    
     <!-- OVERLAY COLORS -->
     <Color x:Key="OverlayLightLow">#40FFFFFF</Color>
     <Color x:Key="OverlayLightMedium">#80FFFFFF</Color>
@@ -33,50 +77,7 @@
 
 
     <!-- Default Control Colors -->
-    <Color x:Key="DefaultStaticBackgroundColor">#FFDDDDDD</Color>
-    <Color x:Key="DefaultStaticBorderColor">#FF707070</Color>
-    <Color x:Key="DefaultDisabledBackgroundColor">#FFF4F4F4</Color>
-    <Color x:Key="DefaultDisabledBorderColor">#FFADB2B5</Color>
-    <Color x:Key="DefaultMouseOverBackgroundColor">#FFBEE6FD</Color>
-    <Color x:Key="DefaultMouseOverBorderColor">#FF3C7FB1</Color>
-    <Color x:Key="DefaultPressedBackgroundColor">#FFC4E5F6</Color>
-    <Color x:Key="DefaultPressedBorderColor">#FF2C628B</Color>
-
-    <Color x:Key="DefaultActiveBorderColor">#B4B4B4</Color>
-    <Color x:Key="DefaultActiveCaptionColor">#99B4D1</Color>
-    <Color x:Key="DefaultActiveCaptionTextColor">#000000</Color>
-    <Color x:Key="DefaultAppWorkspaceColor">#ABABAB</Color>
     
-    <Color x:Key="DefaultControlColor">#F0F0F0</Color>
-    <Color x:Key="DefaultControlDarkColor">#A0A0A0</Color>
-    <Color x:Key="DefaultControlDarkDarkColor">#696969</Color>
-    <Color x:Key="DefaultControlLightColor">#E3E3E3</Color>
-    <Color x:Key="DefaultControlLightLightColor">#FFFFFF</Color>
-    
-    <Color x:Key="WinDefaultControlTextColor">#000000</Color>
-    <Color x:Key="DefaultDesktopColor">#000000</Color>
-    <Color x:Key="DefaultGradientActiveCaptionColor">#B9D1EA</Color>
-    <Color x:Key="DefaultGradientInactiveCaptionColor">#D7E4F2</Color>
-    <Color x:Key="DefaultGrayTextColor">#6D6D6D</Color>
-    <Color x:Key="DefaultHighlightColor">#3399FF</Color>
-    <Color x:Key="DefaultHighlightTextColor">#FFFFFF</Color>
-    <Color x:Key="DefaultHotTrackColor">#0066CC</Color>
-    <Color x:Key="DefaultInactiveBorderColor">#F4F7FC</Color>
-    <Color x:Key="DefaultInactiveCaptionColor">#BFCDDB</Color>
-    <Color x:Key="DefaultInactiveCaptionTextColor">#434E54</Color>
-    <Color x:Key="DefaultInfoColor">#FFFFE1</Color>
-    <Color x:Key="DefaultInfoTextColor">#000000</Color>
-    <Color x:Key="DefaultMenuColor">#F0F0F0</Color>
-    <Color x:Key="DefaultMenuBarColor">#F0FFf0</Color>
-    <Color x:Key="DefaultMenuHighlightColor">#3399FF</Color>
-    <Color x:Key="DefaultMenuTextColor">#000000</Color>
-    <Color x:Key="DefaultScrollbarColor">#C8C8C8</Color>
-    <Color x:Key="DefaultWindowColor">#FFFFFF</Color>
-    <Color x:Key="DefaultWindowFrameColor">#646464</Color>
-    <Color x:Key="DefaultWindowTextColor">#000000</Color>
-
-
-
     <!-- Effect Colors -->
     <Color x:Key="DropShadow">#33000000</Color>
 

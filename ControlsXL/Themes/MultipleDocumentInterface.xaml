@@ -6,15 +6,21 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Geometry.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Fonts.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/VectorButton.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <common:ThicknessConverter x:Key="ThicknessConverter"/>
-    <common:AddaptiveThicknessConverter x:Key="AdaptiveThicknessConverter"/>
+    <common:AdaptiveThicknessConverter x:Key="AdaptiveThicknessConverter"/>
 
     <Style TargetType="{x:Type xl:MDIChild}">
-        <Setter Property="Background" Value="Pink"/>
-        <Setter Property="MinHeight" Value="50"/>
+        
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppBorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
+        
+        <Setter Property="MinHeight" Value="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"/>
         <Setter Property="MinWidth" Value="50"/>
+        
         <Setter Property="SnapsToDevicePixels" Value="True"/>
 
         <!-- IMPORTANT -->
@@ -25,223 +31,37 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:MDIChild}">
+                    
                     <!-- Use (Path=.) to bind byRef and NOT byVal so the data context can be updated. -->
-                    <Border Background="{TemplateBinding Background}" 
-                            DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=.}">
-                        <DockPanel>
-                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                                <Button Content="Child Caption"/>
-                            </StackPanel>
-                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-                                <Button Content="Child Status"/>
-                            </StackPanel>
-                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
-                            <xl:MDIDecorator x:Name="ChildDecorator"/>
-                        </DockPanel>
-                    </Border>
-
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="ChildDecorator" Property="ShowDecorator" Value="True"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type xl:MDIHost}">
-
-        <Setter Property="Background" Value="LightBlue"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type xl:MDIHost}">
-                    <Border Background="{TemplateBinding Background}">
-                        <DockPanel LastChildFill="True">
-                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                                <Button Content="Host Menu"/>
-                            </StackPanel>
-                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="Status Bar"/>
-                            </StackPanel>
-
-                            <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                                <xl:MDICanvas IsItemsHost="True">
-
-                                </xl:MDICanvas>
-                            </ScrollViewer>
-
-                        </DockPanel>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type xl:MDICanvas}">
-        <Setter Property="Background" Value="LightGreen"/>
-    </Style>
-
-    <Style TargetType="{x:Type xl:MDIDecorator}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type xl:MDIDecorator}">
-                    <Grid Opacity="0">
-                        <xl:MDIResizeHandle Opacity="0"
-                                   Height="3"
-                                    Cursor="SizeNS"
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Stretch" />
-
-                        <xl:MDIResizeHandle Width="3"
-                                    Cursor="SizeWE"
-                                    VerticalAlignment="Stretch"
-                                    HorizontalAlignment="Left" />
-
-                        <xl:MDIResizeHandle Width="3"
-                                       Cursor="SizeWE"
-                                       VerticalAlignment="Stretch"
-                                       HorizontalAlignment="Right" />
-                        <xl:MDIResizeHandle Height="3"
-                                       Cursor="SizeNS"
-                                       VerticalAlignment="Bottom"
-                                       HorizontalAlignment="Stretch" />
-
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type xl:MDIResizeChrome}">
-        <Setter Property="Opacity" Value="0"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type xl:MDIResizeChrome}">
-                    <Grid>
-                        <xl:MDIResizeHandle Height="3"
-                                    Cursor="SizeNS"
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Stretch" />
-
-                        <xl:MDIResizeHandle Width="3"
-                                    Cursor="SizeWE"
-                                    VerticalAlignment="Stretch"
-                                    HorizontalAlignment="Left" />
-
-                        <xl:MDIResizeHandle Width="3"
-                                       Cursor="SizeWE"
-                                       VerticalAlignment="Stretch"
-                                       HorizontalAlignment="Right" />
-                        <xl:MDIResizeHandle Height="3"
-                                       Cursor="SizeNS"
-                                       VerticalAlignment="Bottom"
-                                       HorizontalAlignment="Stretch" />
-
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
-    <Style TargetType="{x:Type xl:MDIMoveChrome}">
-        <Setter Property="Opacity" Value="0"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type xl:MDIMoveChrome}">
-                    <Grid Background="Transparent">
-                        <xl:MDIMoveHandle Height="23" Cursor="SizeAll" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-
-
-    <!--<Style TargetType="{x:Type xl:MDIHost}">
-
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, WindowBackgroundBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
-        <Setter Property="Focusable" Value="False"/>
-        
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type xl:MDIHost}">
-
-                    <Border Background="{TemplateBinding Background}">
-                        <DockPanel LastChildFill="True">
-                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                                <Button Content="Host Menu"/>
-                            </StackPanel>
-                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="Status Bar"/>
-                            </StackPanel>
-
-                            <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                                <xl:MDICanvas IsItemsHost="True">
-
-                                </xl:MDICanvas>
-                            </ScrollViewer>
-
-                        </DockPanel>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type xl:MDIChild}" x:Name="ChildStyle">
-
-        <Setter Property="Background" Value="DeepPink"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
-        <Setter Property="MinWidth" Value="{x:Static xl:MDIChild.MDICHILD_MINIMIZED_WIDTH}"/>
-        <Setter Property="MinHeight" Value="{x:Static xl:MDIChild.MDICHILD_MINIMIZED_HEIGHT}"/>
-        --><!--<Setter Property="Width" Value="100"/>-->
-        <!--<Setter Property="Height" Value="100"/>--><!--
-        
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type xl:MDIChild}">
-
-                    <Canvas>
-                    --><!-- MDICHILD WINDOW RESIZE HANDLES LAYOUT --><!--
-                    <ContentControl Template="{StaticResource DesignerItemTemplate}">
-                        --><!-- MDICHILD WINDOW BORDER --><!--
-                    <Border Background="{TemplateBinding Background}"
+                    <Border x:Name="MDIChildBorder" 
+                            Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            MinWidth="{TemplateBinding MinWidth}">
+                            DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=.}">
+                        
+                        <!-- MDICHILD WINDOW LAYOUT PANEL -->
+                        <DockPanel>
+                            
+                            <!-- MDICHILD WINDOW HEADER-->
+                            <Grid x:Name="MDIChildHeader" 
+                                  Background="{DynamicResource {ComponentResourceKey xl:Styles, AppHeaderBrush}}"
+                                  DockPanel.Dock="Top">
 
-                       
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                            --><!-- MDICHILD WINDOW LAYOUT PANEL --><!--
-                            <DockPanel LastChildFill="True">
+                            <!-- MDICHILD WIDOW SYSTEM BUTTON -->
+                            <xl:VectorButton x:Name="SystemButton"
+                                             Grid.Column="0"
+                                             Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                             Scale="0.8"
+                                             StrokeThickness="0"
+                                             Vector="{StaticResource GeometryWindows}"/>
 
-                                --><!-- MDICHILD WINDOW HEADER--><!--
-                                <Grid x:Name="MDIChildHeader" 
-                                      DockPanel.Dock="Top">
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-
-                                    --><!-- MDICHILD WIDOW SYSTEM BUTTON --><!--
-                                    <xl:VectorButton x:Name="SystemButton"
-                                                     Grid.Column="0"
-                                                     Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
-                                                     Scale="0.8"
-                                                     StrokeThickness="0"
-                                                     Vector="{StaticResource GeometryWindows}"/>
-
-                                    --><!-- MDICHILD WINDOW HEADER CAPTION --><!--
+                                <!-- MDICHILD WINDOW HEADER CAPTION -->
                                     <TextBlock x:Name="WindowTitle"
                                                Grid.Column="1"
                                                HorizontalAlignment="Left"
@@ -249,14 +69,14 @@
                                                TextTrimming="CharacterEllipsis"
                                                VerticalAlignment="Center"/>
 
-                                    --><!-- MDICHILD WINDOW HEADER DRAG THUMB --><!--
-                                    <Thumb x:Name="HeaderThumb" 
-                                           Grid.Column="1"
-                                           Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
-                                           Opacity="0.5"
-                                           Tag="{x:Static common:ThumbNames.Header}"/>
+                            <!-- MDICHILD WINDOW HEADER DRAG THUMB -->
+                                    <xl:MDIMoveHandle x:Name="WindowMoveHandle" 
+                                                      Grid.Column="1"
+                                                      Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                                      Opacity="0"
+                                                      Tag="{x:Static common:ThumbNames.Header}"/>
 
-                                    --><!-- MDICHILD WINDOW HEADER BUTTONS --><!--
+                            <!-- MDICHILD WINDOW HEADER BUTTONS -->
                                     <StackPanel x:Name="WindowButtons"
                                                 Grid.Column="2"
                                                 Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
@@ -279,49 +99,146 @@
                                                          StrokeThickness="0"
                                                          Vector="{StaticResource GeometryMaximize}"/>
 
-                                        <xl:VectorButton x:Name="CloseButton"
-                                                         OverridesDefaultStyle="True"
+                                    <xl:VectorButton x:Name="CloseButton"
                                                          Scale="0.8"
                                                          StrokeThickness="0"
-                                                         Vector="{StaticResource GeometryCross}">
-
-                                            <xl:VectorButton.Resources>
-                                                <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, MouseOverBackgroundBrush}" Color="White"/>
-                                                <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, MouseOverBorderBrush}" Color="White"/>
-                                            </xl:VectorButton.Resources>
-
-                                            <xl:VectorButton.Style>
-                                                <Style TargetType="{x:Type xl:VectorButton}" BasedOn="{StaticResource {x:Type xl:VectorButton}}">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="Red"/>
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </xl:VectorButton.Style>
-
-                                        </xl:VectorButton>
+                                                         Vector="{StaticResource GeometryCross}"/>
+                                    
                                     </StackPanel>
                                 </Grid>
-
-                                --><!-- MDICHILD WINDOW CONTENT --><!--
-                                <ContentControl x:Name="Content"
-                                                Content="{TemplateBinding Content}"/>
-
-                            </DockPanel>
-                            
-                           
-
+                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+                                <Button Content="Child Status"/>
+                            </StackPanel>
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
+                            <xl:MDIDecorator x:Name="Decorator"/>
+                        </DockPanel>
                     </Border>
-                    --><!-- MDICHILD WINDOW RESIZE HANDLES -->
-                    <!--<Thumb x:Name="ThumbLeft" Tag="{x:Static common:ThumbNames.ThumbLeft}" Background="Orange" Cursor="SizeWE" Margin="-5, 0, -5, 0" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Left"/>-->
-                    <!--<Thumb x:Name="ThumbRight" Tag="{x:Static common:ThumbNames.ThumbRight}" Background="Orange" Cursor="SizeWE" Margin="0, 0, -5, 0" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Right"/>--><!--
-                    </ContentControl>
-                    </Canvas>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Decorator" Property="ShowDecorator" Value="True"/>
+                            <Setter TargetName="MDIChildBorder" Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppBorderActiveBrush}}"/>
+                            <Setter TargetName="MDIChildHeader" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppHeaderActiveBrush}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
 
-    </Style>-->
+    <!-- MDIHOST -->
+    <Style TargetType="{x:Type xl:MDIHost}">
+
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppWorkspaceBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xl:MDIHost}">
+                    
+                    <!-- MDIHOST BORDER -->
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                             DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=.}" >
+                            
+                        <DockPanel LastChildFill="True">
+                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                                <Button Content="Host Menu"/>
+                            </StackPanel>
+                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="Status Bar"/>
+                            </StackPanel>
+
+                            <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                <Grid>
+                                    <xl:MDIMoveHandle  Cursor="Cross"  DataContext="{Binding ElementName=Canvas, Path=.}"/>
+                                    <xl:MDICanvas x:Name="Canvas" IsItemsHost="True"/>
+                                </Grid>
+                            </ScrollViewer>
+
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+
+        </Setter>
+    </Style>
+    
+    <common:Proxy x:Key="BorderThicknessProxy" Data="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
+    
+    <Style TargetType="{x:Type xl:MDIResizeChrome}">
+        <!--<Setter Property="Opacity" Value="0.5"/>-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xl:MDIResizeChrome}">
+                    <Grid Margin="{x:Static xl:MDIResizeChrome.ADORNER_MARGIN}" 
+                          Opacity="0">
+
+                        <!-- LEFT HANDLE-->
+                        <xl:MDIResizeHandle Cursor="SizeWE"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Stretch"
+                                            Width="{x:Static xl:MDIResizeChrome.ADORNER_SIDE_DIMENSIONS}"/>
+                        
+                        <!-- TOP HANDLE -->
+                        <xl:MDIResizeHandle Cursor="SizeNS"
+                                            Height="{x:Static xl:MDIResizeChrome.ADORNER_SIDE_DIMENSIONS}"
+                                            HorizontalAlignment="Stretch" 
+                                            VerticalAlignment="Top"/>
+
+                        <!-- RIGHT HANDLE -->
+                        <xl:MDIResizeHandle Cursor="SizeWE"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Stretch"
+                                            Width="{x:Static xl:MDIResizeChrome.ADORNER_SIDE_DIMENSIONS}"/>
+
+                        <!-- BOTTOM HANDLE -->
+                        <xl:MDIResizeHandle Cursor="SizeNS"
+                                            Height="{x:Static xl:MDIResizeChrome.ADORNER_SIDE_DIMENSIONS}"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Bottom"/>
+
+                        <!-- NW HANDLE-->
+                        <xl:MDIResizeHandle Cursor="SizeNWSE"
+                                            Margin="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_MARGIN}"
+                                            Height="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_DIMENSIONS}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            Width="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_DIMENSIONS}"/>
+
+                        <!-- NE HANDLE-->
+                        <xl:MDIResizeHandle Cursor="SizeNESW"
+                                            Margin="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_MARGIN}"
+                                            Height="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_DIMENSIONS}"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Width="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_DIMENSIONS}"/>
+
+                        <!-- SE HANDLE-->
+                        <xl:MDIResizeHandle Cursor="SizeNWSE"
+                                            Margin="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_MARGIN}"
+                                            Height="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_DIMENSIONS}"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Bottom"
+                                            Width="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_DIMENSIONS}"/>
+
+                        <!-- SW HANDLE-->
+                        <xl:MDIResizeHandle Cursor="SizeNESW"
+                                            Margin="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_MARGIN}"
+                                            Height="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_DIMENSIONS}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Bottom"
+                                            Width="{x:Static xl:MDIResizeChrome.ADORNER_CORNER_DIMENSIONS}"/>
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+   
 
 </ResourceDictionary>

@@ -62,6 +62,8 @@ namespace ControlsXL.Common
         }
     }
 
+    
+
     /// <summary>
     /// Converts a numeric value to a <see cref="Thickness"/> containing only the specified sides.
     /// </summary>
@@ -80,8 +82,24 @@ namespace ControlsXL.Common
         {
             double left, top, right, bottom;
 
-            double margin = (double)value;
+            double margin;
 
+            Console.WriteLine(value.GetType());
+            if(value.GetType() == typeof(string))
+            {
+                double.TryParse((string)value, out margin);
+            }
+            else if(value.GetType() == typeof(Thickness))
+            {
+                margin = (double)((Thickness)value).Left;
+            }
+            else
+            {
+                margin = (double)value;
+            }
+
+            //double margin = (double)value;
+            
             if (parameter.GetType() == typeof(string))
             {
                 string[] parameters = parameter.ToString().Split(new char[] { ' ' });
@@ -154,7 +172,7 @@ namespace ControlsXL.Common
     /// Converts a <see cref="Thickness"/> to a new <see cref="Thickness"/> containing only the specified borders.
     /// </summary>
     /// <remarks><i>Maintains the provided border thickness, only hides the specified borders, used for dynamic styling.</i></remarks>
-    public class AddaptiveThicknessConverter : IValueConverter
+    public class AdaptiveThicknessConverter : IValueConverter
     {
         /// <summary>
         /// Converts the <see cref="Thickness"/> to a new <see cref="Thickness"/> containing only the specified borders.

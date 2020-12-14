@@ -8,8 +8,8 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
 
-        <Setter Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, BackgroundBrush}}"/>
-        <Setter Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderBrush}}"/>
+        <Setter Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"/>
+        <Setter Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
 
         <Setter Property="Height" Value="{x:Static common:Constants.DEFAULT_CONTROL_HEIGHT}"/>
         <Setter Property="Width" Value="{x:Static common:Constants.DEFAULT_CONTROL_HEIGHT}"/>
@@ -50,26 +50,26 @@
 
                         <!-- MOUSE OVER -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, MouseOverBackgroundBrush}}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, MouseOverBorderBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlActiveBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
                         </Trigger>
 
                         <!-- MOUSE PRESS -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, PressedBackgroundBrush}}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, PressedBorderBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlPressedBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
                         </Trigger>
                         
                         <!-- DISABLED -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, DisabledBackgroundBrush}}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, DisabledBorderBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlDisabledBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
                         </Trigger>
 
                         <!-- IS CHECKED -->
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, CheckedBackgroundBrush}}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, CheckedForegroundBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderSelectedBrush}}"/>
                         </Trigger>
                         
                     </ControlTemplate.Triggers>

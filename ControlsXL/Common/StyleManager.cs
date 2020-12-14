@@ -10,26 +10,6 @@ using System.Windows;
 namespace ControlsXL
 {
     /// <summary>
-    /// Defines the available control styles.
-    /// </summary>
-    /// <remarks><i><b>IMPORTANT: </b> The name of the enumeration values are use in the <see cref="ResourceDictionary.Source"/> uri and have to match the file names in the styles folder.</i></remarks>
-    public enum ControlStyle
-    {
-        Default,
-        Dark
-    }
-
-    /// <summary>
-    /// Defines the available control appearances.
-    /// </summary>
-    /// <remarks><i><b>IMPORTANT: </b> The name of the enumeration values are use in the <see cref="ResourceDictionary.Source"/> uri and have to match the file names in the appearances folder.</i></remarks>
-    public enum ControlAppearance
-    {
-        Default,
-        Flat
-    }
-
-    /// <summary>
     /// Manages the appearance of the custom controls at runtime.
     /// </summary>
     public static class StyleManager
@@ -149,6 +129,7 @@ namespace ControlsXL
             {
                 StyleChanged(null, EventArgs.Empty);
             }
+
         }
 
         /// <summary>
@@ -169,6 +150,11 @@ namespace ControlsXL
             {
                 AppearanceChanged(null, EventArgs.Empty);
             }
+
+            Application.Current.MainWindow.InvalidateArrange();
+            Application.Current.MainWindow.InvalidateMeasure();
+            Application.Current.MainWindow.InvalidateVisual();
+
         }
 
         #endregion

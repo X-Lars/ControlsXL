@@ -4,7 +4,7 @@
 
     <Style TargetType="{x:Type xl:LinkButton}">
 
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ForegroundBrush}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, DefaultText}}"/>
         <Setter Property="Cursor" Value="Hand"/>
         
         <Setter Property="Template">
@@ -29,18 +29,18 @@
 
                         <!-- LINK BUTTON DISABLED -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, DisabledForegroundBrush}}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"/>
                         </Trigger>
                         
                         <!-- LINK BUTTON MOUSE OVER -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, MouseOverBorderBrush}}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
                             <Setter TargetName="TextArea" Property="TextDecorations" Value="Underline"/>
                         </Trigger>
 
                         <!-- LINK BUTTON PRESSED-->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, PressedBorderBrush}}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
                             <Setter TargetName="TextArea" Property="TextDecorations" Value="{x:Null}"/>
                         </Trigger>
                         

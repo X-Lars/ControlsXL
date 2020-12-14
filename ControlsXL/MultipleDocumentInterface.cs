@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
@@ -34,8 +35,15 @@ namespace ControlsXL
  
     public class MDIChild : ContentControl
     {
-       
 
+        #region Constants
+
+        /// <summary>
+        /// Defines the size of the <see cref="MDIChild"/> window header.
+        /// </summary>
+        public const double MDICHILD_HEADER_HEIGHT = 24;
+
+        #endregion
         /// <summary>
         /// Static constructor called before initializing an instance of <see cref="MDIChild"/>.
         /// </summary>
@@ -59,6 +67,16 @@ namespace ControlsXL
         }
 
 
+
+        public string Title
+        {
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Title.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TitleProperty =
+            DependencyProperty.Register(nameof(Title), typeof(string), typeof(MDIChild), new PropertyMetadata(string.Empty));
 
 
 
@@ -116,10 +134,7 @@ namespace ControlsXL
 
     internal class MDICanvas : Canvas
     {
-        static MDICanvas()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(MDICanvas), new FrameworkPropertyMetadata(typeof(MDICanvas)));
-        }
+
 
         public IEnumerable<MDIChild> SelectedItems
         {
@@ -140,6 +155,24 @@ namespace ControlsXL
             {
                 child.IsSelected = false;
             }
+        }
+
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            if(e.LeftButton == MouseButtonState.Pressed)
+            {
+                Console.WriteLine("Left mouse down");
+                Console.WriteLine(e.Source);
+                Console.WriteLine(e.OriginalSource);
+            }
+
+            base.OnPreviewMouseDown(e);
+        }
+
+        protected override void OnPreviewMouseMove(MouseEventArgs e)
+        {
+            
+            base.OnPreviewMouseMove(e);
         }
 
 
@@ -202,14 +235,13 @@ namespace ControlsXL
 
                 if (layer != null)
                 {
-                    layer.Remove(_MoveAdorner);
+                    //layer.Remove(_MoveAdorner);
                     layer.Remove(_Adorner);
 
                 }
 
                 _Adorner = null;
-
-                _MoveAdorner = null;
+                //_MoveAdorner = null;
             }
         }
 
@@ -249,21 +281,21 @@ namespace ControlsXL
                     MDICanvas canvas = VisualTreeHelper.GetParent(child) as MDICanvas;
 
                     _Adorner = new MDIResizeAdorner(child);
-                    _MoveAdorner = new MDIMoveAdorner(child);
+                    //_MoveAdorner = new MDIMoveAdorner(child);
 
-                    layer.Add(_MoveAdorner);
+                    //layer.Add(_MoveAdorner);
                     layer.Add(_Adorner);
 
 
                     if (this.ShowDecorator)
                     {
                         _Adorner.Visibility = Visibility.Visible;
-                        _MoveAdorner.Visibility = Visibility.Visible;
+                        //_MoveAdorner.Visibility = Visibility.Visible;
                     }
                     else
                     {
                         _Adorner.Visibility = Visibility.Hidden;
-                        _MoveAdorner.Visibility = Visibility.Hidden;
+                        //_MoveAdorner.Visibility = Visibility.Hidden;
                     }
                 }
             }
@@ -272,7 +304,7 @@ namespace ControlsXL
                 _Adorner.Visibility = Visibility.Visible;
 
                 //TODO: Adorner collection.
-                _MoveAdorner.Visibility = Visibility.Visible;
+                //_MoveAdorner.Visibility = Visibility.Visible;
             }
         }
 
@@ -283,13 +315,15 @@ namespace ControlsXL
                 _Adorner.Visibility = Visibility.Hidden;
 
                 // TODO: Adorner collection
-                _MoveAdorner.Visibility = Visibility.Hidden;
+                //_MoveAdorner.Visibility = Visibility.Hidden;
             }
         }
     }
 
     public class MDIResizeAdorner : Adorner
     {
+        
+
         private VisualCollection _Visuals;
         private MDIResizeChrome _Chrome;
 
@@ -321,61 +355,78 @@ namespace ControlsXL
 
     public class MDIResizeChrome : Control
     {
+        public static double ADORNER_SIDE_DIMENSIONS = 5;
+        public static double ADORNER_CORNER_DIMENSIONS = 10;
+        public static readonly Thickness ADORNER_MARGIN = new Thickness(-4);
+        public static readonly Thickness ADORNER_CORNER_MARGIN = new Thickness(-2.5);
+
         static MDIResizeChrome()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MDIResizeChrome), new FrameworkPropertyMetadata(typeof(MDIResizeChrome)));
         }
     }
 
-    public class MDIMoveAdorner : Adorner
-    {
-        private VisualCollection _Visuals;
-        private MDIMoveChrome _Chrome;
+    //public class MDIMoveAdorner : Adorner
+    //{
+    //    private VisualCollection _Visuals;
+    //    private MDIMoveChrome _Chrome;
 
-        public MDIMoveAdorner(MDIChild child) : base(child)
-        {
-            _Chrome = new MDIMoveChrome();
-            _Visuals = new VisualCollection(this);
-            _Visuals.Add(_Chrome);
-            _Chrome.DataContext = child;
-        }
+    //    public MDIMoveAdorner(MDIChild child) : base(child)
+    //    {
+    //        _Chrome = new MDIMoveChrome();
+    //        _Visuals = new VisualCollection(this);
+    //        _Visuals.Add(_Chrome);
+    //        _Chrome.DataContext = child;
+    //    }
 
-        protected override int VisualChildrenCount
-        {
-            get { return _Visuals.Count; }
-        }
+    //    protected override int VisualChildrenCount
+    //    {
+    //        get { return _Visuals.Count; }
+    //    }
 
-        protected override Size ArrangeOverride(Size finalSize)
-        {
-            _Chrome.Arrange(new Rect(finalSize));
+    //    protected override Size ArrangeOverride(Size finalSize)
+    //    {
+    //        _Chrome.Arrange(new Rect(finalSize));
 
-            return finalSize;
-        }
+    //        return finalSize;
+    //    }
 
-        protected override Visual GetVisualChild(int index)
-        {
-            return _Visuals[index];
-        }
+    //    protected override Visual GetVisualChild(int index)
+    //    {
+    //        return _Visuals[index];
+    //    }
 
-    }
+    //}
 
-    public class MDIMoveChrome : Control
-    {
-        static MDIMoveChrome()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(MDIMoveChrome), new FrameworkPropertyMetadata(typeof(MDIMoveChrome)));
-        }
-    }
+    //public class MDIMoveChrome : Control
+    //{
+    //    static MDIMoveChrome()
+    //    {
+    //        DefaultStyleKeyProperty.OverrideMetadata(typeof(MDIMoveChrome), new FrameworkPropertyMetadata(typeof(MDIMoveChrome)));
+    //    }
+    //}
 
-    public class MDIMoveHandle : Thumb
+    internal class MDIMoveHandle : Thumb
     {
         private MDIChild _Child;
         private MDICanvas _Canvas;
 
         public MDIMoveHandle()
         {
+            RenderTransformOrigin = new Point(0.5, 0.5);
+
+            SizeChanged += MDIMoveHandleSizeChanged;
             DragStarted += XMoveThumbDragStarted;
             DragDelta += XMoveThumbDragDelta;
+        }
+
+        private void MDIMoveHandleSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(IsDragging)
+            {
+                Width = e.PreviousSize.Width;
+                Height = e.PreviousSize.Height;
+            }
         }
 
         private void XMoveThumbDragStarted(object sender, DragStartedEventArgs e)
@@ -385,6 +436,10 @@ namespace ControlsXL
             if (_Child != null)
             {
                 _Canvas = VisualTreeHelper.GetParent(_Child) as MDICanvas;
+            }
+            else
+            {
+                _Canvas = DataContext as MDICanvas;
             }
         }
 
@@ -416,6 +471,33 @@ namespace ControlsXL
                 _Canvas.InvalidateMeasure();
                 e.Handled = true;
             }
+            else if (_Canvas != null)
+            {
+                // TODO: Canvas Dragging
+                //double minLeft = double.MaxValue;
+                //double minTop = double.MaxValue;
+
+                //foreach (MDIChild item in _Canvas.Children)
+                //{
+                //    minLeft = Math.Min(Canvas.GetLeft(item), minLeft);
+                //    minTop = Math.Min(Canvas.GetTop(item), minTop);
+                //}
+
+
+                //double deltaHorizontal = Math.Max(-minLeft, e.HorizontalChange);
+                //double deltaVertical = Math.Max(-minTop, e.VerticalChange);
+
+                //Console.WriteLine(deltaHorizontal);
+                //foreach (MDIChild item in _Canvas.Children)
+                //{
+                //    Canvas.SetLeft(item, Canvas.GetLeft(item) + deltaHorizontal);
+                //    Canvas.SetTop(item, Canvas.GetTop(item) +  deltaVertical);
+                //}
+
+                //_Canvas.InvalidateArrange();
+                //e.Handled = true;
+
+            }
         }
 
     }
@@ -427,6 +509,8 @@ namespace ControlsXL
 
         public MDIResizeHandle()
         {
+            RenderTransformOrigin = new Point(0.5, 0.5);
+
             DragStarted += new DragStartedEventHandler(XThumbDragStart);
             DragDelta += new DragDeltaEventHandler(XThumbDragDelta);
         }

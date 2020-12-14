@@ -14,19 +14,26 @@
 
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TestBrush}" Color="DeepPink"/>
     
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, BackgroundBrush}" Color="{StaticResource DefaultControlBackgroundColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, BorderBrush}" Color="{StaticResource DefaultControlBorderColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, DisabledBackgroundBrush}" Color="{StaticResource DefaultControlDisabledBackgroundColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, DisabledBorderBrush}" Color="{StaticResource DefaultControlDisabledBorderColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, DisabledForegroundBrush}" Color="{StaticResource DefaultControlDisabledTextColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, MouseOverBackgroundBrush}" Color="{StaticResource DefaultControlMouseOverBackgroundColor}"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, MouseOverBorderBrush}" Color="{StaticResource DefaultMouseOverBorderColor}"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, PressedBackgroundBrush}" Color="{StaticResource DefaultControlPressedBackgroundColor}"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, PressedBorderBrush}" Color="{StaticResource DefaultControlPressedBorderColor}"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, CheckedBackgroundBrush}" Color="{StaticResource DefaultHighlightColor}"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, CheckedForegroundBrush}" Color="{StaticResource DefaultHighlightTextColor}"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, WindowBackgroundBrush}" Color="{StaticResource DefaultWindowBackgroundColor}"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, WindowActiveHeaderBrush}" Color="{StaticResource DefaultWindowActiveHeaderColor}"/>
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, WindowInactiveHeaderBrush}" Color="{StaticResource DefaultWindowInactiveHeaderColor}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, AppBrush}" Color="{StaticResource DefaultApp}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, AppBorderBrush}" Color="{StaticResource DefaultAppBorder}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, AppBorderActiveBrush}" Color="{StaticResource DefaultAppBorderActive}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, AppHeaderBrush}" Color="{StaticResource DefaultAppHeader}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, AppHeaderActiveBrush}" Color="{StaticResource DefaultAppHeaderActive}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, AppWorkspaceBrush}" Color="{StaticResource DefaultAppWorkspace}"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlBrush}" Color="{StaticResource DefaultControl}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlActiveBrush}" Color="{StaticResource DefaultControlActive}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlDisabledBrush}" Color="{StaticResource DefaultControlDisabled}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlPressedBrush}" Color="{StaticResource DefaultControlPressed}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlSelectedBrush}" Color="{StaticResource DefaultControlSelected}"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlBorderBrush}" Color="{StaticResource DefaultControlBorder}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlBorderActiveBrush}" Color="{StaticResource DefaultControlBorderActive}"/>
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}" Color="{StaticResource DefaultControlBorderDisabled}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlBorderPressedBrush}" Color="{StaticResource DefaultControlBorderPressed}"/>
+
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TextDisabledBrush}" Color="{StaticResource DefaultTextDisabled}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TextSelectedBrush}" Color="{StaticResource DefaultTextSelected}"/>
+
 
 </ResourceDictionary>

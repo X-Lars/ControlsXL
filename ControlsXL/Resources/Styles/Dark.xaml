@@ -4,19 +4,16 @@
 
     <ResourceDictionary.MergedDictionaries>
         
-        <!-- Merges the specified dictionaries containing custom control skins into Skins\Dark.xaml -->
+        <!-- Merges the specified dictionaries containing custom control colors into Skins\Dark.xaml -->
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Colors.xaml"/>
-        <!--<ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/MarkerButton/MarkerButtonDark.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/VectorButton/VectorButtonDark.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/SideBar/SideBarDark.xaml"/>-->
         
     </ResourceDictionary.MergedDictionaries>
 
     <SolidColorBrush x:Key="TestBrush" Color="DeepPink"/>
-    
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, BackgroundBrush}" Color="{StaticResource DefaultControlDarkColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, BorderBrush}" Color="{StaticResource DefaultControlDarkDarkColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ForegroundBrush}" Color="{StaticResource DefaultControlTextColor}" />
-    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, HighlightBrush}" Color="{StaticResource DefaultControlHighlightColor}" />
+
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlBrush}" Color="{StaticResource WindowsSystemControlDark}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlBorderBrush}" Color="{StaticResource WindowsSystemControlDarkDarkColor}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TextBrush}" Color="{StaticResource DefaultText}" />
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlSelectedBrush}" Color="{StaticResource DefaultControlSelected}" />
     
 </ResourceDictionary>
