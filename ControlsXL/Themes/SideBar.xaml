@@ -65,6 +65,8 @@
 
                                 <!-- SIDE BAR COMMON AREA -->
                                 <Border x:Name="PART_SideBarCommon" 
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 0 1'}"
                                         DockPanel.Dock="Top">
                                     
                                     <Grid>
@@ -76,7 +78,8 @@
                                         <!-- SIDE BAR COMMON AREA HEADER -->
                                         <Border x:Name="SideBarCommonHeader"
                                                 Background="{TemplateBinding Background}"
-                                                DockPanel.Dock="Top"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 0 1'}"
                                                 Grid.Row="0"
                                                 Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
 
@@ -84,6 +87,7 @@
                                                 
                                                 <!-- SIDE BAR COMMON AREA HEADER COLLAPSE BUTTON -->
                                                 <xl:VectorButton x:Name="SideBarCommonHeaderCollapseButton"
+                                                                 Background="Transparent"
                                                                  Command="{x:Static xl:SideBar.CollapseSideBarCommand}"
                                                                  DockPanel.Dock="Right"
                                                                  Focusable="False"
@@ -94,7 +98,7 @@
 
                                                 <!-- SIDE BAR COMMON AREA HEADER TEXT -->
                                                 <TextBlock x:Name="SideBarCommonHeaderText"
-                                                           FontWeight="Bold"
+                                                           FontFamily="{StaticResource SegoeUIBold}"
                                                            HorizontalAlignment="Center"
                                                            Text="{Binding Path=Header, RelativeSource={RelativeSource TemplatedParent}}"
                                                            TextTrimming="CharacterEllipsis"
@@ -121,11 +125,12 @@
                                             
                                                 <ContentPresenter x:Name="CommonContent"
                                                                   Content="{Binding CommonSection, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                  Focusable="True"
                                                                   Margin="5"/>
 
                                             </ScrollViewer>
                                             
-                                            <!-- SIDE BAR COMMON AREA RESIZE HANDLE -->
+                                            <!-- SIDE BAR COMMON AREA RESIZE HANDLE --><!--
                                             <Button x:Name="SideBarCommonSectionResizeHandle" 
                                                     Grid.Row="1"
                                                     ClickMode="Press"
@@ -141,7 +146,7 @@
                                                         </Border>
                                                     </ControlTemplate>
                                                 </Button.Template>
-                                            </Button>
+                                            </Button>-->
                                         </Grid>
                                     </Grid>
                                 </Border>
@@ -149,12 +154,13 @@
                                 <!-- SIDE BAR HEADER AREA -->
                                 <Button x:Name="PART_SideBarHeader"
                                         BorderBrush="{TemplateBinding BorderBrush}"
-                                        BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 1'}"
+                                        BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 0 1'}"
                                         ClickMode="Press"
                                         Command="{x:Static xl:SideBar.ResizeCommonCommand}"
                                         DockPanel.Dock="Top"
                                         Grid.Row="1"
-                                        Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}">
+                                        Height="{x:Static xl:SideBar.SIDEBAR_SECTION_HEIGHT}"
+                                        HorizontalContentAlignment="Stretch">
 
                                     <DockPanel>
 
@@ -164,13 +170,14 @@
                                                          Command="{x:Static xl:SideBar.CollapseSideBarCommand}"
                                                          DockPanel.Dock="Right"
                                                          Height="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"
+                                                         HorizontalAlignment="Right"
                                                          Scale="0.75"
                                                          Vector="{StaticResource GeometryCollapse}"
                                                          Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"/>
 
                                         <!-- SIDE BAR HEADER TEXT -->
                                         <TextBlock x:Name="SideBarHeaderText"
-                                                   FontWeight="Bold"
+                                                   FontFamily="{StaticResource SegoeUIBold}"
                                                    HorizontalAlignment="Center"
                                                    Margin="{Binding Source={x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}, Converter={StaticResource ThicknessConverter}, ConverterParameter='1 0 0 0'}"
                                                    Text="{Binding Path=SelectedSection.Header, RelativeSource={RelativeSource TemplatedParent}}"
@@ -178,6 +185,7 @@
                                                    VerticalAlignment="Center"/>
 
                                     </DockPanel>
+
                                 </Button>
 
                                 <!-- SIDE BAR CONTENT AREA -->
@@ -210,6 +218,27 @@
                                                          Vector="{StaticResource GeometryExpand}"
                                                          Width="{x:Static xl:SideBar.SIDEBAR_SECTION_IMAGE_DIMENSIONS}"/>
                                         
+                                        <!-- POPUP ANCHOR: Positions the popup, used because the show popup button is rotated -->
+                                        <Border x:Name="CommonPopupLocation"
+                                                DockPanel.Dock="Top" 
+                                                HorizontalAlignment="Right"  
+                                                Height="0"
+                                                Width="0"/>
+
+                                        <!-- SIDE BAR SHOW COLLAPSED SECTION CONTENT BUTTON -->
+                                        <xl:MarkerButton x:Name="PART_SidebarCollapsedCommonButton"
+                                                         ButtonMode="Toggle"
+                                                         ClickMode="Press"
+                                                         Content="{Binding Path=Header, RelativeSource={RelativeSource TemplatedParent}}"
+                                                         DockPanel.Dock="Top"
+                                                         IsChecked="{Binding IsCollapsedCommonContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}">
+
+                                            <ToggleButton.LayoutTransform>
+                                                <RotateTransform Angle="90"/>
+                                            </ToggleButton.LayoutTransform>
+
+                                        </xl:MarkerButton>
+
                                         <!-- POPUP ANCHOR: Positions the popup, used because the show popup button is rotated -->
                                         <Border x:Name="PopupLocation"
                                                 DockPanel.Dock="Top" 
@@ -252,7 +281,7 @@
                                             </ItemsControl>
                                         </ScrollViewer>
                                     </DockPanel>
-                                   
+
                                     <!-- SIDE BAR COLLAPSED SECTION CONTENT POPUP -->
                                     <Popup x:Name="PART_SideBarCollapsedContentPopup"
                                            AllowsTransparency="True"
@@ -275,6 +304,27 @@
                                     </Popup>
                                 </Grid>
 
+                                 <!-- SIDE BAR COLLAPSED COMMON POPUP -->
+                                    <Popup x:Name="PART_SidebarCollapsedCommonPopup"
+                                           AllowsTransparency="True"
+                                           Placement="Right"
+                                           PlacementTarget="{Binding ElementName=CommonPopupLocation}"
+                                           PopupAnimation="Slide"
+                                           StaysOpen="False">
+
+                                        <Popup.Child>
+
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="1"
+                                                    Padding="5">
+
+                                                <ContentPresenter Content="{Binding CommonSection, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                                            </Border>
+                                        </Popup.Child>
+                                    </Popup>
+                                
                                 <!-- SIDE BAR SECTIONS AREA -->
                                 <StackPanel x:Name="SideBarSections"
                                             Grid.Row="3">
@@ -391,8 +441,11 @@
                             <Setter TargetName="SideBarResizeHandle" Property="DockPanel.Dock" Value="Left"/>
                             <Setter TargetName="SideBarHeaderCollapseButton" Property="DockPanel.Dock" Value="Left"/>
                             <Setter TargetName="SideBarCommonHeaderCollapseButton" Property="DockPanel.Dock" Value="Left"/>
+                            
                             <Setter TargetName="PART_SideBarCollapsedContentPopup" Property="Placement" Value="Left"/>
+                            <Setter TargetName="PART_SidebarCollapsedCommonPopup" Property="Placement" Value="Left"/>
                             <Setter TargetName="PopupLocation" Property="HorizontalAlignment" Value="Left"/>
+                            <Setter TargetName="CommonPopupLocation" Property="HorizontalAlignment" Value="Left"/>
                             <Setter TargetName="SideBarHeaderCollapseButton" Property="Vector" Value="{StaticResource GeometryExpand}"/>
                             <Setter TargetName="SideBarCommonHeaderCollapseButton" Property="Vector" Value="{StaticResource GeometryExpand}"/>
                             <Setter TargetName="SideBarOptionsCollapseButton" Property="Vector" Value="{StaticResource GeometryCollapse}"/>

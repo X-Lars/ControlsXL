@@ -20,6 +20,8 @@ namespace ControlsXL
     [TemplatePart(Name = PART_SIDEBAR_HEADER)]
     [TemplatePart(Name = PART_SIDEBAR_COLLAPSED_CONTENT_POPUP)]
     [TemplatePart(Name = PART_SIDEBAR_COLLAPSED_CONTENT_BUTTON)]
+    [TemplatePart(Name = PART_SIDEBAR_COLLAPSED_COMMON_POPUP)]
+    [TemplatePart(Name = PART_SIDEBAR_COLLAPSED_COMMON_BUTTON)]
     public class SideBar : HeaderedItemsControl
     {
         #region Constants
@@ -50,6 +52,16 @@ namespace ControlsXL
         /// The template part name of the collapsed side bar content button in xaml.
         /// </summary>
         private const string PART_SIDEBAR_COLLAPSED_CONTENT_BUTTON = "PART_SideBarCollapsedContentButton";
+
+        /// <summary>
+        /// The template part name of the collapsed side bar common area content in xaml.
+        /// </summary>
+        private const string PART_SIDEBAR_COLLAPSED_COMMON_POPUP = "PART_SidebarCollapsedCommonPopup";
+
+        /// <summary>
+        /// The template part name of the collapsed side bar common area button in xaml.
+        /// </summary>
+        private const string PART_SIDEBAR_COLLAPSED_COMMON_BUTTON = "PART_SidebarCollapsedCommonButton";
 
         /// <summary>
         /// The template part name of the side bar header button in xaml.
@@ -160,6 +172,16 @@ namespace ControlsXL
         /// Stores a reference to the collapsed content popup template part in xaml.
         /// </summary>
         private Popup _PARTCollapsedContentPopup;
+
+        /// <summary>
+        /// Stores a reference to the collapsed common area button template part in xaml.
+        /// </summary>
+        private ToggleButton _PARTCollapsedCommonButton;
+
+        /// <summary>
+        /// Stores a reference to the collapsed common area popup template part in xaml.
+        /// </summary>
+        private Popup _PARTCollapsedCommonPopup;
 
         /// <summary>
         /// Stores a reference to the overflow menu popup template part in xaml.
@@ -357,6 +379,11 @@ namespace ControlsXL
         private static readonly DependencyPropertyKey CollapsedContentPropertyKey = DependencyProperty.RegisterReadOnly("CollapsedContent", typeof(object), typeof(SideBar), new UIPropertyMetadata(null));
 
         /// <summary>
+        /// Registers the specialized read only property to get the content of the collapsed common area.
+        /// </summary>
+        private static readonly DependencyPropertyKey CollapsedCommonContentPropertyKey = DependencyProperty.RegisterReadOnly("CollapsedCommonContent", typeof(object), typeof(SideBar), new UIPropertyMetadata(null));
+
+        /// <summary>
         /// Registers the property to get the expanded state of the <see cref="SideBar"/>.
         /// </summary>
         public static readonly DependencyProperty IsExpandendProperty = DependencyProperty.Register("IsExpanded", typeof(bool), typeof(SideBar), new UIPropertyMetadata(true, IsExpandedChangedCallback));
@@ -375,6 +402,11 @@ namespace ControlsXL
         /// Register the property to get the visibility of the collapsed content popup.
         /// </summary>
         public static readonly DependencyProperty IsCollapsedContentPopupVisibleProperty = DependencyProperty.Register("IsCollapsedContentPopupVisible", typeof(bool), typeof(SideBar), new UIPropertyMetadata(false, IsCollapsedContentPopupVisibleChangedCallback));
+
+        /// <summary>
+        /// Register the property to get the visibility of the collapsed common content area popup.
+        /// </summary>
+        public static readonly DependencyProperty IsCollapsedCommonContentPopupVisibleProperty = DependencyProperty.Register("IsCollapsedCommonContentPopupVisible", typeof(bool), typeof(SideBar), new UIPropertyMetadata(false, IsCollapsedCommonPopupVisibleChangedCallback));
 
         /// <summary>
         /// Registers the specialized read only property to get the <see cref="SideBarSection"/>'s content.
@@ -421,7 +453,12 @@ namespace ControlsXL
         /// </summary>
         public static readonly DependencyProperty CollapsedContentProperty = CollapsedContentPropertyKey.DependencyProperty;
 
+        /// <summary>
+        /// Registers the property to get the collapsed common content.
+        /// </summary>
+        public static readonly DependencyProperty CollapsedCommonContentProperty = CollapsedCommonContentPropertyKey.DependencyProperty;
 
+      
         #endregion
 
         #region Properties
@@ -471,6 +508,12 @@ namespace ControlsXL
             set { SetValue(CollapsedContentPropertyKey, value); }
         }
 
+        internal object CollapsedCommonContent
+        {
+            get { return GetValue(CollapsedCommonContentProperty); }
+            set { SetValue(CollapsedCommonContentPropertyKey, value); }
+        }
+
         /// <summary>
         /// Gets or sets the content of the selected <see cref="SideBarSection"/>.
         /// </summary>
@@ -491,6 +534,15 @@ namespace ControlsXL
         {
             get { return (bool)GetValue(IsCollapsedContentPopupVisibleProperty); }
             set { SetValue(IsCollapsedContentPopupVisibleProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the collapsed common content area popup is visible.
+        /// </summary>
+        public bool IsCollapsedCommonContentPopupVisible
+        {
+            get { return (bool)GetValue(IsCollapsedCommonContentPopupVisibleProperty); }
+            set { SetValue(IsCollapsedCommonContentPopupVisibleProperty, value); }
         }
 
         /// <summary>
@@ -935,6 +987,32 @@ namespace ControlsXL
             }
         }
 
+        /// <summary>
+        /// Handles the property changed event of the <see cref="IsCollapsedCommonContentPopupVisibleProperty"/>.
+        /// </summary>
+        /// <param name="sender">The <see cref="DependencyObject"/> that raised the event.</param>
+        /// <param name="e">A <see cref="DependencyPropertyChangedEventArgs"/> containing event data.</param>
+        private static void IsCollapsedCommonPopupVisibleChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            SideBar sideBar = (SideBar)sender;
+
+            if (sideBar._PARTCollapsedCommonPopup != null)
+            {
+                sideBar._PARTCollapsedCommonPopup.StaysOpen = true;
+                sideBar._PARTCollapsedCommonPopup.IsOpen = (bool)e.NewValue;
+            }
+
+            // If popup is open
+            if ((bool)e.NewValue)
+            {
+                sideBar.RaiseEvent(new RoutedEventArgs(PopupOpenedRoutedEvent));
+            }
+            else
+            {
+                sideBar.RaiseEvent(new RoutedEventArgs(PopupClosedRoutedEvent));
+            }
+        }
+
 
         /// <summary>
         /// Handles the property changed event of the <see cref="IsExpandendProperty"/>.
@@ -953,6 +1031,8 @@ namespace ControlsXL
             if (isExpanded)
             {
                 sideBar.IsCollapsedContentPopupVisible = false;
+                sideBar.IsCollapsedCommonContentPopupVisible = false;
+
                 sideBar.MaxWidth = sideBar._LastWidth;
                 sideBar.RaiseEvent(new RoutedEventArgs(CollapsedRoutedEvent));
             }
@@ -1041,12 +1121,23 @@ namespace ControlsXL
                 _PARTCollapsedContentPopup.Closed -= CollapsedContentPopupClosed;
             }
 
+            if(_PARTCollapsedCommonPopup != null)
+            {
+                _PARTCollapsedCommonPopup.Opened -= CollapsedCommonPopupOpened;
+                _PARTCollapsedCommonPopup.Closed -= CollapsedCommonPopupClosed;
+            }
+
             // Gets a reference to the element in xaml
             _PARTSideBarMinimizedSections = GetTemplateChild(PART_SIDEBAR_MINIMIZED_SECTIONS) as FrameworkElement;
             _PARTOverflowMenu = GetTemplateChild(PART_SIDEBAR_OVERFLOW_MENU) as Popup;
             _PARTSideBarCommon = GetTemplateChild(PART_SIDEBAR_COMMON) as FrameworkElement;
+
             _PARTCollapsedContentPopup = GetTemplateChild(PART_SIDEBAR_COLLAPSED_CONTENT_POPUP) as Popup;
             _PARTCollapsedContentButton = GetTemplateChild(PART_SIDEBAR_COLLAPSED_CONTENT_BUTTON) as ToggleButton;
+
+            _PARTCollapsedCommonPopup = GetTemplateChild(PART_SIDEBAR_COLLAPSED_COMMON_POPUP) as Popup;
+            _PARTCollapsedCommonButton = GetTemplateChild(PART_SIDEBAR_COLLAPSED_COMMON_BUTTON) as ToggleButton;
+
             _PARTSideBarHeader = GetTemplateChild(PART_SIDEBAR_HEADER) as Button;
 
             if(_PARTCollapsedContentPopup != null)
@@ -1058,6 +1149,17 @@ namespace ControlsXL
             if(_PARTCollapsedContentButton != null)
             {
                 _PARTCollapsedContentButton.PreviewMouseLeftButtonUp += CollapsedContentButtonMouseUpPreview;
+            }
+
+            if(_PARTCollapsedCommonPopup != null)
+            {
+                _PARTCollapsedCommonPopup.Opened += CollapsedCommonPopupOpened;
+                _PARTCollapsedCommonPopup.Closed += CollapsedCommonPopupClosed;
+            }
+
+            if(_PARTCollapsedCommonButton != null)
+            {
+                _PARTCollapsedCommonButton.PreviewMouseLeftButtonDown += CollapsedCommonButtonMouseUpPreview;
             }
 
             base.OnApplyTemplate();
@@ -1226,6 +1328,18 @@ namespace ControlsXL
             // Reassign the section content
             this.CollapsedContent = this.IsExpanded ? null : tempContent;
             this.SectionContent = this.IsExpanded ? tempContent : null;
+
+            // Store the selected section content temporary
+            object tempCommonContent = this.CommonSection;
+
+            // Reset the section content
+            this.CommonSection = null;
+
+            // Reassign the section content
+            //this.CollapsedCommonContent =  tempCommonContent;
+            this.CommonSection = tempCommonContent;
+
+
         }
 
         #endregion
@@ -1277,6 +1391,42 @@ namespace ControlsXL
 
             Mouse.Capture(null);
             _PARTCollapsedContentPopup.StaysOpen = false;
+        }
+
+        /// <summary>
+        /// Handles the <see cref="Popup.Closed"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> containing event data.</param>
+        private void CollapsedCommonPopupClosed(object sender, EventArgs e)
+        {
+            IsCollapsedCommonContentPopupVisible = false;
+            Mouse.Capture(null);
+        }
+
+        /// <summary>
+        /// Handles the <see cref="Popup.Opened"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> containing event data.</param>
+        private void CollapsedCommonPopupOpened(object sender, EventArgs e)
+        {
+            IsCollapsedCommonContentPopupVisible = true;
+
+            Mouse.Capture(this, CaptureMode.SubTree);
+        }
+
+        /// <summary>
+        /// Handles the 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CollapsedCommonButtonMouseUpPreview(object sender, MouseButtonEventArgs e)
+        {
+            Point point = e.GetPosition(this);
+
+            Mouse.Capture(null);
+            _PARTCollapsedCommonPopup.StaysOpen = false;
         }
 
 

@@ -17,9 +17,9 @@
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppBrush}}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppBorderBrush}}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
-        
-        <Setter Property="MinHeight" Value="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"/>
-        <Setter Property="MinWidth" Value="50"/>
+
+        <Setter Property="MinHeight" Value="{x:Static xl:MDIChild.MDICHILD_MINIMIZED_HEIGHT}"/>
+        <Setter Property="MinWidth" Value="{x:Static xl:MDIChild.MDICHILD_MINIMIZED_WIDTH}"/>
         
         <Setter Property="SnapsToDevicePixels" Value="True"/>
 
@@ -37,6 +37,7 @@
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
+                            Focusable="True"
                             DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=.}">
                         
                         <!-- MDICHILD WINDOW LAYOUT PANEL -->
@@ -53,73 +54,88 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                            <!-- MDICHILD WIDOW SYSTEM BUTTON -->
-                            <xl:VectorButton x:Name="SystemButton"
-                                             Grid.Column="0"
-                                             Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
-                                             Scale="0.8"
-                                             StrokeThickness="0"
-                                             Vector="{StaticResource GeometryWindows}"/>
+                                <!-- MDICHILD WIDOW SYSTEM BUTTON -->
+                                <xl:VectorButton x:Name="SystemButton"
+                                                 Grid.Column="0"
+                                                 Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                                 Scale="0.8"
+                                                 StrokeThickness="0"
+                                                 Vector="{StaticResource GeometryWindows}"/>
 
                                 <!-- MDICHILD WINDOW HEADER CAPTION -->
-                                    <TextBlock x:Name="WindowTitle"
-                                               Grid.Column="1"
-                                               HorizontalAlignment="Left"
-                                               Text="{TemplateBinding Title}"
-                                               TextTrimming="CharacterEllipsis"
-                                               VerticalAlignment="Center"/>
+                                <TextBlock x:Name="WindowTitle"
+                                            Foreground="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Left"
+                                            Text="{TemplateBinding Title}"
+                                            TextTrimming="CharacterEllipsis"
+                                            VerticalAlignment="Center"/>
 
-                            <!-- MDICHILD WINDOW HEADER DRAG THUMB -->
-                                    <xl:MDIMoveHandle x:Name="WindowMoveHandle" 
-                                                      Grid.Column="1"
-                                                      Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
-                                                      Opacity="0"
-                                                      Tag="{x:Static common:ThumbNames.Header}"/>
+                                <!-- MDICHILD WINDOW HEADER DRAG THUMB -->
+                                <xl:MDIMoveHandle x:Name="WindowMoveHandle" 
+                                                    Grid.Column="1"
+                                                    Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                                    Opacity="0"
+                                                    Tag="{x:Static common:ThumbNames.Header}"/>
 
-                            <!-- MDICHILD WINDOW HEADER BUTTONS -->
-                                    <StackPanel x:Name="WindowButtons"
-                                                Grid.Column="2"
-                                                Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
-                                                HorizontalAlignment="Right"
-                                                Orientation="Horizontal">
+                                 <!-- MDICHILD WINDOW HEADER BUTTONS -->
+                                <StackPanel x:Name="WindowButtons"
+                                            Grid.Column="2"
+                                            Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
 
-                                        <xl:VectorButton x:Name="MinimizeButton"
-                                                         Scale="0.8"
-                                                         StrokeThickness="0"
-                                                         Vector="{StaticResource GeometryMinimize}"/>
+                                    <xl:VectorButton x:Name="MinimizeButton"
+                                                     Command="{x:Static xl:MDIChild.Minimize}"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryMinimize}"/>
 
-                                        <xl:VectorButton x:Name="RestoreButton"
-                                                         Scale="0.8"
-                                                         StrokeThickness="0"
-                                                         Vector="{StaticResource GeometryRestore}"
-                                                         Visibility="Collapsed"/>
+                                    <xl:VectorButton x:Name="RestoreButton"
+                                                     Command="{x:Static xl:MDIChild.Restore}"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryRestore}"
+                                                     Visibility="Collapsed"/>
 
-                                        <xl:VectorButton x:Name="MaximizeButton"
-                                                         Scale="0.8"
-                                                         StrokeThickness="0"
-                                                         Vector="{StaticResource GeometryMaximize}"/>
+                                    <xl:VectorButton x:Name="MaximizeButton"
+                                                     Command="{x:Static xl:MDIChild.Maximize}"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryMaximize}"/>
 
                                     <xl:VectorButton x:Name="CloseButton"
-                                                         Scale="0.8"
-                                                         StrokeThickness="0"
-                                                         Vector="{StaticResource GeometryCross}"/>
-                                    
-                                    </StackPanel>
-                                </Grid>
+                                                     Command="{x:Static xl:MDIChild.Close}"
+                                                     Scale="0.8"
+                                                     StrokeThickness="0"
+                                                     Vector="{StaticResource GeometryCross}"/>
+
+                                </StackPanel>
+                            </Grid>
+                            
                             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
                                 <Button Content="Child Status"/>
                             </StackPanel>
+                            
                             <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
-                            <xl:MDIDecorator x:Name="Decorator"/>
+                            <xl:MDIDecorator x:Name="Decorator" ShowDecorator="{Binding CanResize}"/>
+                            
                         </DockPanel>
                     </Border>
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Decorator" Property="ShowDecorator" Value="True"/>
+                            <!--<Setter TargetName="Decorator" Property="ShowDecorator" Value="True"/>-->
                             <Setter TargetName="MDIChildBorder" Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppBorderActiveBrush}}"/>
                             <Setter TargetName="MDIChildHeader" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppHeaderActiveBrush}}"/>
+                            <Setter TargetName="WindowTitle" Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextSelectedBrush}}"/>
                         </Trigger>
+
+                        <Trigger Property="State" Value="Minimized">
+                            <Setter TargetName="MinimizeButton" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="RestoreButton" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        
                     </ControlTemplate.Triggers>
 
                 </ControlTemplate>
@@ -141,7 +157,7 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                             DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=.}" >
+                            DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=.}" >
                             
                         <DockPanel LastChildFill="True">
                             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">

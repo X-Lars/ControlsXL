@@ -28,11 +28,42 @@ namespace ControlsXL
             // Overrides the default style of the inherited ItemsControl to use the MDIHost style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MDIHost), new FrameworkPropertyMetadata(typeof(MDIHost)));
         }
-      
-   
+
+        public MDIHost()
+        {
+            
+        }
+
+
+        protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
+        {
+            base.OnItemsChanged(e);
+
+            switch(e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnItemsChanged)}] Add");
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnItemsChanged)}] Remove");
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnItemsChanged)}] Replace");
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnItemsChanged)}] Reset");
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnItemsChanged)}] Move");
+                    break;
+            }
+        }
     }
 
  
+    /// <summary>
+    /// 
+    /// </summary>
     public class MDIChild : ContentControl
     {
 
@@ -43,7 +74,29 @@ namespace ControlsXL
         /// </summary>
         public const double MDICHILD_HEADER_HEIGHT = 24;
 
+        /// <summary>
+        /// Defines the width of a minimized <see cref="MDIChild"/> window.
+        /// </summary>
+        public const double MDICHILD_MINIMIZED_WIDTH = 150;
+
+        /// <summary>
+        /// Defines the height of a minimized <see cref="MDIChild"/> window.
+        /// </summary>
+        public const double MDICHILD_MINIMIZED_HEIGHT = MDICHILD_HEADER_HEIGHT;
+       
         #endregion
+
+        #region Fields
+
+        /// <summary>
+        /// Stores the normal size of a <see cref="MDIChild"/> window.
+        /// </summary>
+        private Rect _NormalSize;
+
+        #endregion
+
+        #region Constructor
+
         /// <summary>
         /// Static constructor called before initializing an instance of <see cref="MDIChild"/>.
         /// </summary>
@@ -52,49 +105,236 @@ namespace ControlsXL
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MDIChild), new FrameworkPropertyMetadata(typeof(MDIChild)));
         }
 
-
-        private void XItemLoaded(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// 
+        /// </summary>
+        public MDIChild()
         {
-            throw new NotImplementedException();
+            // Initialize the command bindings
+            CommandBindings.Add(new CommandBinding(_RoutedUICommandClose, OnCloseCommand));
+            CommandBindings.Add(new CommandBinding(_RoutedUICommandMinimize, OnMinimizeCommand));
+            CommandBindings.Add(new CommandBinding(_RoutedUICommandMaximize, OnMaximizeCommand));
+            CommandBindings.Add(new CommandBinding(_RoutedUICommandRestore, OnRestoreCommand));
+
+            _RoutedUICommandClose.InputGestures.Add(new KeyGesture(Key.F4, ModifierKeys.Control));
         }
 
-        public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register("IsSelected", typeof(bool), typeof(MDIChild), new PropertyMetadata(false));
+        
+        #endregion
 
+        #region Commands
+
+        #region Commands: Registrations
+
+        /// <summary>
+        /// Defines the command to close the <see cref="MDIChild"/> window.
+        /// </summary>
+        private static RoutedUICommand _RoutedUICommandClose = new RoutedUICommand(nameof(Close), nameof(Close), typeof(MDIChild));
+
+        /// <summary>
+        /// Defines the command to close the <see cref="MDIChild"/> window.
+        /// </summary>
+        private static RoutedUICommand _RoutedUICommandMinimize = new RoutedUICommand(nameof(Minimize), nameof(Minimize), typeof(MDIChild));
+
+        /// <summary>
+        /// Defines the command to close the <see cref="MDIChild"/> window.
+        /// </summary>
+        private static RoutedUICommand _RoutedUICommandMaximize = new RoutedUICommand(nameof(Maximize), nameof(Maximize), typeof(MDIChild));
+
+        /// <summary>
+        /// Defines the command to close the <see cref="MDIChild"/> window.
+        /// </summary>
+        private static RoutedUICommand _RoutedUICommandRestore = new RoutedUICommand(nameof(Restore), nameof(Restore), typeof(MDIChild));
+
+        #endregion
+
+        #region Command: Properties
+
+        /// <summary>
+        /// Gets the command to close the <see cref="MDIChild"/> window.
+        /// </summary>
+        public static RoutedUICommand Close
+        {
+            get { return _RoutedUICommandClose; }
+        }
+
+        /// <summary>
+        /// Gets the command to minimize the <see cref="MDIChild"/> window.
+        /// </summary>
+        public static RoutedUICommand Minimize
+        {
+            get { return _RoutedUICommandMinimize; }
+        }
+
+        /// <summary>
+        /// Gets the command to maximize the <see cref="MDIChild"/> window.
+        /// </summary>
+        public static RoutedUICommand Maximize
+        {
+            get { return _RoutedUICommandMaximize; }
+        }
+
+        /// <summary>
+        /// Gets the command to restore the <see cref="MDIChild"/> window.
+        /// </summary>
+        public static RoutedUICommand Restore
+        {
+            get { return _RoutedUICommandRestore; }
+        }
+
+        #endregion
+
+        #region Command: Handlers
+
+        private void OnCloseCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Host.Items.Remove(this);
+        }
+
+        private void OnMinimizeCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.State = WindowState.Minimized;
+        }
+
+        private void OnMaximizeCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.State = WindowState.Maximized;
+        }
+
+        private void OnRestoreCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.State = WindowState.Normal;
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Dependency Properties
+
+        #region Dependency Properties: Registration
+
+        /// <summary>
+        /// Registers the property to determin if the <see cref="MDIChild"/> window can be resized.
+        /// </summary>
+        public static readonly DependencyProperty CanResizeProperty = DependencyProperty.Register(nameof(CanResize), typeof(bool), typeof(MDIChild), new PropertyMetadata(true));
+
+        /// <summary>
+        /// Registers the property to determin if the <see cref="MDIChild"/> window is selected.
+        /// </summary>
+        public static readonly DependencyProperty IsSelectedProperty = DependencyProperty.Register(nameof(IsSelected), typeof(bool), typeof(MDIChild), new PropertyMetadata(false, IsSelectedPropertyChangedCallback));
+
+        
+        /// <summary>
+        /// Registers the property to determin the position of the <see cref="MDIChild"/> window.
+        /// </summary>
+        /// <remarks><i>Default has to be -1, -1 to be raise the event on initialize </i></remarks>
+        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register(nameof(Position), typeof(Point), typeof(MDIChild), new PropertyMetadata(new Point(-1.0, -1.0), PositionPropertyChangedCallback));
+
+        /// <summary>
+        /// Registers the property to determin the state of the <see cref="MDIChild"/> window.
+        /// </summary>
+        public static readonly DependencyProperty StateProperty = DependencyProperty.Register(nameof(State), typeof(WindowState), typeof(MDIChild), new PropertyMetadata(WindowState.Normal, StatePropertyChangedCallback));
+
+        /// <summary>
+        /// Registers the property to determin the title of the <see cref="MDIChild"/> window.
+        /// </summary>
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(nameof(Title), typeof(string), typeof(MDIChild), new PropertyMetadata(string.Empty));
+
+        #endregion
+
+        #region Dependency Properties: Implementation
+
+        /// <summary>
+        /// Gets or sets whether the <see cref="MDIChild"/> window can be resized.
+        /// </summary>
+        public bool CanResize
+        {
+            get { return (bool)GetValue(CanResizeProperty); }
+            private set { SetValue(CanResizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets whether the <see cref="MDIChild"/> window is selected.
+        /// </summary>
         public bool IsSelected
         {
             get { return (bool)GetValue(IsSelectedProperty); }
             set { SetValue(IsSelectedProperty, value); }
         }
 
-
-
-        public string Title
-        {
-            get { return (string)GetValue(TitleProperty); }
-            set { SetValue(TitleProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Title.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register(nameof(Title), typeof(string), typeof(MDIChild), new PropertyMetadata(string.Empty));
-
-
-
+        /// <summary>
+        /// Gets or sets the position of the <see cref="MDIChild"/> window.
+        /// </summary>
         public Point Position
         {
             get { return (Point)GetValue(PositionProperty); }
             set { SetValue(PositionProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Position.  This enables animation, styling, binding, etc...
         /// <summary>
-        /// 
+        /// Gets or sets the state of the <see cref="MDIChild"/> window.
         /// </summary>
-        /// <remarks><i>Default has to be -1, -1 to be raise the event on initialize </i></remarks>
-        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(Point), typeof(MDIChild), new PropertyMetadata(new Point(-1.0, -1.0), PositionPropertyChanged));
+        public WindowState State
+        {
+            get { return (WindowState)GetValue(StateProperty); }
+            set { SetValue(StateProperty, value); }
+        }
 
+        /// <summary>
+        /// Gets or sets the title of the <see cref="MDIChild"/> window.
+        /// </summary>
+        public string Title
+        {
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
+        }
 
-        private static void PositionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        #endregion
+
+        #region Dependency Properties: Callbacks
+
+        /// <summary>
+        /// Handles changes made to the <see cref="IsSelectedProperty"/>.
+        /// </summary>
+        /// <param name="d">The <see cref="DependencyObject"/> that raised the event.</param>
+        /// <param name="e">A <see cref="DependencyPropertyChangedEventArgs"/> containing event data.</param>
+        private static void IsSelectedPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            MDIChild child = (MDIChild)d;
+
+            bool isSelected = (bool)e.NewValue;
+
+            if (isSelected)
+            {
+                int maxIndex = 0;
+
+                foreach(MDIChild item in child.Host.Items)
+                {
+                    int index = Panel.GetZIndex(item);
+
+                    if (index > maxIndex)
+                    {
+                        maxIndex = index;
+                        index--;
+                    }
+
+                    if (item != child)
+                        item.IsSelected = false;
+
+                    Console.WriteLine(index);
+                }
+
+                Panel.SetZIndex(child, maxIndex + 1);
+            }
+        }
+
+        /// <summary>
+        /// Handles changes made to the <see cref="PositionProperty"/>.
+        /// </summary>
+        /// <param name="d">The <see cref="DependencyObject"/> that raised the event.</param>
+        /// <param name="e">A <see cref="DependencyPropertyChangedEventArgs"/> containing event data.</param>
+        private static void PositionPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
 
             MDIChild child = (MDIChild)d;
@@ -107,8 +347,129 @@ namespace ControlsXL
             Canvas.SetTop(child, point.Y);
         }
 
+        /// <summary>
+        /// Handles changes made to the <see cref="StateProperty"/>.
+        /// </summary>
+        /// <param name="d">The <see cref="DependencyObject"/> that raised the event.</param>
+        /// <param name="e">A <see cref="DependencyPropertyChangedEventArgs"/> containing event data.</param>
+        private static void StatePropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            MDIChild child = (MDIChild)d;
+
+            WindowState previousState = (WindowState)e.OldValue;
+            WindowState newState = (WindowState)e.NewValue;
+
+            if (newState == previousState)
+                return;
+
+            child.ChangeState(previousState, newState);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the <see cref="MDIHost"/> of this instance.
+        /// </summary>
+        private MDIHost Host
+        {
+            get { return this.Parent as MDIHost; }
+        }
+
+        #endregion
 
 
+        #region Event Handlers
+
+
+        #endregion
+
+        #region Methods
+
+        private void ChangeState(WindowState previousState, WindowState newState)
+        {
+            // Store the normal size to be able to restore the window
+            if (previousState == WindowState.Normal)
+            {
+                _NormalSize = new Rect(Canvas.GetLeft(this), Canvas.GetTop(this), ActualWidth, ActualHeight);
+                Console.WriteLine($"NORMAL STATE STORED [{Position.X},{Position.Y}]");
+            }
+
+            MDICanvas canvas = VisualTreeHelper.GetParent(this) as MDICanvas;
+
+            if(previousState == WindowState.Minimized)
+            {
+                int offset = 0;
+                double positionX = 0;
+
+                foreach(MDIChild child in Host.Items)
+                {
+                    if(child.State == WindowState.Minimized)
+                    {
+                        child.Position = new Point(positionX, child.Position.Y);
+                        positionX += child.ActualWidth;
+                    }
+                }
+            }
+
+            switch (newState)
+            {
+                case WindowState.Normal:
+
+                    CanResize = true;
+
+                    Width = _NormalSize.Width;
+                    Height = _NormalSize.Height;
+
+                    Position = new Point(_NormalSize.X, _NormalSize.Y);
+
+                    ToolTip = null;
+
+                    break;
+
+                case WindowState.Minimized:
+
+                    CanResize = false;
+
+                    double positionX = 0;
+
+                    foreach(MDIChild child in Host.Items)
+                    {
+                        if (child.State == WindowState.Minimized && child.IsSelected == false)
+                        {
+                            positionX = Math.Max(positionX, child.Position.X + child.ActualWidth);
+                        }
+                    }
+
+                    Width = MinWidth + BorderThickness.Left + BorderThickness.Right;
+                    Height = MinHeight + BorderThickness.Top + BorderThickness.Bottom;
+
+                    Position = new Point(positionX, canvas.ActualHeight - Height);
+                    
+                    ToolTip = Title;
+                    
+
+                    break;
+
+                case WindowState.Maximized:
+
+                    CanResize = false;
+
+                    ToolTip = null;
+
+                    break;
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseDown(e);
@@ -121,33 +482,101 @@ namespace ControlsXL
                 this.IsSelected = true;
             }
 
+            Focus();
+
             // Allow the event to route further
             e.Handled = false;
         }
 
-        protected override Size MeasureOverride(Size constraint)
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
         {
+            base.OnPreviewKeyDown(e);
+            
+            switch (e.Key)
+            {
+                case Key.F4:
 
-            return base.MeasureOverride(constraint);
+                    if (e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+                        Host.Items.Remove(this);
+                    
+                    break;
+            }
         }
+
     }
 
     internal class MDICanvas : Canvas
     {
+        #region Fields
 
+        /// <summary>
+        /// Stores a reference to the <see cref="MDIHost"/> owning the <see cref="MDICanvas"/>.
+        /// </summary>
+        private MDIHost _Host;
 
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Creates and initializes a new <see cref="MDICanvas"/> instance.
+        /// </summary>
+        public MDICanvas()
+        {
+            _Host = (MDIHost)this.TemplatedParent;
+        }
+
+        #endregion
+
+       
+        protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)
+        {
+            base.OnVisualChildrenChanged(visualAdded, visualRemoved);
+
+            if(visualAdded != null)
+                Console.WriteLine($"[{this.GetType().Name}.{nameof(OnVisualChildrenChanged)}] Added: {visualAdded}");
+
+            if (visualRemoved != null)
+                Console.WriteLine($"[{this.GetType().Name}.{nameof(OnVisualChildrenChanged)}] Removed: {visualRemoved}");
+        }
+
+        #region Properties
+
+        /// <summary>
+        /// Gets an enumerable list of selected <see cref="MDIChild"/> windows.
+        /// </summary>
         public IEnumerable<MDIChild> SelectedItems
         {
             get
             {
-                var selectedItems = from item in this.Children.OfType<MDIChild>()
-                                    where item.IsSelected == true
-                                    select item;
-
-                return selectedItems;
+                return from item in Children.OfType<MDIChild>() 
+                       where item.IsSelected == true 
+                       select item;
             }
         }
 
+        /// <summary>
+        /// Gets an enumerable list of minimized <see cref="MDIChild"/> windows.
+        /// </summary>
+        public IEnumerable<MDIChild> MinimizedItems
+        {
+            get
+            {
+                return from item in Children.OfType<MDIChild>()
+                       where item.State == WindowState.Minimized
+                       select item;
+            }
+        }
+
+        /// <summary>
+        /// Gets whether any of the <see cref="MDIChild"/> windows is maximized.
+        /// </summary>
+        private bool HasMaximizedItem
+        {
+            get { return this.Children.OfType<MDIChild>().Any(i => i.State == WindowState.Minimized); }
+        }
+
+        #endregion
 
         public void DeselectAll()
         {
@@ -157,28 +586,14 @@ namespace ControlsXL
             }
         }
 
-        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
-        {
-            if(e.LeftButton == MouseButtonState.Pressed)
-            {
-                Console.WriteLine("Left mouse down");
-                Console.WriteLine(e.Source);
-                Console.WriteLine(e.OriginalSource);
-            }
 
-            base.OnPreviewMouseDown(e);
-        }
-
-        protected override void OnPreviewMouseMove(MouseEventArgs e)
-        {
-            
-            base.OnPreviewMouseMove(e);
-        }
-
-
+        // TODO: make scroll bars invisible if all items fit by offsetting item
+        // TODO: ensure minimized windows do not enable the scrolbars, try wrapping and stacking
+        // TODO: foreach sorting problem, minimized items are switcht based on position inside the collection
         protected override Size MeasureOverride(Size constraint)
         {
             Size size = new Size();
+            Console.WriteLine($"Constraint: {constraint.Width}x{constraint.Height}");
 
             foreach (UIElement element in Children)
             {
@@ -195,8 +610,11 @@ namespace ControlsXL
 
                 if (!double.IsNaN(desiredSize.Width) && !double.IsNaN(desiredSize.Height))
                 {
+                    if (((MDIChild)element).State != WindowState.Minimized)
+                    {
+                        size.Height = Math.Max(size.Height, top + desiredSize.Height);
+                    }
                     size.Width = Math.Max(size.Width, left + desiredSize.Width);
-                    size.Height = Math.Max(size.Height, top + desiredSize.Height);
                 }
                 else
                 {
@@ -204,11 +622,57 @@ namespace ControlsXL
                 }
 
             }
+
+            Console.WriteLine($"Measure Actual: {ActualWidth}x{ActualHeight}");
+            Console.WriteLine($"Measure Normal: {Width}x{Height}");
             // extra margin
-            size.Width += 10;
-            size.Height += 10;
+            //size.Width += 10;
+            //size.Height += 10;
+
+
             return size;
 
+        }
+
+        protected override Size ArrangeOverride(Size arrangeSize)
+        {
+            Console.WriteLine(HasMaximizedItem);
+
+            double positionX = 0;
+            double offsetX = 0;
+
+            foreach(MDIChild child in MinimizedItems)
+            {
+                child.Position = new Point(offsetX, ActualHeight - child.Height);
+                offsetX += child.Width;
+            }
+            
+
+            //foreach (MDIChild child in Host.Items)
+            //{
+            //    if (child.State == WindowState.Minimized && child.IsSelected == false)
+            //    {
+            //        positionX = Math.Max(positionX, child.Position.X + child.ActualWidth);
+            //    }
+            //}
+
+            //Width = MinWidth + BorderThickness.Left + BorderThickness.Right;
+            //Height = MinHeight + BorderThickness.Top + BorderThickness.Bottom;
+
+            //Position = new Point(positionX, canvas.ActualHeight - Height);
+
+            foreach (MDIChild child in Children)
+            {
+                Console.WriteLine(child.Title);
+            }
+
+
+
+            Console.WriteLine($"Arrange: {arrangeSize.Width}x{arrangeSize.Height}");
+            Console.WriteLine($"Actual: {ActualWidth}x{ActualHeight}");
+            Console.WriteLine($"Normal: {Width}x{Height}");
+            Console.WriteLine($"Desired: {DesiredSize.Width}x{DesiredSize.Height}");
+            return base.ArrangeOverride(arrangeSize);
         }
     }
 

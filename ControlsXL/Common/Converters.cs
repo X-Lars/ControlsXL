@@ -82,23 +82,7 @@ namespace ControlsXL.Common
         {
             double left, top, right, bottom;
 
-            double margin;
-
-            Console.WriteLine(value.GetType());
-            if(value.GetType() == typeof(string))
-            {
-                double.TryParse((string)value, out margin);
-            }
-            else if(value.GetType() == typeof(Thickness))
-            {
-                margin = (double)((Thickness)value).Left;
-            }
-            else
-            {
-                margin = (double)value;
-            }
-
-            //double margin = (double)value;
+            double margin = (double)value;
             
             if (parameter.GetType() == typeof(string))
             {
