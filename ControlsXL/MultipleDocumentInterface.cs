@@ -436,7 +436,7 @@ namespace ControlsXL
 
                     double positionX = 0;
 
-                    foreach(MDIChild child in Host.Items)
+                    foreach (MDIChild child in Host.Items)
                     {
                         if (child.State == WindowState.Minimized && child.IsSelected == false)
                         {
@@ -447,8 +447,8 @@ namespace ControlsXL
                     Width = MinWidth + BorderThickness.Left + BorderThickness.Right;
                     Height = MinHeight + BorderThickness.Top + BorderThickness.Bottom;
 
-                    Position = new Point(positionX, canvas.ActualHeight - Height);
-                    
+                    //Position = new Point(positionX, canvas.ActualHeight - Height);
+
                     ToolTip = Title;
                     
 
@@ -457,6 +457,7 @@ namespace ControlsXL
                 case WindowState.Maximized:
 
                     CanResize = false;
+
 
                     ToolTip = null;
 
@@ -513,6 +514,7 @@ namespace ControlsXL
         /// Stores a reference to the <see cref="MDIHost"/> owning the <see cref="MDICanvas"/>.
         /// </summary>
         private MDIHost _Host;
+        private ScrollViewer _ScrollViewer;
 
         #endregion
 
@@ -523,12 +525,13 @@ namespace ControlsXL
         /// </summary>
         public MDICanvas()
         {
-            _Host = (MDIHost)this.TemplatedParent;
+            Loaded += (s, a) => { _Host = (MDIHost)this.TemplatedParent; };
         }
+
 
         #endregion
 
-       
+
         protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)
         {
             base.OnVisualChildrenChanged(visualAdded, visualRemoved);
@@ -573,7 +576,7 @@ namespace ControlsXL
         /// </summary>
         private bool HasMaximizedItem
         {
-            get { return this.Children.OfType<MDIChild>().Any(i => i.State == WindowState.Minimized); }
+            get { return this.Children.OfType<MDIChild>().Any(i => i.State == WindowState.Maximized); }
         }
 
         #endregion
@@ -586,7 +589,12 @@ namespace ControlsXL
             }
         }
 
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        {
+            base.OnRenderSizeChanged(sizeInfo);
 
+            Console.WriteLine("Render size changed!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
         // TODO: make scroll bars invisible if all items fit by offsetting item
         // TODO: ensure minimized windows do not enable the scrolbars, try wrapping and stacking
         // TODO: foreach sorting problem, minimized items are switcht based on position inside the collection
@@ -595,36 +603,57 @@ namespace ControlsXL
             Size size = new Size();
             Console.WriteLine($"Constraint: {constraint.Width}x{constraint.Height}");
 
-            foreach (UIElement element in Children)
+            if (!HasMaximizedItem)
             {
-                double left = Canvas.GetLeft(element);
-                double top = Canvas.GetTop(element);
 
-                left = double.IsNaN(left) ? 0 : left;
-                top = double.IsNaN(top) ? 0 : top;
-
-                // Get the elements desired size
-                element.Measure(constraint);
-
-                Size desiredSize = element.DesiredSize;
-
-                if (!double.IsNaN(desiredSize.Width) && !double.IsNaN(desiredSize.Height))
+                foreach (UIElement element in Children)
                 {
-                    if (((MDIChild)element).State != WindowState.Minimized)
+                    double left = Canvas.GetLeft(element);
+                    double top = Canvas.GetTop(element);
+
+                    left = double.IsNaN(left) ? 0 : left;
+                    top = double.IsNaN(top) ? 0 : top;
+
+                    // Get the elements desired size
+                    element.Measure(constraint);
+
+                    Size desiredSize = element.DesiredSize;
+
+                    if (!double.IsNaN(desiredSize.Width) && !double.IsNaN(desiredSize.Height))
                     {
                         size.Height = Math.Max(size.Height, top + desiredSize.Height);
+                        size.Width = Math.Max(size.Width, left + desiredSize.Width);
                     }
-                    size.Width = Math.Max(size.Width, left + desiredSize.Width);
+                    else
+                    {
+                        Console.WriteLine("double.IsNan");
+                    }
+
                 }
-                else
-                {
-                    Console.WriteLine("double.IsNan");
-                }
+            }
+            else
+            {
+                Console.WriteLine("Has Maximized ITEMS");
+                //foreach (MDIChild child in Children)
+                //{
+                //    if (child.State == WindowState.Maximized)
+                //    {
+                //        child.Width = _Host.ActualWidth;
+                //        child.Height = _Host.ActualHeight;
+                //        child.Position = new Point(0, 0);
+
+                //        child.Arrange(new Rect(child.Position.X, child.Position.Y, child.Width, child.Height));
+
+
+                //    }
+                //}
+
+                return base.MeasureOverride(constraint);
+                Console.WriteLine($"Measure Actual: {ActualWidth}x{ActualHeight}");
+                Console.WriteLine($"Measure Normal: {Width}x{Height}");
 
             }
 
-            Console.WriteLine($"Measure Actual: {ActualWidth}x{ActualHeight}");
-            Console.WriteLine($"Measure Normal: {Width}x{Height}");
             // extra margin
             //size.Width += 10;
             //size.Height += 10;
@@ -641,12 +670,30 @@ namespace ControlsXL
             double positionX = 0;
             double offsetX = 0;
 
-            foreach(MDIChild child in MinimizedItems)
-            {
-                child.Position = new Point(offsetX, ActualHeight - child.Height);
-                offsetX += child.Width;
-            }
             
+
+            if(HasMaximizedItem)
+            {
+                foreach(MDIChild child in Children)
+                {
+                    if(child.State == WindowState.Maximized)
+                    {
+                        child.Width = arrangeSize.Width;
+                        child.Height = arrangeSize.Height;
+                        child.Position = new Point(0, 0);
+
+                        child.Arrange(new Rect(child.Position.X, child.Position.Y, child.Width, child.Height));
+                    }
+                }
+            }
+            else
+            {
+                foreach (MDIChild child in MinimizedItems)
+                {
+                    child.Position = new Point(offsetX, ActualHeight - child.Height);
+                    offsetX += child.Width;
+                }
+            }
 
             //foreach (MDIChild child in Host.Items)
             //{
@@ -667,7 +714,7 @@ namespace ControlsXL
             }
 
 
-
+            
             Console.WriteLine($"Arrange: {arrangeSize.Width}x{arrangeSize.Height}");
             Console.WriteLine($"Actual: {ActualWidth}x{ActualHeight}");
             Console.WriteLine($"Normal: {Width}x{Height}");

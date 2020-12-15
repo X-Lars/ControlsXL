@@ -135,6 +135,11 @@
                             <Setter TargetName="MinimizeButton" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="RestoreButton" Property="Visibility" Value="Visible"/>
                         </Trigger>
+
+                        <Trigger Property="State" Value="Maximized">
+                            <Setter TargetName="MDIChildHeader" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="MDIChildBorder" Property="BorderThickness" Value="0"/>
+                        </Trigger>
                         
                     </ControlTemplate.Triggers>
 
@@ -167,7 +172,7 @@
                                 <Button Content="Status Bar"/>
                             </StackPanel>
 
-                            <ScrollViewer CanContentScroll="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <ScrollViewer CanContentScroll="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                                 <Grid>
                                     <xl:MDIMoveHandle  Cursor="Cross"  DataContext="{Binding ElementName=Canvas, Path=.}"/>
                                     <xl:MDICanvas x:Name="Canvas" IsItemsHost="True"/>
