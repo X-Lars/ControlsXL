@@ -19,7 +19,8 @@ namespace ControlsXL
 {
     public class MDIHost : ItemsControl
     {
-       
+        #region Constructor
+
         /// <summary>
         /// Static constructor called before initializing an instance of <see cref="MDIHost"/>.
         /// </summary>
@@ -31,36 +32,151 @@ namespace ControlsXL
 
         public MDIHost()
         {
-            
+            CommandBindings.Add(new CommandBinding(_RoutedUICommandClose, OnCloseCommand));
+            CommandBindings.Add(new CommandBinding(_RoutedUICommandMinimize, OnMinimizeCommand));
+            CommandBindings.Add(new CommandBinding(_RoutedUICommandRestore, OnRestoreCommand));
         }
 
+        #endregion
 
-        protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
+
+        #region Commands
+
+        #region Commands: Registrations
+
+        /// <summary>
+        /// Defines the command to close the <see cref="MDIChild"/> window.
+        /// </summary>
+        private static RoutedUICommand _RoutedUICommandClose = new RoutedUICommand(nameof(Close), nameof(Close), typeof(MDIChild));
+
+        /// <summary>
+        /// Defines the command to close the <see cref="MDIChild"/> window.
+        /// </summary>
+        private static RoutedUICommand _RoutedUICommandMinimize = new RoutedUICommand(nameof(Minimize), nameof(Minimize), typeof(MDIChild));
+
+        /// <summary>
+        /// Defines the command to close the <see cref="MDIChild"/> window.
+        /// </summary>
+        private static RoutedUICommand _RoutedUICommandRestore = new RoutedUICommand(nameof(Restore), nameof(Restore), typeof(MDIChild));
+
+        #endregion
+
+        #region Command: Properties
+
+        /// <summary>
+        /// Gets the command to close the <see cref="MDIChild"/> window.
+        /// </summary>
+        public static RoutedUICommand Close
         {
-            base.OnItemsChanged(e);
+            get { return _RoutedUICommandClose; }
+        }
 
-            switch(e.Action)
+        /// <summary>
+        /// Gets the command to minimize the <see cref="MDIChild"/> window.
+        /// </summary>
+        public static RoutedUICommand Minimize
+        {
+            get { return _RoutedUICommandMinimize; }
+        }
+
+        /// <summary>
+        /// Gets the command to restore the <see cref="MDIChild"/> window.
+        /// </summary>
+        public static RoutedUICommand Restore
+        {
+            get { return _RoutedUICommandRestore; }
+        }
+
+        #endregion
+
+        #region Command: Handlers
+
+        private void OnCloseCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            Items.Remove(SelectedChild);
+        }
+
+        private void OnMinimizeCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectedChild.State = WindowState.Minimized;
+        }
+
+        private void OnRestoreCommand(object sender, ExecutedRoutedEventArgs e)
+        {
+            SelectedChild.State = WindowState.Normal;
+        }
+
+        #endregion
+
+        #endregion
+
+
+
+        #region Dependency Properties
+        #region Dependency Properties: Registration
+
+
+
+
+
+        /// <summary>
+        /// Register the property to determin if the <see cref="MDIHost"/> menu is visible.
+        /// </summary>
+        public static readonly DependencyProperty ShowMenuProperty = DependencyProperty.Register("ShowMenu", typeof(bool), typeof(MDIHost), new PropertyMetadata(true));
+
+
+
+       
+
+        /// <summary>
+        /// Registers the property to determin if the <see cref="MDIHost"/> statusbar is visible.
+        /// </summary>
+        public static readonly DependencyProperty ShowStatusbarProperty = DependencyProperty.Register("ShowStatusbar", typeof(bool), typeof(MDIHost), new PropertyMetadata(true));
+
+       
+        #endregion
+        #region Dependency Properties: Implementation
+
+        /// <summary>
+        /// Gets or sets whether the <see cref="MDIHost"/> menu is visible.
+        /// </summary>
+        public bool ShowMenu
+        {
+            get { return (bool)GetValue(ShowMenuProperty); }
+            set { SetValue(ShowMenuProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets wheter the <see cref="MDIHost"/> statusbar is visible.
+        /// </summary>
+        public bool ShowStatusbar
+        {
+            get { return (bool)GetValue(ShowStatusbarProperty); }
+            set { SetValue(ShowStatusbarProperty, value); }
+        }
+
+        #endregion
+        #endregion
+
+        #region Properties
+
+        private MDIChild SelectedChild
+        {
+            get 
             {
-                case NotifyCollectionChangedAction.Add:
-                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnItemsChanged)}] Add");
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnItemsChanged)}] Remove");
-                    break;
-                case NotifyCollectionChangedAction.Replace:
-                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnItemsChanged)}] Replace");
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnItemsChanged)}] Reset");
-                    break;
-                case NotifyCollectionChangedAction.Move:
-                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnItemsChanged)}] Move");
-                    break;
+                // TODO: Error when no item selected
+                return Items.OfType<MDIChild>().Where(i => i.IsSelected).First();
             }
         }
+
+        #endregion
+
+        #region Methods
+
+        #endregion
     }
 
- 
+
     /// <summary>
     /// 
     /// </summary>
@@ -320,7 +436,10 @@ namespace ControlsXL
                     }
 
                     if (item != child)
+                    {
                         item.IsSelected = false;
+                        item.CanResize = false;
+                    }
 
                     Console.WriteLine(index);
                 }
@@ -391,6 +510,7 @@ namespace ControlsXL
 
         private void ChangeState(WindowState previousState, WindowState newState)
         {
+            IsSelected = true;
             // Store the normal size to be able to restore the window
             if (previousState == WindowState.Normal)
             {
@@ -400,20 +520,20 @@ namespace ControlsXL
 
             MDICanvas canvas = VisualTreeHelper.GetParent(this) as MDICanvas;
 
-            if(previousState == WindowState.Minimized)
-            {
-                int offset = 0;
-                double positionX = 0;
+            //if(previousState == WindowState.Minimized)
+            //{
+            //    int offset = 0;
+            //    double positionX = 0;
 
-                foreach(MDIChild child in Host.Items)
-                {
-                    if(child.State == WindowState.Minimized)
-                    {
-                        child.Position = new Point(positionX, child.Position.Y);
-                        positionX += child.ActualWidth;
-                    }
-                }
-            }
+            //    foreach(MDIChild child in Host.Items)
+            //    {
+            //        if(child.State == WindowState.Minimized )
+            //        {
+            //            child.Position = new Point(positionX, child.Position.Y);
+            //            positionX += child.ActualWidth;
+            //        }
+            //    }
+            //}
 
             switch (newState)
             {
@@ -458,11 +578,17 @@ namespace ControlsXL
 
                     CanResize = false;
 
-
+                    Position = new Point(0, 0);
+                    Width = ActualWidth;
+                    Height = ActualHeight;
                     ToolTip = null;
 
                     break;
             }
+
+            InvalidateMeasure();
+            InvalidateArrange();
+            UpdateLayout();
         }
 
         #endregion
@@ -506,6 +632,9 @@ namespace ControlsXL
 
     }
 
+    /// <summary>
+    /// The visual component of the <see cref="MDIHost"/> to handle layout and rendering of it's collection of <see cref="MDIChild"/> windows.
+    /// </summary>
     internal class MDICanvas : Canvas
     {
         #region Fields
@@ -525,23 +654,13 @@ namespace ControlsXL
         /// </summary>
         public MDICanvas()
         {
-            Loaded += (s, a) => { _Host = (MDIHost)this.TemplatedParent; };
+            //Loaded += (s, a) => { _Host = (MDIHost)this.TemplatedParent; };
         }
 
 
         #endregion
 
-
-        protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)
-        {
-            base.OnVisualChildrenChanged(visualAdded, visualRemoved);
-
-            if(visualAdded != null)
-                Console.WriteLine($"[{this.GetType().Name}.{nameof(OnVisualChildrenChanged)}] Added: {visualAdded}");
-
-            if (visualRemoved != null)
-                Console.WriteLine($"[{this.GetType().Name}.{nameof(OnVisualChildrenChanged)}] Removed: {visualRemoved}");
-        }
+        
 
         #region Properties
 
@@ -576,7 +695,7 @@ namespace ControlsXL
         /// </summary>
         private bool HasMaximizedItem
         {
-            get { return this.Children.OfType<MDIChild>().Any(i => i.State == WindowState.Maximized); }
+            get { return Children.OfType<MDIChild>().Any(i => i.State == WindowState.Maximized); }
         }
 
         #endregion
@@ -589,15 +708,43 @@ namespace ControlsXL
             }
         }
 
+        #region Overrides
+
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
 
             Console.WriteLine("Render size changed!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
+
+        /// <summary>
+        /// Catches changes in the collection of visual children of the <see cref="MDICanvas"/>.
+        /// </summary>
+        /// <param name="visualAdded">A reference to the <see cref="DependencyObject"/> that is added.</param>
+        /// <param name="visualRemoved">A reference to the <see cref="DependencyObject"/> that is removed.</param>
+        protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)
+        {
+            base.OnVisualChildrenChanged(visualAdded, visualRemoved);
+
+            if (visualAdded != null)
+                Console.WriteLine($"[{this.GetType().Name}.{nameof(OnVisualChildrenChanged)}] Added: {visualAdded}");
+
+            if (visualRemoved != null)
+                Console.WriteLine($"[{this.GetType().Name}.{nameof(OnVisualChildrenChanged)}] Removed: {visualRemoved}");
+        }
+
+
+
+
         // TODO: make scroll bars invisible if all items fit by offsetting item
         // TODO: ensure minimized windows do not enable the scrolbars, try wrapping and stacking
         // TODO: foreach sorting problem, minimized items are switcht based on position inside the collection
+        
+        /// <summary>
+        /// Handles the first layout pass to meassure or override the desired size of the <see cref="MDICanvas"/> and it's descendants.
+        /// </summary>
+        /// <param name="constraint"></param>
+        /// <returns>A <see cref="Size"/> structure containing the desired size of the <see cref="MDICanvas"/>.</returns>
         protected override Size MeasureOverride(Size constraint)
         {
             Size size = new Size();
@@ -630,10 +777,14 @@ namespace ControlsXL
                     }
 
                 }
+
+                // Extra margin for visual aestetic
+                //size.Width += 10;
+                //size.Height += 10;
             }
             else
             {
-                Console.WriteLine("Has Maximized ITEMS");
+                //Console.WriteLine("Has Maximized ITEMS");
                 //foreach (MDIChild child in Children)
                 //{
                 //    if (child.State == WindowState.Maximized)
@@ -648,21 +799,26 @@ namespace ControlsXL
                 //    }
                 //}
 
+                // Return a width and height of 0 to make the scrollbars dissapeare
+                return new Size(0, 0);
                 return base.MeasureOverride(constraint);
-                Console.WriteLine($"Measure Actual: {ActualWidth}x{ActualHeight}");
-                Console.WriteLine($"Measure Normal: {Width}x{Height}");
+                //Console.WriteLine($"Measure Actual: {ActualWidth}x{ActualHeight}");
+                //Console.WriteLine($"Measure Normal: {Width}x{Height}");
 
             }
 
-            // extra margin
-            //size.Width += 10;
-            //size.Height += 10;
+           
 
 
             return size;
 
         }
 
+        /// <summary>
+        /// Handles the second layout pass to arrange or override the arrangement of the <see cref="MDICanvas"/> and it's descendants.
+        /// </summary>
+        /// <param name="arrangeSize"></param>
+        /// <returns>A <see cref="Size"/> structure containing the final size of the <see cref="MDICanvas"/>.</returns>
         protected override Size ArrangeOverride(Size arrangeSize)
         {
             Console.WriteLine(HasMaximizedItem);
@@ -708,19 +864,21 @@ namespace ControlsXL
 
             //Position = new Point(positionX, canvas.ActualHeight - Height);
 
-            foreach (MDIChild child in Children)
-            {
-                Console.WriteLine(child.Title);
-            }
+            //foreach (MDIChild child in Children)
+            //{
+            //    Console.WriteLine(child.Title);
+            //}
 
 
             
-            Console.WriteLine($"Arrange: {arrangeSize.Width}x{arrangeSize.Height}");
-            Console.WriteLine($"Actual: {ActualWidth}x{ActualHeight}");
-            Console.WriteLine($"Normal: {Width}x{Height}");
-            Console.WriteLine($"Desired: {DesiredSize.Width}x{DesiredSize.Height}");
+            //Console.WriteLine($"Arrange: {arrangeSize.Width}x{arrangeSize.Height}");
+            //Console.WriteLine($"Actual: {ActualWidth}x{ActualHeight}");
+            //Console.WriteLine($"Normal: {Width}x{Height}");
+            //Console.WriteLine($"Desired: {DesiredSize.Width}x{DesiredSize.Height}");
             return base.ArrangeOverride(arrangeSize);
         }
+
+        #endregion
     }
 
     public class MDIDecorator : Control

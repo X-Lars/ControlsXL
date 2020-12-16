@@ -113,10 +113,19 @@
                                 </StackPanel>
                             </Grid>
                             
-                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
-                                <Button Content="Child Status"/>
-                            </StackPanel>
-                            
+                            <!-- MDICHILD STATUSBAR -->
+                            <Border x:Name="MDIChildStatusbar"
+                                    Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 1 0 0'}"
+                                    DockPanel.Dock="Bottom">
+
+                                <StackPanel HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
+                                    <Button Content="Status Bar"/>
+                                </StackPanel>
+                            </Border>
+
                             <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
                             <xl:MDIDecorator x:Name="Decorator" ShowDecorator="{Binding CanResize}"/>
                             
@@ -165,22 +174,65 @@
                             DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=.}" >
                             
                         <DockPanel LastChildFill="True">
-                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                                <Button Content="Host Menu"/>
+                        
+                            <!-- MDICHILD WINDOW HEADER BUTTONS -->
+                            <StackPanel x:Name="WindowButtons"
+                                        DockPanel.Dock="Top"
+                                        Height="24"
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+
+                                <xl:VectorButton x:Name="MinimizeButton"
+                                                 Command="{x:Static xl:MDIHost.Minimize}"
+                                                 Scale="0.8"
+                                                 StrokeThickness="0"
+                                                 Vector="{StaticResource GeometryMinimize}"/>
+
+                                <xl:VectorButton x:Name="RestoreButton"
+                                                 Command="{x:Static xl:MDIHost.Restore}"
+                                                 Scale="0.8"
+                                                 StrokeThickness="0"
+                                                 Vector="{StaticResource GeometryRestore}"/>
+
+                                <xl:VectorButton x:Name="CloseButton"
+                                                 Command="{x:Static xl:MDIHost.Close}"
+                                                 Scale="0.8"
+                                                 StrokeThickness="0"
+                                                 Vector="{StaticResource GeometryCross}"/>
+
                             </StackPanel>
-                            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
-                                <Button Content="Status Bar"/>
-                            </StackPanel>
+                         
+
+                            <Border x:Name="MDIHostStatusbar"
+                                    Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 1 0 0'}"
+                                    DockPanel.Dock="Bottom">
+                                
+                                <StackPanel HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
+                                    <Button Content="Status Bar"/>
+                                </StackPanel>
+                            </Border>
 
                             <ScrollViewer CanContentScroll="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                                 <Grid>
-                                    <xl:MDIMoveHandle  Cursor="Cross"  DataContext="{Binding ElementName=Canvas, Path=.}"/>
+                                    <!--<xl:MDIMoveHandle  Cursor="Cross"  DataContext="{Binding ElementName=Canvas, Path=.}"/>-->
                                     <xl:MDICanvas x:Name="Canvas" IsItemsHost="True"/>
                                 </Grid>
                             </ScrollViewer>
 
                         </DockPanel>
                     </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="ShowMenu" Value="False">
+                            <!--<Setter TargetName="MDIHostMenu" Property="Visibility" Value="Collapsed"/>-->
+                        </Trigger>
+                        <Trigger Property="ShowStatusbar" Value="False">
+                            <Setter TargetName="MDIHostStatusbar" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
 
