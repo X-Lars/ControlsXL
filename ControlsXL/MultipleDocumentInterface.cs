@@ -13,15 +13,47 @@ using System.Windows.Media;
 
 namespace ControlsXL
 {
-    
+    /// <summary>
+    /// 
+    /// </summary>
     [TemplatePart(Name = PART_MDIHOST_TABS, Type = typeof(ScrollViewer))]
     [TemplatePart(Name = PART_MDIHOST_MENU, Type = typeof(Menu))]
     public class MDIHost : ItemsControl
     {
         #region Constants
 
+        #region Constants: Template Parts
+
+        /// <summary>
+        /// The template part name of the <see cref="MDIHost"/> header tabs area in xaml.
+        /// </summary>
         public const string PART_MDIHOST_TABS = "PART_MDIHostTabs";
+
+        /// <summary>
+        /// The template part name of the <see cref="MDIHost"/> menu in xaml.
+        /// </summary>
         public const string PART_MDIHOST_MENU = "PART_MDIHostMenu";
+
+        #endregion
+
+        /// <summary>
+        /// The height of the <see cref="MDIHost"/> header area.
+        /// </summary>
+        public const double MDIHOST_HEADER_HEIGHT = 24;
+
+        #endregion
+
+        #region Fields
+
+        /// <summary>
+        /// Stores the collection of <see cref="MDIChild"/> windows.
+        /// </summary>
+        public ObservableCollection<MDIChild> Children { get; private set; }
+
+        /// <summary>
+        /// Stores a reference to the <see cref="MDIHost"/> menu.
+        /// </summary>
+        private Menu _Menu;
 
         #endregion
 
@@ -36,24 +68,23 @@ namespace ControlsXL
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MDIHost), new FrameworkPropertyMetadata(typeof(MDIHost)));
         }
 
+        /// <summary>
+        /// Creates and initalizes a new <see cref="MDIHost"/> instance.
+        /// </summary>
         public MDIHost()
         {
             // Bind the commands
             CommandBindings.Add(new CommandBinding(_CloseCommand, OnCloseCommand, CanExecuteCloseCommand));
-            CommandBindings.Add(new CommandBinding(_CloseTabCommand, OnCloseTabCommand));
             CommandBindings.Add(new CommandBinding(_MinimizeCommand, OnMinimizeCommand, CanExecuteMinimizeCommand));
             CommandBindings.Add(new CommandBinding(_MaximizeCommand, OnMaximizeCommand, CanExecuteMaximizeCommand));
             CommandBindings.Add(new CommandBinding(_RestoreCommand, OnRestoreCommand, CanExecuteRestoreCommand));
 
-            // Bind the command gestures
+            // Bind the command keyboard shortcuts
             InputBindings.Add(new InputBinding(_CloseCommand, new KeyGesture(Key.F4, ModifierKeys.Control, "CTRL + F4")));
             InputBindings.Add(new InputBinding(_CloseCommand, new KeyGesture(Key.W, ModifierKeys.Control, "CTRL + W")));
-
-           
         }
 
         #endregion
-
 
         #region Commands
 
@@ -79,11 +110,6 @@ namespace ControlsXL
         /// </summary>
         private static RoutedUICommand _RestoreCommand = new RoutedUICommand(nameof(RestoreCommand), nameof(RestoreCommand), typeof(MDIHost));
 
-        /// <summary>
-        /// Defines the command to close the <see cref="MDIChild"/> tab.
-        /// </summary>
-        private static RoutedUICommand _CloseTabCommand = new RoutedUICommand(nameof(CloseTabCommand), nameof(CloseTabCommand), typeof(MDIChild));
-
         #endregion
 
         #region Command: Properties
@@ -94,14 +120,6 @@ namespace ControlsXL
         public static ICommand CloseCommand
         {
             get { return _CloseCommand; }
-        }
-
-        /// <summary>
-        /// Gets the command to close the <see cref="MDIChild"/> tab.
-        /// </summary>
-        public static ICommand CloseTabCommand
-        {
-            get { return _CloseTabCommand; }
         }
 
         /// <summary>
@@ -141,24 +159,6 @@ namespace ControlsXL
         {
             Items.Remove(SelectedChild);
             e.Handled = false;
-        }
-
-        /// <summary>
-        /// Implements the <see cref="CloseTabCommand"/> to remove the selected <see cref="MDIChild"/> tab from the <see cref="MDIHost"/>.
-        /// </summary>
-        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
-        /// <param name="e">An <see cref="ExecutedRoutedEventArgs"/> containing event data.</param>
-        private void OnCloseTabCommand(object sender, ExecutedRoutedEventArgs e)
-        {
-            MDIChild child = e.Source as MDIChild;
-
-            if (child != null)
-            {
-                child.IsSelected = true;
-                
-                Items.Remove(child);
-                e.Handled = true;
-            }
         }
 
         /// <summary>
@@ -243,10 +243,9 @@ namespace ControlsXL
 
         #endregion
 
-        private Menu _Menu;
-        public ObservableCollection<MDIChild> Children { get; private set; }
 
         #region Dependency Properties
+
         #region Dependency Properties: Registration
 
         /// <summary>
@@ -260,6 +259,7 @@ namespace ControlsXL
         public static readonly DependencyProperty ShowStatusbarProperty = DependencyProperty.Register("ShowStatusbar", typeof(bool), typeof(MDIHost), new PropertyMetadata(true));
 
         #endregion
+
         #region Dependency Properties: Implementation
 
         /// <summary>
@@ -281,6 +281,7 @@ namespace ControlsXL
         }
 
         #endregion
+
         #endregion
 
         #region Properties
@@ -297,7 +298,10 @@ namespace ControlsXL
 
         #region Methods
 
-        private void UpdateMDIHostMenu()
+        /// <summary>
+        /// Invalidates the <see cref="MDIHost"/> menu.
+        /// </summary>
+        private void InvalidateMenu()
         {
             //if (Items == null)
             //    return;
@@ -337,7 +341,7 @@ namespace ControlsXL
 
             _Menu = GetTemplateChild(PART_MDIHOST_MENU) as Menu;
 
-            UpdateMDIHostMenu();
+            InvalidateMenu();
 
             base.OnApplyTemplate();
         }
@@ -350,11 +354,11 @@ namespace ControlsXL
             {
                 case NotifyCollectionChangedAction.Add:
                     Console.WriteLine("MDIHOST item added");
-                    UpdateMDIHostMenu();
+                    InvalidateMenu();
                     break;
                 case NotifyCollectionChangedAction.Remove:
                     Console.WriteLine("MDIHOST item removed");
-                    UpdateMDIHostMenu();
+                    InvalidateMenu();
                     break;
                 case NotifyCollectionChangedAction.Reset:
                     if(_Menu != null)
@@ -426,12 +430,12 @@ namespace ControlsXL
         }
 
         /// <summary>
-        /// 
+        /// Creates and initalizes a new <see cref="MDIChild"/> window.
         /// </summary>
         public MDIChild()
         {
             // Initialize the command bindings
-            CommandBindings.Add(new CommandBinding(_CommandClose, OnCloseCommand ));
+            CommandBindings.Add(new CommandBinding(_CommandClose, OnCloseCommand));
             CommandBindings.Add(new CommandBinding(_CommandMinimize, OnMinimizeCommand));
             CommandBindings.Add(new CommandBinding(_CommandMaximize, OnMaximizeCommand));
             CommandBindings.Add(new CommandBinding(_CommandRestore, OnRestoreCommand));
@@ -508,38 +512,59 @@ namespace ControlsXL
 
         #region Command: Handlers
 
+        /// <summary>
+        /// Implements the <see cref="CloseCommand"/> to remove the selected <see cref="MDIChild"/> window from the <see cref="MDIHost"/>.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="ExecutedRoutedEventArgs"/> containing event data.</param>
         private void OnCloseCommand(object sender, ExecutedRoutedEventArgs e)
         {
-            Console.WriteLine("MDIChild Close requested!");
-            
-            //if (!IsSelected)
-            //    IsSelected = true;
+            // IMPORTANT: The child has to be selected before it is removed otherwise the Z index is not updated
+            if (!IsSelected)
+                IsSelected = true;
 
             this.Host.Items.Remove(this);
         }
 
+        /// <summary>
+        /// Implements the <see cref="MinimizeCommand"/> to minimize the selected <see cref="MDIChild"/> window.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="ExecutedRoutedEventArgs"/> containing event data.</param>
         private void OnMinimizeCommand(object sender, ExecutedRoutedEventArgs e)
         {
+            if (!IsSelected)
+                IsSelected = true;
+
             this.State = WindowState.Minimized;
         }
 
+        /// <summary>
+        /// Implements the <see cref="MaximizeCommand"/> to maximize the selected <see cref="MDIChild"/> window.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="ExecutedRoutedEventArgs"/> containing event data.</param>
         private void OnMaximizeCommand(object sender, ExecutedRoutedEventArgs e)
         {
+            if (!IsSelected)
+                IsSelected = true;
+
             this.State = WindowState.Maximized;
         }
 
+        /// <summary>
+        /// Implements the <see cref="RestoreCommand"/> to restore the selected <see cref="MDIChild"/> window.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="ExecutedRoutedEventArgs"/> containing event data.</param>
         private void OnRestoreCommand(object sender, ExecutedRoutedEventArgs e)
         {
+            if (!IsSelected)
+                IsSelected = true;
+
             this.State = WindowState.Normal;
         }
-
-        private void CanExecuteMDIChildCommand(object sender, CanExecuteRoutedEventArgs e)
-        {
-            //e.CanExecute = IsSelected;
-            //e.Handled = true;
-        }
-
-
+ 
         #endregion
 
         #endregion

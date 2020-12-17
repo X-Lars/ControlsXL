@@ -178,213 +178,198 @@
                         <!-- MDIHOST LAYOUT-->
                         <DockPanel LastChildFill="True">
 
-                            
                             <!-- MDIHOST HEADER AREA -->
-                            <DockPanel DockPanel.Dock="Top" 
-                                    Height="24">
-
-                                <!-- MDIHOST HEADER MENU -->
-                                <Menu x:Name="PART_MDIHostMenu" 
-                                      DockPanel.Dock="Left">
-                                </Menu>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 0 1'}"
+                                    DockPanel.Dock="Top">
                                 
-                                <!-- MDIHOST HEADER BUTTONS -->
-                                <StackPanel x:Name="WindowButtons"
-                                            DockPanel.Dock="Right"
-                                            Height="24"
-                                            HorizontalAlignment="Right"
-                                            Orientation="Horizontal">
+                                <DockPanel Height="{x:Static xl:MDIHost.MDIHOST_HEADER_HEIGHT}">
+
+                                    <!-- MDIHOST HEADER MENU -->
+                                    <Menu x:Name="PART_MDIHostMenu" 
+                                          Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"
+                                          BorderBrush="{TemplateBinding BorderBrush}"
+                                          BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 1 0'}"
+                                          DockPanel.Dock="Left"/>
+
+                                    <!-- MDIHOST HEADER BUTTONS -->
+                                    <StackPanel x:Name="WindowButtons"
+                                                DockPanel.Dock="Right"
+                                                Height="{x:Static xl:MDIHost.MDIHOST_HEADER_HEIGHT}"
+                                                HorizontalAlignment="Right"
+                                                Orientation="Horizontal">
 
                                     
-                                    <xl:VectorButton x:Name="MinimizeButton"
-                                                     Command="{x:Static xl:MDIHost.MinimizeCommand}"
-                                                     Scale="0.8"
-                                                     StrokeThickness="0"
-                                                     Vector="{StaticResource GeometryMinimize}"/>
+                                        <xl:VectorButton x:Name="MinimizeButton"
+                                                         Command="{x:Static xl:MDIHost.MinimizeCommand}"
+                                                         Scale="0.8"
+                                                         StrokeThickness="0"
+                                                         Vector="{StaticResource GeometryMinimize}"/>
 
-                                    <xl:VectorButton x:Name="RestoreButton"
-                                                     Command="{x:Static xl:MDIHost.RestoreCommand}"
-                                                     Scale="0.8"
-                                                     StrokeThickness="0"
-                                                     Vector="{StaticResource GeometryRestore}"/>
+                                        <xl:VectorButton x:Name="RestoreButton"
+                                                         Command="{x:Static xl:MDIHost.RestoreCommand}"
+                                                         Scale="0.8"
+                                                         StrokeThickness="0"
+                                                         Vector="{StaticResource GeometryRestore}"/>
 
-                                    <xl:VectorButton x:Name="MaximizeButton"
-                                                     Command="{x:Static xl:MDIHost.MaximizeCommand}"
-                                                     Scale="0.8"
-                                                     StrokeThickness="0"
-                                                     Vector="{StaticResource GeometryMaximize}"/>
+                                        <xl:VectorButton x:Name="MaximizeButton"
+                                                         Command="{x:Static xl:MDIHost.MaximizeCommand}"
+                                                         Scale="0.8"
+                                                         StrokeThickness="0"
+                                                         Vector="{StaticResource GeometryMaximize}"/>
 
-                                    <xl:VectorButton x:Name="CloseButton"
-                                                     Command="{x:Static xl:MDIHost.CloseCommand}"
-                                                     Scale="0.8"
-                                                     StrokeThickness="0"
-                                                     Vector="{StaticResource GeometryCross}"/>
+                                        <xl:VectorButton x:Name="CloseButton"
+                                                         Command="{x:Static xl:MDIHost.CloseCommand}"
+                                                         Scale="0.8"
+                                                         StrokeThickness="0"
+                                                         Vector="{StaticResource GeometryCross}"/>
 
-                                </StackPanel>
+                                    </StackPanel>
 
-                                <!-- MDIHOST HEADER TABS -->
-                                <ScrollViewer x:Name="PART_MDIHostTabs" 
-                                              HorizontalScrollBarVisibility="Hidden" 
-                                              VerticalScrollBarVisibility="Disabled">
+                                    <!-- MDIHOST HEADER TABS -->
+                                    <ScrollViewer x:Name="PART_MDIHostTabs" 
+                                                  HorizontalScrollBarVisibility="Hidden" 
+                                                  VerticalScrollBarVisibility="Disabled">
 
-                                    <ListView x:Name="list"  ItemsSource="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}"
-                                               ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                                        <ListView x:Name="list"  ItemsSource="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}"
+                                                   ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
 
-                                        <ListView.Style>
-                                            <Style TargetType="{x:Type ListView}">
-                                                <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppWorkspaceBrush}}"/>
-                                                <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
-                                                <Setter Property="BorderThickness" Value="0"/>
-                                                <Setter Property="DataContext" Value="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"/>
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate>
-                                                            <Border Background="{TemplateBinding Background}" 
-                                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                                                <ItemsPresenter/>
-                                                            </Border>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </ListView.Style>
+                                            <ListView.Style>
+                                                <Style TargetType="{x:Type ListView}">
+                                                    <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppWorkspaceBrush}}"/>
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="DataContext" Value="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"/>
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate>
+                                                                <Border Background="{TemplateBinding Background}" 
+                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                                                    <ItemsPresenter/>
+                                                                </Border>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ListView.Style>
 
-                                        <ListView.ItemContainerStyle>
-                                            <Style TargetType="{x:Type ListViewItem}">
-                                                <Setter Property="Padding" Value="0"/>
-                                                <Setter Property="Margin" Value="0"/>
-                                                <Setter Property="BorderThickness" Value="0"/>
-                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                                            </Style>
-                                        </ListView.ItemContainerStyle>
-                                        <ListView.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal" CanHorizontallyScroll="False" CanVerticallyScroll="False">
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListViewItem}">
+                                                    <Setter Property="Padding" Value="0"/>
+                                                    <Setter Property="Margin" Value="0"/>
+                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
+                                            <ListView.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" CanHorizontallyScroll="False" CanVerticallyScroll="False">
 
-                                                </StackPanel>
-                                            </ItemsPanelTemplate>
-                                        </ListView.ItemsPanel>
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate DataType="{x:Type xl:MDIChild}">
+                                                    </StackPanel>
+                                                </ItemsPanelTemplate>
+                                            </ListView.ItemsPanel>
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type xl:MDIChild}">
                                                 
-                                                <ToggleButton Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}" 
-                                                              BorderBrush="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"
-                                                              BorderThickness="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}" 
-                                                              Foreground="{DynamicResource {ComponentResourceKey xl:Styles, DefaultText}}"
-                                                              Content="{Binding Title}" 
-                                                              HorizontalContentAlignment="Center"
-                                                              IsChecked="{Binding IsSelected}" 
-                                                              OverridesDefaultStyle="True"
-                                                              VerticalContentAlignment="Center">
+                                                    <ToggleButton Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}" 
+                                                                  BorderBrush="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"
+                                                                  BorderThickness="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}" 
+                                                                  Foreground="{DynamicResource {ComponentResourceKey xl:Styles, DefaultText}}"
+                                                                  Content="{Binding Title}" 
+                                                                  HorizontalContentAlignment="Center"
+                                                                  IsChecked="{Binding IsSelected}" 
+                                                                  OverridesDefaultStyle="True"
+                                                                  VerticalContentAlignment="Center">
 
-                                                    <ToggleButton.Template>
-                                                        <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                        <ToggleButton.Template>
+                                                            <ControlTemplate TargetType="{x:Type ToggleButton}">
 
-                                                            <!-- MARKER BUTTON BORDER -->
-                                                            <Border Background="{TemplateBinding Background}"
-                                                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                                                <!-- MARKER BUTTON BORDER -->
+                                                                <Border Background="{TemplateBinding Background}"
+                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                        BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 1 0'}">
 
-                                                                <!-- MARKER BUTTON CONTENT -->
-                                                                <DockPanel>
+                                                                    <!-- MARKER BUTTON CONTENT -->
+                                                                    <DockPanel>
 
-                                                                    <!-- MARKER -->
-                                                                    <Border x:Name="Marker"
-                                                                            DockPanel.Dock="Bottom"
-                                                                            Background="{TemplateBinding BorderBrush}"
-                                                                            Height="3"
-                                                                            Focusable="False"/>
+                                                                        <!-- MARKER BUTTON MARKER -->
+                                                                        <Border x:Name="Marker"
+                                                                                DockPanel.Dock="Bottom"
+                                                                                Background="{TemplateBinding BorderBrush}"
+                                                                                Height="3"
+                                                                                Focusable="False"/>
 
-                                                                    <!-- TEXT -->
-                                                                    <TextBlock x:Name="Content"
-                                                                               Grid.Column="0"
-                                                                               Grid.ColumnSpan="2"
-                                                                               Focusable="False"            
-                                                                               Height="{TemplateBinding Height}"
-                                                                               Text="{Binding Path=Title}"
-                                                                               TextTrimming="CharacterEllipsis"
-                                                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                               Margin="4, 0"/>
+                                                                        <!-- MARKER BUTTON TEXT -->
+                                                                        <TextBlock x:Name="Content"
+                                                                                   Grid.Column="0"
+                                                                                   Grid.ColumnSpan="2"
+                                                                                   Focusable="False"            
+                                                                                   Height="{TemplateBinding Height}"
+                                                                                   Text="{Binding Path=Title}"
+                                                                                   TextTrimming="CharacterEllipsis"
+                                                                                   HorizontalAlignment="Left"
+                                                                                   Margin="4, 0"
+                                                                                   VerticalAlignment="Center"/>
 
-                                                                    <xl:VectorButton x:Name="CloseButton"
+                                                                        <!-- MARKER BUTTON CLOSE BUTTON -->
+                                                                        <xl:VectorButton x:Name="CloseButton"
                                                                                          Fill="{TemplateBinding BorderBrush}"
                                                                                          Command="{Binding CloseCommand}"
                                                                                          CommandTarget="{Binding}"
                                                                                          DockPanel.Dock="Right"
-                                                                                     Height="16"
+                                                                                         Height="16"
                                                                                          HorizontalAlignment="Right"
                                                                                          Scale="0.8"
                                                                                          StrokeThickness="0"
                                                                                          Vector="{StaticResource GeometryCross}"
                                                                                          VerticalContentAlignment="Top"/>
 
-                                                                </DockPanel>
-                                                            </Border>
+                                                                    </DockPanel>
+                                                                </Border>
 
-                                                            <ControlTemplate.Triggers>
+                                                                <ControlTemplate.Triggers>
 
-                                                                <!-- IS CHECKED -->
-                                                                <Trigger Property="IsChecked" Value="True">
-                                                                    <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
-                                                                    <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
-                                                                </Trigger>
+                                                                    <!-- IS CHECKED -->
+                                                                    <Trigger Property="IsChecked" Value="True">
+                                                                        <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
+                                                                        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
+                                                                    </Trigger>
 
-                                                                <!-- MOUSE OVER -->
-                                                                <Trigger Property="IsMouseOver" Value="True">
-                                                                    <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
-                                                                    <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlActiveBrush}}"/>
-                                                                    <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
-                                                                </Trigger>
+                                                                    <!-- MOUSE OVER -->
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                                                                        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlActiveBrush}}"/>
+                                                                        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                                                                    </Trigger>
 
-                                                                <!-- MOUSE PRESS -->
-                                                                <Trigger Property="IsPressed" Value="True">
-                                                                    <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
-                                                                    <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlPressedBrush}}"/>
-                                                                    <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
-                                                                </Trigger>
+                                                                    <!-- MOUSE PRESS -->
+                                                                    <Trigger Property="IsPressed" Value="True">
+                                                                        <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
+                                                                        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlPressedBrush}}"/>
+                                                                        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
+                                                                    </Trigger>
 
-                                                                <!-- DISABLED -->
-                                                                <Trigger Property="IsEnabled" Value="False">
-                                                                    <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
-                                                                    <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlDisabledBrush}}"/>
-                                                                    <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
-                                                                    <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"/>
-                                                                </Trigger>
+                                                                    <!-- DISABLED -->
+                                                                    <Trigger Property="IsEnabled" Value="False">
+                                                                        <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
+                                                                        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlDisabledBrush}}"/>
+                                                                        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
+                                                                        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"/>
+                                                                    </Trigger>
                                                                 
-                                                            </ControlTemplate.Triggers>
-                                                        </ControlTemplate>
-                                                    </ToggleButton.Template>
-                                                </ToggleButton>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </ScrollViewer>
-
-                                <!--<ScrollViewer x:Name="PART_MDIHostTabs" 
-                                              HorizontalScrollBarVisibility="Hidden" 
-                                              VerticalScrollBarVisibility="Disabled">
-                                    <ListBox ItemsSource="{Binding Items, RelativeSource={RelativeSource TemplatedParent}}"
-                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
-
-                                        <ListBox.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal">
-
-                                                </StackPanel>
-                                            </ItemsPanelTemplate>
-                                        </ListBox.ItemsPanel>
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate DataType="{x:Type xl:MDIChild}">
-                                                <Button x:Name="mybtn" Background="Red" Foreground="Orange"  Command="{Binding RelativeSource={RelativeSource AncestorType=xl:MDIHost}, Path=CloseCommand}" Content="{Binding Title}" OverridesDefaultStyle="False"/>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
-                                </ScrollViewer>-->
-                            </DockPanel>
-
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </ToggleButton.Template>
+                                                    </ToggleButton>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Border>
                             <Border x:Name="MDIHostStatusbar"
                                     Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
