@@ -304,18 +304,22 @@
                                                                                     Focusable="False"/>
 
                                                                             <Grid>
-                                                                            <!-- MARKER BUTTON TEXT -->
-                                                                            <TextBlock x:Name="Content"
-                                                                                       Grid.Column="0"
-                                                                                       Grid.ColumnSpan="2"
-                                                                                       Focusable="False"            
-                                                                                       Height="{TemplateBinding Height}"
-                                                                                       Text="{Binding Path=Title}"
-                                                                                       TextTrimming="CharacterEllipsis"
-                                                                                       HorizontalAlignment="Left"
-                                                                                       Margin="4, 0"
-                                                                                       VerticalAlignment="Center"/>
-                                                                            <xl:MDIMoveHandle Opacity="0" CanMove="False"/>
+                                                                                
+                                                                                <!-- MARKER BUTTON TEXT -->
+                                                                                <TextBlock x:Name="Content"
+                                                                                           Grid.Column="0"
+                                                                                           Grid.ColumnSpan="2"
+                                                                                           Focusable="False"            
+                                                                                           Height="{TemplateBinding Height}"
+                                                                                           Text="{Binding Path=Title}"
+                                                                                           TextTrimming="CharacterEllipsis"
+                                                                                           HorizontalAlignment="Left"
+                                                                                           Margin="4, 0"
+                                                                                           VerticalAlignment="Center"/>
+                                                                                
+                                                                                <!-- MARKER BUTTON MOVE HANDLE -->
+                                                                                <xl:MDIMoveHandle Opacity="0" CanMove="False"/>
+                                                                                
                                                                             </Grid>
 
                                                                             <!-- MARKER BUTTON CLOSE BUTTON -->
@@ -415,7 +419,7 @@
                         </Trigger>
 
                         <Trigger Property="ShowMenu" Value="False">
-                            <!--<Setter TargetName="MDIHostMenu" Property="Visibility" Value="Collapsed"/>-->
+                            <Setter TargetName="PART_MDIHostMenu" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                         <Trigger Property="ShowStatusbar" Value="False">
                             <Setter TargetName="MDIHostStatusbar" Property="Visibility" Value="Collapsed"/>

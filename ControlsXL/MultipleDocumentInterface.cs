@@ -46,9 +46,14 @@ namespace ControlsXL
         #region Fields
 
         /// <summary>
-        /// Stores the collection of <see cref="MDIChild"/> windows.
+        /// Stores the original title of the main window.
         /// </summary>
-        public ObservableCollection<MDIChild> Children { get; private set; }
+        private string _OriginalTitle;
+
+        /// <summary>
+        /// Stores a modified title of the main window.
+        /// </summary>
+        private string _Title;
 
         /// <summary>
         /// Stores a reference to the <see cref="MDIHost"/> menu.
@@ -73,6 +78,8 @@ namespace ControlsXL
         /// </summary>
         public MDIHost()
         {
+            _OriginalTitle = Application.Current.MainWindow.Title;
+
             // Bind the commands
             CommandBindings.Add(new CommandBinding(_CloseCommand, OnCloseCommand, CanExecuteCloseCommand));
             CommandBindings.Add(new CommandBinding(_MinimizeCommand, OnMinimizeCommand, CanExecuteMinimizeCommand));
@@ -287,11 +294,28 @@ namespace ControlsXL
         #region Properties
 
         /// <summary>
+        /// Gets the collection of <see cref="MDIChild"/> windows.
+        /// </summary>
+        public ObservableCollection<MDIChild> Children { get; private set; }
+
+        /// <summary>
         /// Gets a reference to the selected <see cref="MDIChild"/> window.
         /// </summary>
         public MDIChild SelectedChild
         {
             get { return Items.OfType<MDIChild>().Where(i => i.IsSelected).FirstOrDefault(); }
+        }
+
+        /// <summary>
+        /// Gets the original caption of the main window.
+        /// </summary>
+        internal string Title
+        {
+            set 
+            { 
+                _Title = $"{_OriginalTitle} - {value}";
+                Application.Current.MainWindow.Title = _Title;
+            }
         }
 
         #endregion
@@ -352,6 +376,13 @@ namespace ControlsXL
 
             if (_Menu != null)
                 InvalidateMenu();
+
+            if(e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                // If no items left restore the original main window title
+                if(Items.Count == 0)
+                    Application.Current.MainWindow.Title = _OriginalTitle;
+            }
         }
 
         private void MDIHostTabsPreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -609,7 +640,7 @@ namespace ControlsXL
         public WindowState State
         {
             get { return (WindowState)GetValue(StateProperty); }
-            set { SetValue(StateProperty, value); }
+            internal set { SetValue(StateProperty, value); }
         }
 
         /// <summary>
@@ -640,7 +671,10 @@ namespace ControlsXL
             if (isSelected)
             {
                 MDIChild child = (MDIChild)d;
-                
+
+                // Set the caption of the main window
+                child.Host.Title = child.Title;
+
                 // Get current top child state
                 MDIChild topChild = child.Host.Items.Cast<MDIChild>().OrderByDescending(i => i.ZIndex).FirstOrDefault();
 
@@ -667,31 +701,6 @@ namespace ControlsXL
 
                 child.ZIndex = child.Host.Items.Count;
                 Canvas.SetZIndex(child, child.ZIndex);
-
-                for (int i = 0; i < child.Host.Items.Count; i++)
-                {
-                    Console.WriteLine($"{((MDIChild)child.Host.Items[i]).Title} ZIndex = {((MDIChild)child.Host.Items[i]).ZIndex}");
-                }
-                //for (int i = 0; i < Host.Items.Count; i++)
-                //{
-                //    MDIChild child = (MDIChild)Host.Items[i];
-
-                //    if (child.ZIndex > ZIndex)
-                //    {
-                //        child.ZIndex--;
-
-                //        Canvas.SetZIndex(child, child.ZIndex);
-                //    }
-                //}
-
-                //ZIndex = Host.Items.Count;
-                //Canvas.SetZIndex(this, this.ZIndex);
-
-
-                //Panel.SetZIndex(child, maxIndex + 1);
-
-                // TEMP test function
-                //child.UpdateIndex();
             }
         }
 
@@ -770,23 +779,6 @@ namespace ControlsXL
             {
                 _NormalSize = new Rect(Math.Max(Canvas.GetLeft(this), 0), Math.Max(Canvas.GetTop(this), 0), Width, Height);
             }
-
-            //MDICanvas canvas = VisualTreeHelper.GetParent(this) as MDICanvas;
-
-            //if(previousState == WindowState.Minimized)
-            //{
-            //    int offset = 0;
-            //    double positionX = 0;
-
-            //    foreach(MDIChild child in Host.Items)
-            //    {
-            //        if(child.State == WindowState.Minimized )
-            //        {
-            //            child.Position = new Point(positionX, child.Position.Y);
-            //            positionX += child.ActualWidth;
-            //        }
-            //    }
-            //}
 
             switch (newState)
             {
@@ -1422,7 +1414,7 @@ namespace ControlsXL
                 _Child.IsSelected = true;
                 _Child.BringIntoView();
             }
-           
+            e.Handled = false;
         }
 
         protected override void OnPreviewMouseDoubleClick(MouseButtonEventArgs e)
