@@ -273,97 +273,101 @@
                                             </ListView.ItemsPanel>
                                             <ListView.ItemTemplate>
                                                 <DataTemplate DataType="{x:Type xl:MDIChild}">
-                                                
-                                                    <ToggleButton Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}" 
-                                                                  BorderBrush="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"
-                                                                  BorderThickness="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}" 
-                                                                  Foreground="{DynamicResource {ComponentResourceKey xl:Styles, DefaultText}}"
-                                                                  Content="{Binding Title}" 
-                                                                  HorizontalContentAlignment="Center"
-                                                                  IsChecked="{Binding IsSelected}" 
-                                                                  OverridesDefaultStyle="True"
-                                                                  VerticalContentAlignment="Center">
 
-                                                        <ToggleButton.Template>
-                                                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                    <Grid>
+                                                        <ToggleButton Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}" 
+                                                                      BorderBrush="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"
+                                                                      BorderThickness="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}" 
+                                                                      Foreground="{DynamicResource {ComponentResourceKey xl:Styles, DefaultText}}"
+                                                                      Content="{Binding Title}" 
+                                                                      HorizontalContentAlignment="Center"
+                                                                      IsChecked="{Binding IsSelected}" 
+                                                                      OverridesDefaultStyle="True"
+                                                                      VerticalContentAlignment="Center">
 
-                                                                <!-- MARKER BUTTON BORDER -->
-                                                                <Border Background="{TemplateBinding Background}"
-                                                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                                                        BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 1 0'}">
+                                                            <ToggleButton.Template>
+                                                                <ControlTemplate TargetType="{x:Type ToggleButton}">
 
-                                                                    <!-- MARKER BUTTON CONTENT -->
-                                                                    <DockPanel>
+                                                                    <!-- MARKER BUTTON BORDER -->
+                                                                    <Border Background="{TemplateBinding Background}"
+                                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                                            BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 1 0'}">
 
-                                                                        <!-- MARKER BUTTON MARKER -->
-                                                                        <Border x:Name="Marker"
-                                                                                DockPanel.Dock="Bottom"
-                                                                                Background="{TemplateBinding BorderBrush}"
-                                                                                Height="3"
-                                                                                Focusable="False"/>
+                                                                        <!-- MARKER BUTTON CONTENT -->
+                                                                        <DockPanel>
 
-                                                                        <!-- MARKER BUTTON TEXT -->
-                                                                        <TextBlock x:Name="Content"
-                                                                                   Grid.Column="0"
-                                                                                   Grid.ColumnSpan="2"
-                                                                                   Focusable="False"            
-                                                                                   Height="{TemplateBinding Height}"
-                                                                                   Text="{Binding Path=Title}"
-                                                                                   TextTrimming="CharacterEllipsis"
-                                                                                   HorizontalAlignment="Left"
-                                                                                   Margin="4, 0"
-                                                                                   VerticalAlignment="Center"/>
+                                                                            <!-- MARKER BUTTON MARKER -->
+                                                                            <Border x:Name="Marker"
+                                                                                    DockPanel.Dock="Bottom"
+                                                                                    Background="{TemplateBinding BorderBrush}"
+                                                                                    Height="3"
+                                                                                    Focusable="False"/>
 
-                                                                        <!-- MARKER BUTTON CLOSE BUTTON -->
-                                                                        <xl:VectorButton x:Name="CloseButton"
-                                                                                         Fill="{TemplateBinding BorderBrush}"
-                                                                                         Command="{Binding CloseCommand}"
-                                                                                         CommandTarget="{Binding}"
-                                                                                         DockPanel.Dock="Right"
-                                                                                         Height="16"
-                                                                                         HorizontalAlignment="Right"
-                                                                                         Scale="0.8"
-                                                                                         StrokeThickness="0"
-                                                                                         Vector="{StaticResource GeometryCross}"
-                                                                                         VerticalContentAlignment="Top"/>
+                                                                            <!-- MARKER BUTTON TEXT -->
+                                                                            <TextBlock x:Name="Content"
+                                                                                       Grid.Column="0"
+                                                                                       Grid.ColumnSpan="2"
+                                                                                       Focusable="False"            
+                                                                                       Height="{TemplateBinding Height}"
+                                                                                       Text="{Binding Path=Title}"
+                                                                                       TextTrimming="CharacterEllipsis"
+                                                                                       HorizontalAlignment="Left"
+                                                                                       Margin="4, 0"
+                                                                                       VerticalAlignment="Center"/>
 
-                                                                    </DockPanel>
-                                                                </Border>
+                                                                            <!-- MARKER BUTTON CLOSE BUTTON -->
+                                                                            <xl:VectorButton x:Name="CloseButton"
+                                                                                             Fill="{TemplateBinding BorderBrush}"
+                                                                                             Command="{Binding CloseCommand}"
+                                                                                             CommandTarget="{Binding}"
+                                                                                             DockPanel.Dock="Right"
+                                                                                             Height="16"
+                                                                                             HorizontalAlignment="Right"
+                                                                                             Scale="0.8"
+                                                                                             StrokeThickness="0"
+                                                                                             Vector="{StaticResource GeometryCross}"
+                                                                                             VerticalContentAlignment="Top"/>
 
-                                                                <ControlTemplate.Triggers>
+                                                                        </DockPanel>
+                                                                    </Border>
 
-                                                                    <!-- IS CHECKED -->
-                                                                    <Trigger Property="IsChecked" Value="True">
-                                                                        <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
-                                                                        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
-                                                                    </Trigger>
+                                                                    <ControlTemplate.Triggers>
 
-                                                                    <!-- MOUSE OVER -->
-                                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                                        <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
-                                                                        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlActiveBrush}}"/>
-                                                                        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
-                                                                    </Trigger>
+                                                                        <!-- IS CHECKED -->
+                                                                        <Trigger Property="IsChecked" Value="True">
+                                                                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
+                                                                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
+                                                                        </Trigger>
 
-                                                                    <!-- MOUSE PRESS -->
-                                                                    <Trigger Property="IsPressed" Value="True">
-                                                                        <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
-                                                                        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlPressedBrush}}"/>
-                                                                        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
-                                                                    </Trigger>
+                                                                        <!-- MOUSE OVER -->
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                                                                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlActiveBrush}}"/>
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                                                                        </Trigger>
 
-                                                                    <!-- DISABLED -->
-                                                                    <Trigger Property="IsEnabled" Value="False">
-                                                                        <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
-                                                                        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlDisabledBrush}}"/>
-                                                                        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
-                                                                        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"/>
-                                                                    </Trigger>
+                                                                        <!-- MOUSE PRESS -->
+                                                                        <Trigger Property="IsPressed" Value="True">
+                                                                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
+                                                                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlPressedBrush}}"/>
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
+                                                                        </Trigger>
+
+                                                                        <!-- DISABLED -->
+                                                                        <Trigger Property="IsEnabled" Value="False">
+                                                                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
+                                                                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlDisabledBrush}}"/>
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
+                                                                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"/>
+                                                                        </Trigger>
                                                                 
-                                                                </ControlTemplate.Triggers>
-                                                            </ControlTemplate>
-                                                        </ToggleButton.Template>
-                                                    </ToggleButton>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </ToggleButton.Template>
+                                                        </ToggleButton>
+                                                        
+                                                        <xl:MDIMoveHandle Opacity="0" CanMove="False"/>
+                                                    </Grid>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>
@@ -382,9 +386,9 @@
                                 </StackPanel>
                             </Border>
 
-                            <ScrollViewer CanContentScroll="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" PanningMode="Both">
+                            <ScrollViewer CanContentScroll="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
                                 <Grid>
-                                    <!--<xl:MDIMoveHandle  Cursor="Cross"  DataContext="{Binding ElementName=Canvas, Path=.}"/>-->
+                                    <!--<xl:MDIMoveHandle Opacity="0.1" Cursor="Cross" DataContext="{Binding ElementName=Canvas, Path=.}" />-->
                                     <xl:MDICanvas x:Name="Canvas" IsItemsHost="True"/>
                                 </Grid>
                             </ScrollViewer>

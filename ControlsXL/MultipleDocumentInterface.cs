@@ -350,21 +350,8 @@ namespace ControlsXL
         {
             base.OnItemsChanged(e);
 
-            switch(e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    Console.WriteLine("MDIHOST item added");
-                    InvalidateMenu();
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    Console.WriteLine("MDIHOST item removed");
-                    InvalidateMenu();
-                    break;
-                case NotifyCollectionChangedAction.Reset:
-                    if(_Menu != null)
-                        _Menu.Items.Clear();
-                    break;
-            }
+            if (_Menu != null)
+                InvalidateMenu();
         }
 
         private void MDIHostTabsPreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -653,9 +640,19 @@ namespace ControlsXL
             if (isSelected)
             {
                 MDIChild child = (MDIChild)d;
+                
+                // Get current top child state
+                MDIChild topChild = child.Host.Items.Cast<MDIChild>().OrderByDescending(i => i.ZIndex).FirstOrDefault();
+
+                if(topChild.State == WindowState.Maximized)
+                {
+                    topChild.State = WindowState.Normal;
+                    child.State = WindowState.Maximized;
+                }
 
                 foreach (MDIChild item in child.Host.Items)
                 {
+                    
                     // Move all items in front of the current item one step back
                     if (item.ZIndex > child.ZIndex)
                     {
@@ -760,14 +757,18 @@ namespace ControlsXL
 
         private void ChangeState(WindowState previousState, WindowState newState)
         {
-            if(!IsSelected)
-                IsSelected = true;
+            // If the previous state of the window was maximized it was already selected
+            if (previousState != WindowState.Maximized)
+            {
+                // Ensure the window is selected before changing it's state
+                if (!IsSelected)
+                    IsSelected = true;
+            }
 
             // Store the normal size to be able to restore the window
             if (previousState == WindowState.Normal)
             {
-                _NormalSize = new Rect(Canvas.GetLeft(this), Canvas.GetTop(this), ActualWidth, ActualHeight);
-                Console.WriteLine($"NORMAL STATE STORED [{Position.X},{Position.Y}]");
+                _NormalSize = new Rect(Math.Max(Canvas.GetLeft(this), 0), Math.Max(Canvas.GetTop(this), 0), Width, Height);
             }
 
             //MDICanvas canvas = VisualTreeHelper.GetParent(this) as MDICanvas;
@@ -827,13 +828,9 @@ namespace ControlsXL
                 case WindowState.Maximized:
 
 
-                    //Position = new Point(-1, -1);
-                    //Width = ActualWidth;
-                    //Height = ActualHeight;
-                    
                     //TODO: Change width to ensure update????? solving issue second maximize not working?????
-                    Width = MinWidth;
-
+                    // Enforces a layout pass
+                    Position = new Point(-1, -1);
 
                     ToolTip = null;
 
@@ -1391,28 +1388,69 @@ namespace ControlsXL
         private MDIChild _Child;
         private MDICanvas _Canvas;
 
+
+
+        public bool CanMove
+        {
+            get { return (bool)GetValue(CanMoveProperty); }
+            set { SetValue(CanMoveProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CanMove.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CanMoveProperty =
+            DependencyProperty.Register("CanMove", typeof(bool), typeof(MDIMoveHandle), new PropertyMetadata(true));
+
+
+
         public MDIMoveHandle()
         {
-            RenderTransformOrigin = new Point(0.5, 0.5);
+            //RenderTransformOrigin = new Point(0.5, 0.5);
 
             SizeChanged += MDIMoveHandleSizeChanged;
             DragStarted += XMoveThumbDragStarted;
             DragDelta += XMoveThumbDragDelta;
         }
 
+        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnPreviewMouseLeftButtonDown(e);
+
+            _Child = DataContext as MDIChild;
+
+            if (_Child != null)
+            {
+                _Child.IsSelected = true;
+                _Child.BringIntoView();
+            }
+           
+        }
+
         protected override void OnPreviewMouseDoubleClick(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseDoubleClick(e);
 
+           
             _Child = DataContext as MDIChild;
 
             if(_Child != null)
             {
-                
-                _Child.State = WindowState.Maximized;
-            }
-        }
+                switch(_Child.State)
+                {
+                    case WindowState.Normal:
+                        _Child.State = WindowState.Maximized;
+                        break;
+                    case WindowState.Minimized:
+                    case WindowState.Maximized:
+                        _Child.State = WindowState.Normal;
+                        break;
+                }
 
+                e.Handled = true;
+                //_Child.State = WindowState.Maximized;
+            }
+
+        }
+        private Point _Start;
         private void MDIMoveHandleSizeChanged(object sender, SizeChangedEventArgs e)
         {
             if(IsDragging)
@@ -1424,20 +1462,30 @@ namespace ControlsXL
 
         private void XMoveThumbDragStarted(object sender, DragStartedEventArgs e)
         {
+            if (!CanMove)
+                return;
+
             _Child = DataContext as MDIChild;
 
             if (_Child != null)
             {
+                _Start = new Point(e.HorizontalOffset, e.VerticalOffset);
                 _Canvas = VisualTreeHelper.GetParent(_Child) as MDICanvas;
             }
             else
             {
                 _Canvas = DataContext as MDICanvas;
+
+                //_Canvas.BringIntoView(new Rect(_Start.X, _Start.Y, _Canvas.Width, _Canvas.Height));
+                //e.Handled = true;
             }
         }
 
         private void XMoveThumbDragDelta(object sender, DragDeltaEventArgs e)
         {
+            if (!CanMove)
+                return;
+
 
             if (_Child != null && _Canvas != null && _Child.IsSelected)
             {
@@ -1451,10 +1499,11 @@ namespace ControlsXL
                     minTop = Math.Min(Canvas.GetTop(item), minTop);
                 }
 
-
+                
                 double deltaHorizontal = Math.Max(-minLeft, e.HorizontalChange);
-                double deltaVertical = Math.Max(-minTop, e.VerticalChange);
 
+                double deltaVertical = Math.Max(-minTop, e.VerticalChange);
+                
                 foreach (MDIChild item in _Canvas.SelectedItems)
                 {
                     Canvas.SetLeft(item, Canvas.GetLeft(item) + deltaHorizontal);
@@ -1467,6 +1516,7 @@ namespace ControlsXL
             else if (_Canvas != null)
             {
                 // TODO: Canvas Dragging (check scrollviewer panning mode?)
+
                 //double minLeft = double.MaxValue;
                 //double minTop = double.MaxValue;
 
@@ -1476,15 +1526,15 @@ namespace ControlsXL
                 //    minTop = Math.Min(Canvas.GetTop(item), minTop);
                 //}
 
-
+               
                 //double deltaHorizontal = Math.Max(-minLeft, e.HorizontalChange);
                 //double deltaVertical = Math.Max(-minTop, e.VerticalChange);
 
                 //Console.WriteLine(deltaHorizontal);
                 //foreach (MDIChild item in _Canvas.Children)
                 //{
-                //    Canvas.SetLeft(item, Canvas.GetLeft(item) + deltaHorizontal);
-                //    Canvas.SetTop(item, Canvas.GetTop(item) + deltaVertical);
+                //    Canvas.SetLeft(item, deltaHorizontal);
+                //    Canvas.SetTop(item, deltaVertical);
                 //}
 
                 //_Canvas.InvalidateArrange();
