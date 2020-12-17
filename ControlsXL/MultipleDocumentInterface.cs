@@ -1445,7 +1445,7 @@ namespace ControlsXL
                         break;
                 }
 
-                e.Handled = true;
+                
                 //_Child.State = WindowState.Maximized;
             }
 
@@ -1469,7 +1469,6 @@ namespace ControlsXL
 
             if (_Child != null)
             {
-                _Start = new Point(e.HorizontalOffset, e.VerticalOffset);
                 _Canvas = VisualTreeHelper.GetParent(_Child) as MDICanvas;
             }
             else

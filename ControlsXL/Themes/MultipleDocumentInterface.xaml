@@ -303,6 +303,7 @@
                                                                                     Height="3"
                                                                                     Focusable="False"/>
 
+                                                                            <Grid>
                                                                             <!-- MARKER BUTTON TEXT -->
                                                                             <TextBlock x:Name="Content"
                                                                                        Grid.Column="0"
@@ -314,6 +315,8 @@
                                                                                        HorizontalAlignment="Left"
                                                                                        Margin="4, 0"
                                                                                        VerticalAlignment="Center"/>
+                                                                            <xl:MDIMoveHandle Opacity="0" CanMove="False"/>
+                                                                            </Grid>
 
                                                                             <!-- MARKER BUTTON CLOSE BUTTON -->
                                                                             <xl:VectorButton x:Name="CloseButton"
@@ -366,7 +369,7 @@
                                                             </ToggleButton.Template>
                                                         </ToggleButton>
                                                         
-                                                        <xl:MDIMoveHandle Opacity="0" CanMove="False"/>
+                                                        
                                                     </Grid>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
