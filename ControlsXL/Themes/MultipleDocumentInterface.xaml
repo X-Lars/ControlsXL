@@ -13,6 +13,8 @@
     <common:ThicknessConverter x:Key="ThicknessConverter"/>
     <common:AdaptiveThicknessConverter x:Key="AdaptiveThicknessConverter"/>
 
+    
+    <!-- MDICHILD WINDOW -->
     <Style TargetType="{x:Type xl:MDIChild}">
         
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppBrush}}"/>
@@ -21,8 +23,8 @@
 
         <Setter Property="MinHeight" Value="{x:Static xl:MDIChild.MDICHILD_MINIMIZED_HEIGHT}"/>
         <Setter Property="MinWidth" Value="{x:Static xl:MDIChild.MDICHILD_MINIMIZED_WIDTH}"/>
-        <Setter Property="SnapsToDevicePixels" Value="True"/>
         
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
 
         <!-- IMPORTANT -->
         <Setter Property="Canvas.Left" Value="{Binding RelativeSource={RelativeSource Self}, Path=Position.X}"/>
@@ -33,7 +35,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:MDIChild}">
                     
-                    <!-- Use (Path=.) to bind byRef and NOT byVal so the data context can be updated. -->
+                    <!-- Use (Path=.) to bind byRef and NOT byVal so the data context can be changed. -->
+                    <!-- MDI CHILD WINDOW BORDER-->
                     <Border x:Name="MDIChildBorder" 
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
@@ -44,42 +47,54 @@
                         <!-- MDICHILD WINDOW LAYOUT PANEL -->
                         <DockPanel>
                             
-                            <!-- MDICHILD WINDOW HEADER-->
+                            <!-- MDICHILD WINDOW HEADER LAYOUT-->
                             <Grid x:Name="MDIChildHeader" 
-                                  Background="{DynamicResource {ComponentResourceKey xl:Styles, AppHeaderBrush}}"
-                                  DockPanel.Dock="Top">
+                                    Background="{DynamicResource {ComponentResourceKey xl:Styles, AppHeaderBrush}}"
+                                    DockPanel.Dock="Top">
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-
-                                <!-- MDICHILD WIDOW SYSTEM BUTTON -->
+                                
+                                <!-- MDICHILD WINDOW HEADER SYSTEM BUTTON -->
                                 <xl:VectorButton x:Name="SystemButton"
                                                  Grid.Column="0"
                                                  Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
                                                  Scale="0.8"
                                                  StrokeThickness="0"
-                                                 Vector="{StaticResource GeometryWindows}"/>
+                                                 Vector="{StaticResource GeometryWindows}">
+                                    
+                                    <xl:VectorButton.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Minimize" Command="{x:Static xl:MDIChild.MinimizeCommand}"/>
+                                            <MenuItem Header="Maximize" Command="{x:Static xl:MDIChild.MaximizeCommand}"/>
+                                            <Separator/>
+                                            <MenuItem Header="Close" Command="{x:Static xl:MDIChild.CloseCommand}"/>
+                                        </ContextMenu>
+                                    </xl:VectorButton.ContextMenu>
 
-                                <!-- MDICHILD WINDOW HEADER CAPTION -->
-                                <TextBlock x:Name="WindowTitle"
-                                            Foreground="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"
-                                            Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Text="{TemplateBinding Title}"
-                                            TextTrimming="CharacterEllipsis"
-                                            VerticalAlignment="Center"/>
+                                </xl:VectorButton>
 
-                                <!-- MDICHILD WINDOW HEADER DRAG THUMB -->
+                                <!-- MDICHILD WINDOW HEADER TITLE -->
+                                <TextBlock x:Name="MDIChildTitle"
+                                           Foreground="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"
+                                           Grid.Column="1"
+                                           HorizontalAlignment="Left"
+                                           IsHitTestVisible="False"
+                                           Text="{TemplateBinding Title}"
+                                           TextTrimming="CharacterEllipsis"
+                                           VerticalAlignment="Center"/>
+
+                                <!-- MDICHILD WINDOW HEADER HANDLE -->
                                 <xl:MDIMoveHandle x:Name="WindowMoveHandle" 
-                                                    Grid.Column="1"
-                                                    Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
-                                                    Opacity="0"
-                                                    Tag="{x:Static common:ThumbNames.Header}"/>
+                                                  Grid.Column="1"
+                                                  Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
+                                                  Opacity="0"
+                                                  Tag="{x:Static common:ThumbNames.Header}"/>
 
-                                 <!-- MDICHILD WINDOW HEADER BUTTONS -->
+                                <!-- MDICHILD WINDOW HEADER RESIZE BUTTONS -->
                                 <StackPanel x:Name="WindowButtons"
                                             Grid.Column="2"
                                             Height="{x:Static xl:MDIChild.MDICHILD_HEADER_HEIGHT}"
@@ -138,7 +153,7 @@
                             <!--<Setter TargetName="Decorator" Property="ShowDecorator" Value="True"/>-->
                             <Setter TargetName="MDIChildBorder" Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppBorderActiveBrush}}"/>
                             <Setter TargetName="MDIChildHeader" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppHeaderActiveBrush}}"/>
-                            <Setter TargetName="WindowTitle" Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextSelectedBrush}}"/>
+                            <Setter TargetName="MDIChildTitle" Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextSelectedBrush}}"/>
                         </Trigger>
 
                         <Trigger Property="State" Value="Minimized">

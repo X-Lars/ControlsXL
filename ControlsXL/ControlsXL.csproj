@@ -57,6 +57,18 @@
     <Compile Include="MarkerButton.cs" />
     <Compile Include="MultipleDocumentInterface.cs" />
     <Compile Include="VectorButton.cs" />
+    <Page Include="Resources\Appearances\Raised.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Appearances\Shadowed.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Appearances\Rounded.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\Appearances\Strong.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

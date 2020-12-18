@@ -14,6 +14,27 @@ namespace ControlsXL
     /// </summary>
     public static class StyleManager
     {
+        #region Constants
+
+        /// <summary>
+        /// Defines the base uri for all resources.
+        /// </summary>
+        private const string _BaseUri = "/ControlsXL;Component/Resources/";
+
+        /// <summary>
+        /// Defines the uri for all appearances.
+        /// </summary>
+        /// <remarks><i>Use a string format to inject the filename. <code>string.format(_AppearanceUri, <filename>)</code></i></remarks>
+        private const string _AppearancesUri = _BaseUri + "Appearances/{0}.xaml";
+
+        /// <summary>
+        /// Defines the uri for all styles.
+        /// </summary>
+        /// <remarks><i>Use a string format to inject the filename. <code>string.format(_AppearanceUri, <filename>)</code></i></remarks>
+        private const string _StylesUri = _BaseUri + "Styles/{0}.xaml";
+
+        #endregion
+
         #region Fields
 
         /// <summary>
@@ -35,7 +56,7 @@ namespace ControlsXL
         /// Stores the <see cref="ResourceDictionary"/> containing the dictionary keys for the current appearance.
         /// </summary>
         private static ResourceDictionary _CurrentAppearance = new ResourceDictionary();
-
+        private static Dictionary<ControlAppearance, ResourceDictionary> _CurrentAppearances = new Dictionary<ControlAppearance, ResourceDictionary>();
         #endregion
 
         #region Events
@@ -92,9 +113,23 @@ namespace ControlsXL
                 if (_Appearance != value)
                 {
                     _Appearance = value;
+                    InvalidateAppearance();
                     ApplyAppearance();
                 }
             }
+        }
+
+        public static void InvalidateAppearance()
+        {
+            if(_Appearance.HasFlag(ControlAppearance.Default) && _Appearance.HasFlag(ControlAppearance.Strong))
+            {
+                // Toggle default off
+                _Appearance ^= ControlAppearance.Default;
+            }
+        }
+
+        public static void RemoveAppearance(ControlAppearance appearance)
+        {
         }
    
         #endregion
@@ -120,7 +155,7 @@ namespace ControlsXL
 
             dictionaries.Remove(_CurrentStyle);
 
-            _CurrentStyle.Source = new Uri($"/ControlsXL;Component/Resources/Styles/{Style}.xaml", UriKind.Relative);
+            _CurrentStyle.Source = new Uri(string.Format(_StylesUri, Style), UriKind.Relative);
 
             dictionaries.Add(_CurrentStyle);            
 
@@ -139,11 +174,42 @@ namespace ControlsXL
         {
             Collection<ResourceDictionary> dictionaries = Application.Current.Resources.MergedDictionaries;
 
-            dictionaries.Remove(_CurrentAppearance);
+            Array appearances = Enum.GetValues(typeof(ControlAppearance));
 
-            _CurrentAppearance.Source = new Uri($"/ControlsXL;Component/Resources/Appearances/{Appearance}.xaml", UriKind.Relative);
+            // Remove all current appearance dictionaries
+            foreach(ResourceDictionary dictionary in _CurrentAppearances.Values)
+            {
+                dictionaries.Remove(dictionary);
+            }
 
-            dictionaries.Add(_CurrentAppearance);
+            _CurrentAppearances.Clear();
+
+            foreach (ControlAppearance appearance in appearances)
+            {
+                if ((_Appearance & appearance) == appearance)
+                {
+                    switch (appearance)
+                    {
+                        case ControlAppearance.Flat:
+                            _CurrentAppearances.Add(ControlAppearance.Flat, new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Flat), UriKind.Relative) });
+                            break;
+                        case ControlAppearance.Default:
+                            _CurrentAppearances.Add(ControlAppearance.Default, new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Default), UriKind.Relative) });
+                            break;
+                        case ControlAppearance.Strong:
+                            _CurrentAppearances.Add(ControlAppearance.Strong, new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Strong), UriKind.Relative) });
+                            break;
+                        case ControlAppearance.Round:
+                            _CurrentAppearances.Add(ControlAppearance.Round, new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Round), UriKind.Relative) });
+                            break;
+                    }
+                }
+            }
+
+            foreach(ResourceDictionary dictionary in _CurrentAppearances.Values)
+            {
+                dictionaries.Add(dictionary);
+            }
 
             // Raise the appearance changed event
             if (AppearanceChanged != null)
@@ -151,9 +217,22 @@ namespace ControlsXL
                 AppearanceChanged(null, EventArgs.Empty);
             }
 
-            Application.Current.MainWindow.InvalidateArrange();
-            Application.Current.MainWindow.InvalidateMeasure();
-            Application.Current.MainWindow.InvalidateVisual();
+            //dictionaries.Remove(_CurrentAppearance);
+
+            //_CurrentAppearance.Source = new Uri($"/ControlsXL;Component/Resources/Appearances/{Appearance}.xaml", UriKind.Relative);
+
+            //dictionaries.Add(_CurrentAppearance);
+
+            //// Raise the appearance changed event
+            //if (AppearanceChanged != null)
+            //{
+            //    AppearanceChanged(null, EventArgs.Empty);
+            //}
+
+            // Remove?
+            //Application.Current.MainWindow.InvalidateArrange();
+            //Application.Current.MainWindow.InvalidateMeasure();
+            //Application.Current.MainWindow.InvalidateVisual();
 
         }
 

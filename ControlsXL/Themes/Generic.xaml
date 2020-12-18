@@ -18,8 +18,8 @@
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/LinkButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/MarkerButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/VectorButton.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/SideBar.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/MultipleDocumentInterface.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/SideBar.xaml"/>
 
     </ResourceDictionary.MergedDictionaries>
 

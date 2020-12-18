@@ -23,9 +23,13 @@ namespace ControlsXL
     [Flags]
     public enum ControlAppearance
     {
+        Flat = 0,
         Default = 1,
-        Flat    = 2,
-        Strong  = 4,
+        Strong  = 2,
+        Rounded   = 4,
+        Raised  = 8,
+        Shadowed  = 16
+
     }
 
     internal static class Styles 

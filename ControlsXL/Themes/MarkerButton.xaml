@@ -17,34 +17,44 @@
             <Setter.Value>
                 
                 <ControlTemplate TargetType="{x:Type xl:MarkerButton}">
-                    
-                    <!-- MARKER BUTTON BORDER -->
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+
+                    <Grid>
+                        <Grid.OpacityMask>
+                            <VisualBrush Visual="{Binding ElementName=ControlBorder}"/>
+                        </Grid.OpacityMask>
                         
-                        <!-- MARKER BUTTON CONTENT -->
-                        <DockPanel>
+                        <!-- MARKER BUTTON BORDER -->
+                        <Border x:Name="ControlBorder" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{DynamicResource {ComponentResourceKey xl:Styles, CornerRadius}}">
 
-                            <!-- MARKER -->
-                            <Border x:Name="Marker"
-                                    DockPanel.Dock="{Binding MarkerPlacement, RelativeSource={RelativeSource TemplatedParent}}"
-                                    Background="{TemplateBinding BorderBrush}"
-                                    Height="{Binding MarkerSize, RelativeSource={RelativeSource TemplatedParent}}"
-                                    Width="{Binding MarkerSize, RelativeSource={RelativeSource TemplatedParent}}"
-                                    Focusable="False"/>
+                            <!-- MARKER BUTTON CONTENT -->
+                            <DockPanel>
 
-                            <!-- TEXT -->
-                            <TextBlock x:Name="Content"
-                                       Focusable="False"            
-                                       Height="{TemplateBinding Height}"
-                                       Text="{TemplateBinding Content}"
-                                       TextTrimming="CharacterEllipsis"
-                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                       Margin="4, 0"/>
+                                <!-- MARKER -->
+                                <Border x:Name="Marker"
+                                        DockPanel.Dock="{Binding MarkerPlacement, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Background="{TemplateBinding BorderBrush}"
+                                        Height="{Binding MarkerSize, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Width="{Binding MarkerSize, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Focusable="False"/>
 
-                        </DockPanel>
-                    </Border>
+                                <!-- TEXT -->
+                                <TextBlock x:Name="Content"
+                                           Focusable="False"            
+                                           Height="{TemplateBinding Height}"
+                                           Text="{TemplateBinding Content}"
+                                           TextTrimming="CharacterEllipsis"
+                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                           Margin="4, 0"/>
+
+                            </DockPanel>
+
+                            
+                        </Border>
+                    </Grid>
                     
                     <ControlTemplate.Triggers>
 
