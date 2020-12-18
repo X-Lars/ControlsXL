@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 
 namespace ControlsXL
 {
@@ -32,10 +29,13 @@ namespace ControlsXL
 
     }
 
+    /// <summary>
+    /// Class functions as namespace for creation of <see cref="ComponentResourceKey"/>s and defines constants of <see cref="ComponentResourceKey"/> names to use in code.
+    /// </summary>
+    /// <remarks><i>The defined constants are used for calculation of dynamic style properties.</i></remarks>
     internal static class Styles 
     {
         internal const string BorderThickness = "BorderThickness";
-
         internal const string ControlBrush = "ControlBrush";
     }
 }

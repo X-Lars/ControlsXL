@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ControlsXL
@@ -53,10 +49,10 @@ namespace ControlsXL
         private static ResourceDictionary _CurrentStyle = new ResourceDictionary();
 
         /// <summary>
-        /// Stores the <see cref="ResourceDictionary"/> containing the dictionary keys for the current appearance.
+        /// Stores the list of resource dictionaries containing the dictonary keys for all current appearances.
         /// </summary>
-        private static ResourceDictionary _CurrentAppearance = new ResourceDictionary();
-        private static Dictionary<ControlAppearance, ResourceDictionary> _CurrentAppearances = new Dictionary<ControlAppearance, ResourceDictionary>();
+        private static List<ResourceDictionary> _CurrentAppearances = new List<ResourceDictionary>();
+
         #endregion
 
         #region Events
@@ -78,9 +74,7 @@ namespace ControlsXL
         /// <summary>
         /// Static constructor called before the instance of <see cref="StyleManager"/> is created.
         /// </summary>
-        static StyleManager()
-        {
-        }
+        static StyleManager() { }
 
         #endregion
 
@@ -117,19 +111,6 @@ namespace ControlsXL
                     ApplyAppearance();
                 }
             }
-        }
-
-        public static void InvalidateAppearance()
-        {
-            if(_Appearance.HasFlag(ControlAppearance.Default) && _Appearance.HasFlag(ControlAppearance.Strong))
-            {
-                // Toggle default off
-                _Appearance ^= ControlAppearance.Default;
-            }
-        }
-
-        public static void RemoveAppearance(ControlAppearance appearance)
-        {
         }
    
         #endregion
@@ -177,13 +158,14 @@ namespace ControlsXL
             Array appearances = Enum.GetValues(typeof(ControlAppearance));
 
             // Remove all current appearance dictionaries
-            foreach(ResourceDictionary dictionary in _CurrentAppearances.Values)
+            foreach(ResourceDictionary dictionary in _CurrentAppearances)
             {
                 dictionaries.Remove(dictionary);
             }
 
             _CurrentAppearances.Clear();
 
+            // Create a resource dictionary for each control appearance flag
             foreach (ControlAppearance appearance in appearances)
             {
                 if ((_Appearance & appearance) == appearance)
@@ -191,22 +173,29 @@ namespace ControlsXL
                     switch (appearance)
                     {
                         case ControlAppearance.Flat:
-                            _CurrentAppearances.Add(ControlAppearance.Flat, new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Flat), UriKind.Relative) });
+                            _CurrentAppearances.Add(new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Flat), UriKind.Relative) });
                             break;
                         case ControlAppearance.Default:
-                            _CurrentAppearances.Add(ControlAppearance.Default, new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Default), UriKind.Relative) });
+                            _CurrentAppearances.Add(new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Default), UriKind.Relative) });
                             break;
                         case ControlAppearance.Strong:
-                            _CurrentAppearances.Add(ControlAppearance.Strong, new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Strong), UriKind.Relative) });
+                            _CurrentAppearances.Add(new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Strong), UriKind.Relative) });
                             break;
-                        case ControlAppearance.Round:
-                            _CurrentAppearances.Add(ControlAppearance.Round, new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Round), UriKind.Relative) });
+                        case ControlAppearance.Rounded:
+                            _CurrentAppearances.Add(new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Rounded), UriKind.Relative) });
+                            break;
+                        case ControlAppearance.Raised:
+                            _CurrentAppearances.Add(new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Raised), UriKind.Relative) });
+                            break;
+                        case ControlAppearance.Shadowed:
+                            _CurrentAppearances.Add(new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Shadowed), UriKind.Relative) });
                             break;
                     }
                 }
             }
 
-            foreach(ResourceDictionary dictionary in _CurrentAppearances.Values)
+            // Add all dictionaries to the application's merged dictionaries
+            foreach(ResourceDictionary dictionary in _CurrentAppearances)
             {
                 dictionaries.Add(dictionary);
             }
@@ -216,24 +205,20 @@ namespace ControlsXL
             {
                 AppearanceChanged(null, EventArgs.Empty);
             }
+        }
 
-            //dictionaries.Remove(_CurrentAppearance);
-
-            //_CurrentAppearance.Source = new Uri($"/ControlsXL;Component/Resources/Appearances/{Appearance}.xaml", UriKind.Relative);
-
-            //dictionaries.Add(_CurrentAppearance);
-
-            //// Raise the appearance changed event
-            //if (AppearanceChanged != null)
-            //{
-            //    AppearanceChanged(null, EventArgs.Empty);
-            //}
-
-            // Remove?
-            //Application.Current.MainWindow.InvalidateArrange();
-            //Application.Current.MainWindow.InvalidateMeasure();
-            //Application.Current.MainWindow.InvalidateVisual();
-
+        /// <summary>
+        /// Invalidates the current appearance by removing colliding appearances.
+        /// </summary>
+        /// <remarks><i>Remove colliding appearances using XOR assignment operator.</i></remarks>
+        private static void InvalidateAppearance()
+        {
+            // Strong ovveride default
+            if (_Appearance.HasFlag(ControlAppearance.Default) && _Appearance.HasFlag(ControlAppearance.Strong))
+            {
+                // Toggle default off
+                _Appearance ^= ControlAppearance.Default;
+            }
         }
 
         #endregion
