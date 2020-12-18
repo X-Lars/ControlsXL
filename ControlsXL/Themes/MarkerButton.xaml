@@ -18,6 +18,7 @@
                 
                 <ControlTemplate TargetType="{x:Type xl:MarkerButton}">
 
+                    <!-- CORNERRADIUS MASK -->
                     <Grid>
                         <Grid.OpacityMask>
                             <VisualBrush Visual="{Binding ElementName=ControlBorder}"/>

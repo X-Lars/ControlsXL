@@ -111,7 +111,7 @@
     </Page>
     <Compile Include="Common\Styles.cs" />
     <Compile Include="Common\StyleManager.cs" />
-    <Compile Include="SideBar.cs">
+    <Compile Include="Sidebar.cs">
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Themes\LinkButton.xaml">
@@ -126,7 +126,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Themes\SideBar.xaml">
+    <Page Include="Themes\Sidebar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -78,7 +78,11 @@ namespace ControlsXL
         /// </summary>
         public MDIHost()
         {
-            _OriginalTitle = Application.Current.MainWindow.Title;
+            // Cannot access the title at design time
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                _OriginalTitle = Application.Current.MainWindow.Title;
+            }
 
             // Bind the commands
             CommandBindings.Add(new CommandBinding(_CloseCommand, OnCloseCommand, CanExecuteCloseCommand));
@@ -672,8 +676,12 @@ namespace ControlsXL
             {
                 MDIChild child = (MDIChild)d;
 
-                // Set the caption of the main window
-                child.Host.Title = child.Title;
+                // Cannot acces caption at design time
+                if (!DesignerProperties.GetIsInDesignMode(child))
+                {
+                    // Set the caption of the main window
+                    child.Host.Title = child.Title;
+                }
 
                 // Get current top child state
                 MDIChild topChild = child.Host.Items.Cast<MDIChild>().OrderByDescending(i => i.ZIndex).FirstOrDefault();
@@ -881,16 +889,6 @@ namespace ControlsXL
 
         #region Properties
 
-
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// Gets an enumerable list of selected <see cref="MDIChild"/> windows.
         /// </summary>
@@ -940,6 +938,7 @@ namespace ControlsXL
             {
                 if (DesignerProperties.GetIsInDesignMode(this))
                     return false;
+
                 return Children.OfType<MDIChild>().Any(i => i.State == WindowState.Maximized); 
             }
         }
@@ -965,8 +964,10 @@ namespace ControlsXL
         /// </summary>
         private void SelectTopChild()
         {
-            if(!DesignerProperties.GetIsInDesignMode(this))
-            Children.OfType<MDIChild>().OrderByDescending(i => GetZIndex(i)).FirstOrDefault(i => i.IsSelected = true);
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                Children.OfType<MDIChild>().OrderByDescending(i => GetZIndex(i)).FirstOrDefault(i => i.IsSelected = true);
+            }
         }
 
         #endregion
@@ -997,8 +998,8 @@ namespace ControlsXL
         {
             base.OnVisualChildrenChanged(visualAdded, visualRemoved);
 
-            if(!DesignerProperties.GetIsInDesignMode(this))
-            { 
+            //if(!DesignerProperties.GetIsInDesignMode(this))
+            //{ 
             // Don't run this code in design time
             if (visualAdded != null)
             {
@@ -1016,7 +1017,7 @@ namespace ControlsXL
             {
                 SelectTopChild();
             }
-            }
+            //}
         }
 
 
