@@ -1066,8 +1066,8 @@ namespace ControlsXL
                 }
 
                 // Extra margin for visual aestetic
-                size.Width += 10;
-                size.Height += 10;
+                //size.Width += 10;
+                //size.Height += 10;
             }
             else
             {

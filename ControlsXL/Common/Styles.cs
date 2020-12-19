@@ -25,17 +25,18 @@ namespace ControlsXL
         Strong  = 2,
         Rounded   = 4,
         Raised  = 8,
-        Shadowed  = 16
+        Shadowed  = 16,
+        Spaced = 32
 
     }
 
     /// <summary>
-    /// Class functions as namespace for creation of <see cref="ComponentResourceKey"/>s and defines constants of <see cref="ComponentResourceKey"/> names to use in code.
+    /// Class serves as namespace for <see cref="ComponentResourceKey"/>s and defines constant <see cref="ComponentResourceKey"/> names for use in code.
     /// </summary>
-    /// <remarks><i>The defined constants are used for calculation of dynamic style properties.</i></remarks>
+    /// <remarks><i>The defined constants are used for calculation of dynamic appearance properties that influence layout.</i></remarks>
     internal static class Styles 
     {
         internal const string BorderThickness = "BorderThickness";
-        internal const string ControlBrush = "ControlBrush";
+        internal const string Margin = "Margin";
     }
 }

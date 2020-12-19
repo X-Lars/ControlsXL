@@ -9,7 +9,7 @@ using System.Windows;
 namespace ControlsXL
 {
     /// <summary>
-    /// Class to provide data for dynamic resources at design time.
+    /// Provide data for dynamic resources at design time.
     /// </summary>
     public class DesignTimeResourceDictionary : ResourceDictionary
     {

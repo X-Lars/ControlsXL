@@ -10,10 +10,8 @@ using System.Windows.Media;
 
 namespace ControlsXL
 {
-
     /// <summary>
-    /// The Sidebar is a container for SidebarSections
-    /// 
+    /// The sidebar provides a section based stacked layout menu.
     /// </summary>
     [TemplatePart(Name = PART_SIDEBAR_COMMON)]
     [TemplatePart(Name = PART_SIDEBAR_COMMON_CONTENT_BUTTON)]

@@ -190,6 +190,9 @@ namespace ControlsXL
                         case ControlAppearance.Shadowed:
                             _CurrentAppearances.Add(new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Shadowed), UriKind.Relative) });
                             break;
+                        case ControlAppearance.Spaced:
+                            _CurrentAppearances.Add(new ResourceDictionary() { Source = new Uri(string.Format(_AppearancesUri, ControlAppearance.Spaced), UriKind.Relative) });
+                            break;
                     }
                 }
             }

@@ -446,8 +446,6 @@
         </Setter>
     </Style>
     
-    <common:Proxy x:Key="BorderThicknessProxy" Data="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
-    
     <Style TargetType="{x:Type xl:MDIResizeChrome}">
         <!--<Setter Property="Opacity" Value="0.5"/>-->
         <Setter Property="Template">

@@ -1,4 +1,5 @@
 ﻿using ControlsXL.Common;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -55,6 +56,7 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set the size of the marker .
         /// </summary>
+        /// <remarks>Defaults to <see cref="DEFAULT_MARKER_SIZE"/>.</remarks>
         public static readonly DependencyProperty MarkerSizeProperty = DependencyProperty.Register(nameof(MarkerSize), typeof(double), typeof(MarkerButton), new PropertyMetadata(DEFAULT_MARKER_SIZE));
 
         #endregion
@@ -62,8 +64,9 @@ namespace ControlsXL
         #region Properties
 
         /// <summary>
-        /// Gets or sets the <see cref="MarkerButton"/> mode.
+        /// Gets or sets the button mode.
         /// </summary>
+        [Category("Behavior"), Description("Indicates the mode of the button."), DefaultValue(ButtonModes.Standard)]
         public ButtonModes ButtonMode
         {
             get { return (ButtonModes)GetValue(ButtonModeProperty); }
@@ -71,8 +74,9 @@ namespace ControlsXL
         }
 
         /// <summary>
-        /// Gets or sets the placement of the marker.
+        /// Gets or sets the <see cref="Dock"/>ing position of the marker.
         /// </summary>
+        [Category("Appearance"), Description("Sets the location of the marker."), DefaultValue(Dock.Bottom)]
         public Dock MarkerPlacement
         {
             get { return (Dock)GetValue(MarkerPlacementProperty); }
@@ -82,6 +86,7 @@ namespace ControlsXL
         /// <summary>
         /// Gets or set the size of the marker.
         /// </summary>
+        [Category("Appearance"), Description("Sets the size of the marker."), DefaultValue(DEFAULT_MARKER_SIZE)]
         public double MarkerSize
         {
             get { return (double)GetValue(MarkerSizeProperty); }
@@ -108,6 +113,7 @@ namespace ControlsXL
         /// Handles the checked event.
         /// </summary>
         /// <param name="e">A <see cref="RoutedEventArgs"/> containing event data.</param>
+        /// <remarks><i>Has no effect when the <see cref="ButtonMode"/> is <see cref="ButtonModes.Standard"/>.</i></remarks>
         protected override void OnChecked(RoutedEventArgs e)
         {
             // Prevents setting the checked state if the marker button is used as a normal button            

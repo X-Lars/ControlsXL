@@ -23,7 +23,7 @@
         <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
         <Setter Property="Width" Value="150"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeUI}"/>
-        
+        <Setter Property="Margin" Value="{DynamicResource {ComponentResourceKey xl:Styles, Margin}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:Sidebar}">
@@ -326,10 +326,7 @@
                                         </Popup.Child>
                                     </Popup>
                                     
-                                  
                                 </Grid>
-
-                                
                                 
                                 <!-- SIDE BAR SECTIONS AREA -->
                                 <StackPanel x:Name="SidebarSections"
@@ -489,6 +486,7 @@
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Height" Value="{x:Static xl:Sidebar.SIDEBAR_SECTION_HEIGHT}"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Margin" Value="{DynamicResource {ComponentResourceKey xl:Styles, Margin}}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         
         <Setter Property="Template">
