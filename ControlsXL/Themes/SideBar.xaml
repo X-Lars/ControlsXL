@@ -126,7 +126,7 @@
                                                           VerticalScrollBarVisibility="Hidden">
                                             
                                                 <ContentPresenter x:Name="CommonContent"
-                                                                  Content="{Binding CommonSection, RelativeSource={RelativeSource TemplatedParent}}"
+                                                                  Content="{Binding CommonContent, RelativeSource={RelativeSource TemplatedParent}}"
                                                                   Focusable="True"
                                                                   Margin="5"/>
 
@@ -228,12 +228,12 @@
                                                 Width="0"/>
 
                                         <!-- SIDE BAR SHOW COLLAPSED COMMON CONTENT BUTTON -->
-                                        <xl:MarkerButton x:Name="PART_SidebarCollapsedCommonButton"
+                                        <xl:MarkerButton x:Name="PART_SidebarCommonContentButton"
                                                          ButtonMode="Toggle"
                                                          ClickMode="Press"
                                                          Content="{Binding Path=Header, RelativeSource={RelativeSource TemplatedParent}}"
                                                          DockPanel.Dock="Top"
-                                                         IsChecked="{Binding IsCollapsedCommonContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}">
+                                                         IsChecked="{Binding IsCommonContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}">
 
                                             <ToggleButton.LayoutTransform>
                                                 <RotateTransform Angle="90"/>
@@ -249,12 +249,12 @@
                                                 Width="0"/>
 
                                         <!-- SIDE BAR SHOW COLLAPSED SECTION CONTENT BUTTON -->
-                                        <xl:MarkerButton x:Name="PART_SidebarCollapsedContentButton"
+                                        <xl:MarkerButton x:Name="PART_SidebarSectionContentButton"
                                                          ButtonMode="Toggle"
                                                          ClickMode="Press"
                                                          Content="{Binding Path=SelectedSection.Header, RelativeSource={RelativeSource TemplatedParent}}"
                                                          DockPanel.Dock="Top"
-                                                         IsChecked="{Binding IsCollapsedContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}">
+                                                         IsChecked="{Binding IsSectionContentPopupVisible, RelativeSource={RelativeSource TemplatedParent}}">
 
                                             <ToggleButton.LayoutTransform>
                                                 <RotateTransform Angle="90"/>
@@ -285,7 +285,7 @@
                                     </DockPanel>
 
                                     <!-- SIDE BAR COLLAPSED COMMON POPUP -->
-                                    <Popup x:Name="PART_SidebarCollapsedCommonPopup"
+                                    <Popup x:Name="PART_SidebarCommonContentPopup"
                                            AllowsTransparency="True"
                                            Placement="Right"
                                            PlacementTarget="{Binding ElementName=CommonPopupLocation}"
@@ -299,14 +299,14 @@
                                                     BorderThickness="1"
                                                     Padding="5">
 
-                                                <ContentPresenter Content="{Binding CommonSection, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                <ContentPresenter Content="{Binding CommonContent, RelativeSource={RelativeSource TemplatedParent}}"/>
 
                                             </Border>
                                         </Popup.Child>
                                     </Popup>
 
                                     <!-- SIDE BAR COLLAPSED SECTION CONTENT POPUP -->
-                                    <Popup x:Name="PART_SidebarCollapsedContentPopup"
+                                    <Popup x:Name="PART_SidebarSectionContentPopup"
                                            AllowsTransparency="True"
                                            Placement="Right"
                                            PlacementTarget="{Binding ElementName=PopupLocation}"
@@ -410,14 +410,15 @@
 
                                         <Popup.Child>
                                             <Border Background="{TemplateBinding Background}"
-                                                    BorderBrush="{TemplateBinding BorderBrush}">
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='1 0 1 1'}">
 
                                                 <ItemsControl x:Name="SidebarOverflowMenuItems"
                                                               ItemsSource="{TemplateBinding OverflowMenuItems}">
 
                                                     <ItemsControl.ItemsPanel>
                                                         <ItemsPanelTemplate>
-                                                            <VirtualizingStackPanel Orientation="Vertical"/>
+                                                            <StackPanel Orientation="Vertical"/>
                                                         </ItemsPanelTemplate>
                                                     </ItemsControl.ItemsPanel>
                                                     
@@ -448,8 +449,8 @@
                             <Setter TargetName="SidebarHeaderCollapseButton" Property="DockPanel.Dock" Value="Left"/>
                             <Setter TargetName="SidebarCommonHeaderCollapseButton" Property="DockPanel.Dock" Value="Left"/>
                             
-                            <Setter TargetName="PART_SidebarCollapsedContentPopup" Property="Placement" Value="Left"/>
-                            <Setter TargetName="PART_SidebarCollapsedCommonPopup" Property="Placement" Value="Left"/>
+                            <Setter TargetName="PART_SidebarSectionContentPopup" Property="Placement" Value="Left"/>
+                            <Setter TargetName="PART_SidebarCommonContentPopup" Property="Placement" Value="Left"/>
                             <Setter TargetName="PopupLocation" Property="HorizontalAlignment" Value="Left"/>
                             <Setter TargetName="CommonPopupLocation" Property="HorizontalAlignment" Value="Left"/>
                             <Setter TargetName="SidebarHeaderCollapseButton" Property="Vector" Value="{StaticResource GeometryExpand}"/>
@@ -463,11 +464,11 @@
                             <Setter TargetName="SidebarSections" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
 
-                        <Trigger Property="ShowCommon" Value="False">
+                        <Trigger Property="ShowCommonArea" Value="False">
                             <Setter TargetName="PART_SidebarCommon" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
 
-                        <Trigger Property="ShowCommon" Value="True">
+                        <Trigger Property="ShowCommonArea" Value="True">
                             <Setter TargetName="SidebarHeaderCollapseButton" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="SidebarHeaderText" Property="Margin" Value="0"/>
                         </Trigger>
