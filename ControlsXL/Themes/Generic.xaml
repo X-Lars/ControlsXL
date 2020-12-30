@@ -20,8 +20,10 @@
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/VectorButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/MultipleDocumentInterface.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Sidebar.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Dialog.xaml"/>
 
     </ResourceDictionary.MergedDictionaries>
 
     
+
 </ResourceDictionary>

@@ -1,0 +1,97 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:xl="clr-namespace:ControlsXL">
+
+    <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
+
+    <Style TargetType="{x:Type xl:Dialog}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xl:Dialog}">
+
+                    <!-- DIALOG -->
+                    <Grid x:Name="DialogGrid" Background="#66000000">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="250"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- DIALOG UI AREA -->
+                        <Border x:Name="DialogContent" 
+                                Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" 
+                                Background="Gray"/>
+
+                        <Grid x:Name="ContentGrid" Grid.Column="1" Grid.Row="1"
+                              Margin="5">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock x:Name="DialogCaption" 
+                                       Grid.Row="0" 
+                                       HorizontalAlignment="Center"
+                                       FontSize="18" FontWeight="Bold"
+                                       Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <TextBlock x:Name="DialogMessage" 
+                                       Grid.Row="1"
+                                       Padding="5"
+                                       HorizontalAlignment="Left"
+                                       Text="{Binding Message, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <ProgressBar x:Name="DialogProgressBar"
+                                         Grid.Row="2"
+                                         Padding="5"
+                                         HorizontalAlignment="Stretch"
+                                         MinWidth="200" MinHeight="10"
+                                         Background="Gray"
+                                         Foreground="DeepPink"
+                                         BorderBrush="Black"
+                                         BorderThickness="1"
+                                         Minimum="0"
+                                         Maximum="100"
+                                         IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}"
+                                         Visibility="{Binding ShowProgress, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanVisibilityConverter}}"
+                                         Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <TextBlock x:Name="DialogStatusLabel"
+                                       Grid.Row="3"
+                                       Padding="5"
+                                       HorizontalAlignment="Left"
+                                       Foreground="Black"
+                                       FontWeight="Light"
+                                       Text="{Binding Status, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                <Button x:Name="DialogCancelButton"
+                                        Padding="5"
+                                        Command="{Binding CancelCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Content="Cancel"
+                                        
+                                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+                            </StackPanel>
+
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>
