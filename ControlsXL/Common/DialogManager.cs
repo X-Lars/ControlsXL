@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -9,11 +10,43 @@ using System.Windows.Threading;
 
 namespace ControlsXL
 {
+
     /// <summary>
-    /// Manages creation of dialogs.
+    /// Enumeration specifying all possible <see cref="Dialog"/> result values.
     /// </summary>
+    public enum DialogResults
+    {
+        DialogNone,
+        DialogOK,
+        DialogCancelled,
+        DialogYes,
+        DialogNo
+    }
+
+    /// <summary>
+    /// Manages creation and deletion of dialogs.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// MessageDialog dialog = DialogManager.MessageDialog("Title", "Message");
+    /// await dialog.Result()
+    /// 
+    /// DialogResult result = await DialogManager.QuestionDialog("Title", "Message");
+    /// 
+    /// Dialog dialog = new Dialog();
+    /// dialog.Title = "Title";
+    /// dialog.Message = "Message";
+    /// await DialogManager.Show(dialog);
+    /// </code>
+    /// </example>
+    /// <remarks>Ensure the main window contains a Dialog element.</remarks>
     public static class DialogManager
     {
+        /// <summary>
+        /// Defines the time in milliseconds to wait before actually closing the <see cref="Dialog"/>.
+        /// </summary>
+        private const int DIALOG_CLOSE_DELAY = 1000;
+
         #region Fields
 
         /// <summary>
@@ -31,10 +64,17 @@ namespace ControlsXL
         /// </summary>
         private static readonly Dialog _Placeholder;
 
+        /// <summary>
+        /// Stores a stack of all open <see cref="Dialog"/>s.
+        /// </summary>
+        private static Stack<Dialog> _Dialogs = new Stack<Dialog>();
+
+        /// <summary>
+        /// Lock object for thread safety.
+        /// </summary>
+        private static readonly object _Lock = new object();
+
         #endregion
-
-
-        public delegate void DialogCloseEventHandler(object sender, DialogEventArgs e);
 
         #region Constructor
 
@@ -57,42 +97,148 @@ namespace ControlsXL
 
         #endregion
 
+        #region Event Handlers
+
+        /// <summary>
+        /// Handles the <see cref="Dialog.CloseRequested"/> event to delete the <see cref="Dialog"/> and remove it from the UI.
+        /// </summary>
+        /// <param name="sender">An <see cref="object"/> representing the <see cref="Dialog"/> to close.</param>
+        /// <param name="e">A <see cref="DialogEventArgs"/> containing event data.</param>
+        private static void DialogCloseRequested(object sender, DialogEventArgs e)
+        {
+            if(sender is ProgressDialog)
+                Thread.Sleep(DIALOG_CLOSE_DELAY);
+
+            lock (_Lock)
+            {
+                _Dialogs.Pop();
+
+                if (_Dialogs.Count == 0)
+                {
+                    _Dispatcher.Invoke(() =>
+                    {
+                        _Placeholder.Content = null;
+                    sender = null;
+                    });
+                }
+                else
+                {
+                    _Dispatcher.Invoke(() =>
+                    {
+                        _Placeholder.Content = _Dialogs.Peek();
+                    });
+                }
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
-        /// Creates a new <see cref="ProgressDialog"/>.
+        /// Attaches the provided <see cref="Dialog"/> to the UI to be rendered.
         /// </summary>
-        /// <returns>A reference to the created <see cref="ProgressDialog"/>.</returns>
-        public static ProgressDialog ProgressDialog()
+        /// <param name="dialog">A <see cref="Dialog"/> inherited class.</param>
+        /// <returns>A <see cref="Task{DialogResults}"/> containing the result of the <see cref="Dialog"/>.</returns>
+        public static async Task<DialogResults> Show(Dialog dialog)
         {
-            if(!_Owner.IsLoaded)
+            _Dispatcher.Invoke(() =>
             {
-                throw new ApplicationException("Can't create dialog before the main window is loaded.");
-            }
+                // Dialog has to be cast to DialogBase because Dialog has not default style key
+                dialog = new DialogBase(dialog);
+                dialog.CloseRequested += DialogCloseRequested;
 
-            ProgressDialog dialog = null;
+                _Placeholder.Content = dialog;
+
+                lock (_Lock)
+                {
+                    _Dialogs.Push(dialog);
+                }
+            });
+
+            return await dialog.Result();
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="MessageDialog"/> instance and attaches it to the UI.
+        /// </summary>
+        /// <param name="title">A <see cref="string"/> specifying the name.</param>
+        /// <param name="message">A <see cref="string"/> specifying the message.</param>
+        /// <returns>A reference to the created <see cref="MessageDialog"/>.</returns>
+        public static MessageDialog MessageDialog(string title, string message)
+        {
+            MessageDialog dialog = null;
 
             _Dispatcher.Invoke(() =>
             {
-                dialog = new ProgressDialog();
-                dialog.Closed += DialogClosed;
+                dialog = new MessageDialog(title, message);
+                dialog.CloseRequested += DialogCloseRequested;
 
                 _Placeholder.Content = dialog;
+
+                lock (_Lock)
+                {
+                    _Dialogs.Push(dialog);
+                }
             });
 
             return dialog;
         }
 
-
-        private static void DialogClosed(object sender, EventArgs e)
+        /// <summary>
+        /// Creates a new <see cref="QuestionDialog"/> instance and attaches it to the UI.
+        /// </summary>
+        /// <param name="title">A <see cref="string"/> specifying the name.</param>
+        /// <param name="message">A <see cref="string"/> specifying the message.</param>
+        /// <returns>A reference to the created <see cref="QuestionDialog"/>.</returns>
+        public static QuestionDialog QuestionDialog(string title, string message)
         {
+            QuestionDialog dialog = null;
+
             _Dispatcher.Invoke(() =>
             {
-                _Placeholder.Content = null;
-                sender = null;
+                dialog = new QuestionDialog(title, message);
+                dialog.CloseRequested += DialogCloseRequested;
+
+                _Placeholder.Content = dialog;
+
+                lock (_Lock)
+                {
+                    _Dialogs.Push(dialog);
+                }
             });
+
+            return dialog;
         }
 
+        /// <summary>
+        /// Creates a new <see cref="ProgressDialog"/> and attaches it to the UI.
+        /// </summary>
+        /// <param name="title">A <see cref="string"/> specifying the title.</param>
+        /// <param name="message">A <see cref="string"/> specifying the message.</param>
+        /// <param name="status">A <see cref="string"/> specifying the status text.</param>
+        /// <param name="isIndeterminate">A <see cref="bool"/> to determine whether the dialog is indeterminate.</param>
+        /// <param name="canCancel">A <see cref="bool"/> to determine whether the dialog supports cancellation.</param>
+        /// <returns>A reference to the created <see cref="ProgressDialog"/>.</returns>
+        public static ProgressDialog ProgressDialog(string title, string message, string status, bool isIndeterminate = false, bool canCancel = false)
+        {
+            ProgressDialog dialog = null;
+
+            _Dispatcher.Invoke(() =>
+            {
+                dialog = new ProgressDialog(title, message, status, isIndeterminate, canCancel);
+                dialog.CloseRequested += DialogCloseRequested;
+
+                _Placeholder.Content = dialog;
+
+                lock (_Lock)
+                {
+                    _Dialogs.Push(dialog);
+                }
+            });
+
+            return dialog;
+        }
 
         /// <summary>
         /// Searches the visual tree of the provided <see cref="DependencyObject"/> recursively for a <see cref="Dialog"/> placeholder element.
@@ -129,15 +275,31 @@ namespace ControlsXL
         #endregion
     }
 
+    /// <summary>
+    /// Extends the <see cref="EventArgs"/> with a <see cref="Result"/> property.
+    /// </summary>
     public class DialogEventArgs : EventArgs
     {
-        DialogResult _DialogResult;
+        #region Constructor
 
-        public DialogEventArgs() { }
-    }
+        /// <summary>
+        /// Creates and initializes a new <see cref="DialogEventArgs"/> instance.
+        /// </summary>
+        /// <param name="result">A <see cref="DialogResults"/> to associate with the event.</param>
+        public DialogEventArgs(DialogResults result = DialogResults.DialogOK) 
+        {
+            Result = result;
+        }
 
-    public class DialogResult
-    {
+        #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// Gets the result of associated event.
+        /// </summary>
+        public DialogResults Result { get; }
+
+        #endregion
     }
 }

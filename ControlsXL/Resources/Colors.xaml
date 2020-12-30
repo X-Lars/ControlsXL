@@ -29,6 +29,9 @@
     <Color x:Key="DefaultTextActive">#000000</Color>
     <Color x:Key="DefaultTextDisabled">#838383</Color>
     <Color x:Key="DefaultTextSelected">#FFFFFF</Color>
+
+    <Color x:Key="DefaultShadow">#80000000</Color>
+    <Color x:Key="DefaultHighlight">#80FFFFFF</Color>    
     
     <!-- DEFAULT WINDOWS SYSTEM COLORS -->
     <Color x:Key="WindowsSystemControlColor">#E3E3E3</Color>

@@ -4,13 +4,14 @@
 
     <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
 
-    <Style TargetType="{x:Type xl:Dialog}">
+    <Style x:Name="DialogStyle" TargetType="{x:Type xl:Dialog}">
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ShadowBrush}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:Dialog}">
 
                     <!-- DIALOG -->
-                    <Grid x:Name="DialogGrid" Background="#66000000">
+                    <Grid x:Name="DialogGrid" Background="{TemplateBinding Background}">
 
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -24,10 +25,10 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <!-- DIALOG UI AREA -->
+                        <!-- DIALOG: CONTENT AREA -->
                         <Border x:Name="DialogContent" 
                                 Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" 
-                                Background="Gray"/>
+                                Background="{DynamicResource {ComponentResourceKey xl:Styles, AppBrush}}"/>
 
                         <Grid x:Name="ContentGrid" Grid.Column="1" Grid.Row="1"
                               Margin="5">
@@ -41,48 +42,67 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
 
-                            <TextBlock x:Name="DialogCaption" 
+                            <!-- DIALOG: TITLE -->
+                            <TextBlock x:Name="DialogTitle" 
                                        Grid.Row="0" 
                                        HorizontalAlignment="Center"
                                        FontSize="18" FontWeight="Bold"
                                        Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}"/>
 
+                            <!-- DIALOG: MESSAGE -->
                             <TextBlock x:Name="DialogMessage" 
+                                       FontSize="14"
                                        Grid.Row="1"
-                                       Padding="5"
                                        HorizontalAlignment="Left"
                                        Text="{Binding Message, RelativeSource={RelativeSource TemplatedParent}}"/>
 
-                            <ProgressBar x:Name="DialogProgressBar"
+                            <!-- DIALOG: PROGRESS BAR -->
+                            <ProgressBar x:Name="DialogProgress"
                                          Grid.Row="2"
-                                         Padding="5"
                                          HorizontalAlignment="Stretch"
                                          MinWidth="200" MinHeight="10"
-                                         Background="Gray"
-                                         Foreground="DeepPink"
-                                         BorderBrush="Black"
-                                         BorderThickness="1"
+                                         Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"
+                                         Foreground="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"
+                                         BorderBrush="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"
                                          Minimum="0"
                                          Maximum="100"
                                          IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}"
                                          Visibility="{Binding ShowProgress, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanVisibilityConverter}}"
                                          Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"/>
 
-                            <TextBlock x:Name="DialogStatusLabel"
+                            <!-- DIALOG: STATUS TEXT -->
+                            <TextBlock x:Name="DialogStatusText"
                                        Grid.Row="3"
-                                       Padding="5"
                                        HorizontalAlignment="Left"
-                                       Foreground="Black"
-                                       FontWeight="Light"
-                                       Text="{Binding Status, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                       FontSize="10"
+                                       Text="{Binding Status, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Visibility="{Binding ShowStatus, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanVisibilityConverter}}"/>
 
+                            <!-- DIALOG: OPTION BUTTONS -->
                             <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
 
-                                <Button x:Name="DialogCancelButton"
-                                        Padding="5"
+                                <Button x:Name="AcceptButton"
+                                        Command="{Binding AcceptCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Content="Yes"
+                                        MinWidth="50"
+                                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+                                <Button x:Name="DeclineButton"
+                                        Command="{Binding DeclineCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Content="No"
+                                        MinWidth="50"
+                                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+                                <Button x:Name="CancelButton"
                                         Command="{Binding CancelCommand, RelativeSource={RelativeSource TemplatedParent}}"
                                         Content="Cancel"
-                                        
+                                        MinWidth="50"
+                                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+                                <Button x:Name="ConfirmButton"
+                                        Command="{Binding ConfirmCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Content="OK"
+                                        MinWidth="50"
                                         Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanVisibilityConverter}}"/>
 
                             </StackPanel>

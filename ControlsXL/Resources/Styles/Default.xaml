@@ -35,5 +35,6 @@
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TextDisabledBrush}" Color="{StaticResource DefaultTextDisabled}" />
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TextSelectedBrush}" Color="{StaticResource DefaultTextSelected}"/>
 
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ShadowBrush}" Color="{StaticResource DefaultShadow}"/>
 
 </ResourceDictionary>
