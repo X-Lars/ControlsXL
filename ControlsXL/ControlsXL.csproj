@@ -57,6 +57,7 @@
     <Compile Include="LinkButton.cs" />
     <Compile Include="MarkerButton.cs" />
     <Compile Include="MultipleDocumentInterface.cs" />
+    <Compile Include="NumericTextBox.cs" />
     <Compile Include="VectorButton.cs" />
     <Page Include="Resources\Appearances\Spaced.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -132,6 +133,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\MultipleDocumentInterface.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\NumericTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

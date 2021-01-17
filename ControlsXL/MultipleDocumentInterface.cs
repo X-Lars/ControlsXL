@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace ControlsXL
 {
+    //TODO: Multiple window selection
+
+
     /// <summary>
     /// 
     /// </summary>
@@ -51,14 +57,27 @@ namespace ControlsXL
         private string _OriginalTitle;
 
         /// <summary>
-        /// Stores a modified title of the main window.
-        /// </summary>
-        private string _Title;
-
-        /// <summary>
         /// Stores a reference to the <see cref="MDIHost"/> menu.
         /// </summary>
         private Menu _Menu;
+
+        private readonly Dispatcher _Dispatcher;
+
+        #endregion
+
+        #region Events
+
+        /// <summary>
+        /// Provides the signature for the <see cref="SelectionChanged"/> event.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">A <see cref="MDIChildEventArgs"/> containing event data.</param>
+        public delegate void SelectionChangedHandler(object sender, MDIChildEventArgs e);
+
+        /// <summary>
+        /// Raised when a <see cref="MDIChild"/> window is selected or deselected.
+        /// </summary>
+        public event SelectionChangedHandler SelectionChanged;
 
         #endregion
 
@@ -93,6 +112,8 @@ namespace ControlsXL
             // Bind the command keyboard shortcuts
             InputBindings.Add(new InputBinding(_CloseCommand, new KeyGesture(Key.F4, ModifierKeys.Control, "CTRL + F4")));
             InputBindings.Add(new InputBinding(_CloseCommand, new KeyGesture(Key.W, ModifierKeys.Control, "CTRL + W")));
+
+            _Dispatcher = Application.Current.Dispatcher;
         }
 
         #endregion
@@ -254,10 +275,14 @@ namespace ControlsXL
 
         #endregion
 
-
         #region Dependency Properties
 
         #region Dependency Properties: Registration
+
+        /// <summary>
+        /// Registers the property to set the selected <see cref="MDIChild"/> window.
+        /// </summary>
+        public static readonly DependencyProperty SelectedChildProperty = DependencyProperty.Register(nameof(SelectedChild), typeof(MDIChild), typeof(MDIHost), new PropertyMetadata(null, SelectedChildChanged));
 
         /// <summary>
         /// Registers the property to determine the <see cref="MDIHost"/> menu visibility.
@@ -272,6 +297,15 @@ namespace ControlsXL
         #endregion
 
         #region Dependency Properties: Implementation
+
+        /// <summary>
+        /// Gets or sets the selected <see cref="MDIChild"/> window.
+        /// </summary>
+        internal MDIChild SelectedChild
+        {
+            get { return (MDIChild)GetValue(SelectedChildProperty); }
+            set { SetValue(SelectedChildProperty, value); }
+        }
 
         /// <summary>
         /// Gets or sets whether the <see cref="MDIHost"/> menu is visible.
@@ -293,38 +327,122 @@ namespace ControlsXL
 
         #endregion
 
+        #region Dependency Properties: Callbacks
+
+        private static readonly object _Lock = new object();
+        /// <summary>
+        /// Callback function for the <see cref="SelectedChildProperty"/>.
+        /// </summary>
+        /// <param name="d">The <see cref="DependencyObject"/> that raised the event.</param>
+        /// <param name="e">A <see cref="DependencyPropertyChangedEventArgs"/> containing event data.</param>
+        private static void SelectedChildChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            MDIHost host = (MDIHost)d;
+
+            MDIChild activatedChild   = (MDIChild)e.NewValue;
+            MDIChild deactivatedChild = (MDIChild)e.OldValue;
+
+            if (activatedChild == deactivatedChild)
+                return;
+
+            if (deactivatedChild != null)
+            {
+                Debug.Print($"[{nameof(MDIHost)}.{nameof(SelectedChildChanged)}] Deactivate: {deactivatedChild.Title}");
+            }
+
+            if (activatedChild != null)
+            {
+                Debug.Print($"[{nameof(MDIHost)}.{nameof(SelectedChildChanged)}] Activate: {activatedChild.Title}");
+                host.SetTitle(activatedChild.Title);
+
+                // TODO: Bring to front
+            }
+            
+            host.SelectionChanged?.Invoke(host, new MDIChildEventArgs(activatedChild, deactivatedChild));
+        }
+
+        #endregion
+
         #endregion
 
         #region Properties
+    
+        #endregion
+
+        #region Event Handlers
 
         /// <summary>
-        /// Gets the collection of <see cref="MDIChild"/> windows.
+        /// Handles the  mouse wheel event of the <see cref="MDIChild"/> window tabs to scroll to the tabs horizontally.
         /// </summary>
-        public ObservableCollection<MDIChild> Children { get; private set; }
-
-        /// <summary>
-        /// Gets a reference to the selected <see cref="MDIChild"/> window.
-        /// </summary>
-        public MDIChild SelectedChild
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">A <see cref="MouseWheelEventArgs"/> containing event data.</param>
+        private void MDIHostTabsPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            get { return Items.OfType<MDIChild>().Where(i => i.IsSelected).FirstOrDefault(); }
-        }
+            ScrollViewer viewer = sender as ScrollViewer;
 
-        /// <summary>
-        /// Gets the original caption of the main window.
-        /// </summary>
-        internal string Title
-        {
-            set 
-            { 
-                _Title = $"{_OriginalTitle} - {value}";
-                Application.Current.MainWindow.Title = _Title;
+            if (e.Delta > 0)
+            {
+                viewer.LineLeft();
+            }
+            else
+            {
+                viewer.LineRight();
             }
         }
 
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// Sets the title of the application window to include the <see cref="MDIChild.Title"/>.
+        /// </summary>
+        /// <param name="title">A <see cref="string"/> containing the text to append to the title.</param>
+        private void SetTitle(string title = null)
+        {
+            // Title of the main window cannot be accessed at design time
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                if (title != null)
+                {
+                    Application.Current.MainWindow.Title = $"{_OriginalTitle} - {title}";
+                }
+                else
+                {
+                    Application.Current.MainWindow.Title = _OriginalTitle;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the selected child, called from <see cref="MDIChild"/> when the child is activated.
+        /// </summary>
+        /// <param name="child"></param>
+        public void SelectChild(MDIChild child)
+        {
+            SelectedChild = child;
+        }
+
+        public void ShowWindow(Type type)
+        {
+            if (!type.IsSubclassOf(typeof(MDIChild)))
+                return;
+
+            foreach (MDIChild child in Items)
+            {
+                // Prevent opening a duplicate window
+                if (child.GetType() == type)
+                {
+                    SelectChild(child);
+                    //child.IsSelected = true;
+                    return;
+                }
+            }
+
+            MDIChild window = (MDIChild)Activator.CreateInstance(type);
+
+            Items.Add(window);
+        }
 
         /// <summary>
         /// Invalidates the <see cref="MDIHost"/> menu.
@@ -363,12 +481,14 @@ namespace ControlsXL
 
         public override void OnApplyTemplate()
         {
+            
             ScrollViewer tabsViewer = GetTemplateChild(PART_MDIHOST_TABS) as ScrollViewer;
 
             tabsViewer.PreviewMouseWheel += MDIHostTabsPreviewMouseWheel;
 
             _Menu = GetTemplateChild(PART_MDIHOST_MENU) as Menu;
 
+            
             InvalidateMenu();
 
             base.OnApplyTemplate();
@@ -377,36 +497,38 @@ namespace ControlsXL
         protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
         {
             base.OnItemsChanged(e);
-
+            
             if (_Menu != null)
                 InvalidateMenu();
 
-            if(e.Action == NotifyCollectionChangedAction.Remove)
+            switch(e.Action)
             {
-                // If no items left restore the original main window title
-                if(Items.Count == 0)
-                    Application.Current.MainWindow.Title = _OriginalTitle;
+                case NotifyCollectionChangedAction.Add:
+                    Debug.Print($"[{nameof(MDIHost)}.{nameof(OnItemsChanged)}] Added: {e.NewItems[0]}");
+                    break;
+
+                case NotifyCollectionChangedAction.Remove:
+
+                    // If no items left restore the original main window title
+                    if (Items.Count == 0) SetTitle();
+                    // TODO: Move to 
+
+                    break;
+
+                case NotifyCollectionChangedAction.Reset:
+                    break;
             }
         }
 
-        private void MDIHostTabsPreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            ScrollViewer viewer = sender as ScrollViewer;
+       
 
-            if(e.Delta > 0)
-            {
-                
-                viewer.LineLeft();
-            }
-            else
-            {
-                viewer.LineRight();
-            }
-        }
         #endregion
     }
 
 
+    
+
+    
     /// <summary>
     /// 
     /// </summary>
@@ -615,7 +737,12 @@ namespace ControlsXL
         /// Registers the property to determin the title of the <see cref="MDIChild"/> window.
         /// </summary>
         public static readonly DependencyProperty TitleProperty = DependencyProperty.Register(nameof(Title), typeof(string), typeof(MDIChild), new PropertyMetadata(string.Empty));
-        
+
+        /// <summary>
+        /// Registers the property to set the <see cref="MDIChild"/> window's widget.
+        /// </summary>
+        public static readonly DependencyProperty WidgetProperty = DependencyProperty.Register(nameof(Widget), typeof(UIElement), typeof(MDIChild));
+
         #endregion
 
         #region Dependency Properties: Implementation
@@ -626,7 +753,7 @@ namespace ControlsXL
         public bool IsSelected
         {
             get { return (bool)GetValue(IsSelectedProperty); }
-            set { SetValue(IsSelectedProperty, value); }
+            internal set { SetValue(IsSelectedProperty, value); }
         }
 
         /// <summary>
@@ -656,6 +783,15 @@ namespace ControlsXL
             set { SetValue(TitleProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the widget of the <see cref="MDIChild"/> window.
+        /// </summary>
+        public UIElement Widget
+        {
+            get { return (UIElement)GetValue(WidgetProperty); }
+            set { SetValue(WidgetProperty, value); }
+        }
+
         #endregion
 
         #region Dependency Properties: Callbacks
@@ -674,41 +810,45 @@ namespace ControlsXL
 
             if (isSelected)
             {
-                MDIChild child = (MDIChild)d;
+                
+                MDICanvas.Select((MDIChild)d);
+                
+                //MDIChild child = (MDIChild)d;
 
-                // Cannot acces caption at design time
-                if (!DesignerProperties.GetIsInDesignMode(child))
-                {
-                    // Set the caption of the main window
-                    child.Host.Title = child.Title;
-                }
+                //// Cannot acces caption at design time
+                //if (!DesignerProperties.GetIsInDesignMode(child))
+                //{
+                //    // Set the caption of the main window
+                //    child.Host.Title = child.Title;
+                //}
 
-                // Get current top child state
-                MDIChild topChild = child.Host.Items.Cast<MDIChild>().OrderByDescending(i => i.ZIndex).FirstOrDefault();
+                //// Get current top child state
+                //MDIChild topChild = child.Host.Items.Cast<MDIChild>().OrderByDescending(i => i.ZIndex).FirstOrDefault();
 
-                if(topChild.State == WindowState.Maximized)
-                {
-                    topChild.State = WindowState.Normal;
-                    child.State = WindowState.Maximized;
-                }
+                //if (topChild.State == WindowState.Maximized)
+                //{
+                //    topChild.State = WindowState.Normal;
+                //    child.State = WindowState.Maximized;
+                //}
 
-                foreach (MDIChild item in child.Host.Items)
-                {
-                    
-                    // Move all items in front of the current item one step back
-                    if (item.ZIndex > child.ZIndex)
-                    {
-                        item.ZIndex--;
-                        Canvas.SetZIndex(item, item.ZIndex);
-                    }
+                //foreach (MDIChild item in child.Host.Items)
+                //{
 
-                    // Ensure every child is deselected
-                    if (item != child)
-                        item.IsSelected = false;
-                }
+                //    // Move all items in front of the current item one step back
+                //    if (item.ZIndex > child.ZIndex)
+                //    {
+                //        item.ZIndex--;
+                //        Canvas.SetZIndex(item, item.ZIndex);
+                //    }
 
-                child.ZIndex = child.Host.Items.Count;
-                Canvas.SetZIndex(child, child.ZIndex);
+                //    // Ensure every child is deselected
+                //    if (item != child)
+                //        item.IsSelected = false;
+                //}
+
+                //child.ZIndex = child.Host.Items.Count;
+                //Canvas.SetZIndex(child, child.ZIndex);
+
             }
         }
 
@@ -761,12 +901,6 @@ namespace ControlsXL
         {
             get { return this.Parent as MDIHost; }
         }
-
-        #endregion
-
-
-        #region Event Handlers
-
 
         #endregion
 
@@ -844,11 +978,6 @@ namespace ControlsXL
 
         #endregion
 
-        #region Methods
-        internal int ZIndex { get; set; } = 0;
-
-        #endregion
-
         #region Overrides
 
         /// <summary>
@@ -861,13 +990,12 @@ namespace ControlsXL
 
             MDICanvas canvas = VisualTreeHelper.GetParent(this) as MDICanvas;
 
-            if (this.IsSelected == false)
-            {
-                canvas.DeselectAll();
-                this.IsSelected = true;
-            }
+            if (IsSelected == false)
+                IsSelected = true;
 
-            Focus();
+            ((MDIHost)this.Parent).SelectedChild = this;
+
+            //Focus();
 
             // Allow the event to route further
             e.Handled = false;
@@ -879,12 +1007,32 @@ namespace ControlsXL
     /// <summary>
     /// The visual component of the <see cref="MDIHost"/> to handle layout and rendering of it's collection of <see cref="MDIChild"/> windows.
     /// </summary>
-    internal class MDICanvas : Canvas
+    public class MDICanvas : Canvas
     {
         #region Fields
+        
+        /// <summary>
+        /// Stores a reference to parent <see cref="MDIHost"/> containing the <see cref="MDICanvas"/>.
+        /// </summary>
+        private static MDIHost _Host;
+
+        /// <summary>
+        /// Stores a static reference to the <see cref="MDICanvas"/>.
+        /// </summary>
+        private static MDICanvas _Instance;
+
         #endregion
 
         #region Constructor
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="MDICanvas"/> and initializes the static reference to itself.
+        /// </summary>
+        public MDICanvas()
+        {
+            _Instance = this;
+        }
+ 
         #endregion
 
         #region Properties
@@ -916,20 +1064,6 @@ namespace ControlsXL
         }
 
         /// <summary>
-        /// Gets the maximum Z index.
-        /// </summary>
-        public int MaxIndex
-        {
-            get 
-            {
-                if (DesignerProperties.GetIsInDesignMode(this))
-                    return 0;
-
-                return Children == null ? 0 : Children.OfType<MDIChild>().Max(i => GetZIndex(i)); 
-            }
-        }
-
-        /// <summary>
         /// Gets whether any of the <see cref="MDIChild"/> windows is maximized.
         /// </summary>
         private bool HasMaximizedChild
@@ -954,9 +1088,9 @@ namespace ControlsXL
         /// <summary>
         /// Gets the top most <see cref="MDIChild"/> window if any.
         /// </summary>
-        private MDIChild TopChild
+        private static MDIChild TopChild
         {
-            get { return Children.OfType<MDIChild>().OrderByDescending(i => GetZIndex(i)).FirstOrDefault(); }
+            get { return _Instance.Children.OfType<MDIChild>().OrderByDescending(i => GetZIndex(i)).FirstOrDefault(); }
         }
 
         /// <summary>
@@ -974,23 +1108,87 @@ namespace ControlsXL
 
         public void DeselectAll()
         {
+            
             foreach (MDIChild child in Children)
             {
                 child.IsSelected = false;
             }
         }
 
+        /// <summary>
+        /// Selects the provided <see cref="MDIChild"/>
+        /// </summary>
+        /// <param name="child">The <see cref="MDIChild"/> to select</param>
+        public static void Select(MDIChild child)
+        {
+            if (TopChild.State == WindowState.Maximized)
+            {
+                TopChild.State = WindowState.Normal;
+                child.State = WindowState.Maximized;
+            }
+
+            int c = Canvas.GetZIndex(child);
+
+            foreach (MDIChild item in _Instance.Children)
+            {
+                if(item == null)
+                {
+                    //TopChild.IsSelected = true;
+                    _Host.SelectedChild = TopChild;
+                    return;
+                }
+
+                int z = Canvas.GetZIndex(item);
+                if (z > c)
+                {
+                    z--;
+                    Canvas.SetZIndex(item, z);
+                }
+
+                if(item != child)
+                {
+                    item.IsSelected = false;
+                }
+            }
+            Canvas.SetZIndex(child, _Instance.Children.Count);
+            _Host.SelectedChild = child;
+            
+        }
+
+        public MDIChild ActiveChild
+        {
+            get { return Children.OfType<MDIChild>().Where(child => child.IsSelected).FirstOrDefault(); }
+            set 
+            {
+                DeselectAll();
+
+                value.IsSelected = true;
+            }
+        }
+
         #region Overrides
 
-        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
+        /// <summary>
+        /// Initializes the static reference to the <see cref="MDIHost"/> containing the <see cref="MDICanvas"/>.
+        /// </summary>
+        /// <param name="e">An <see cref="EventArgs"/> containing event data.</param>
+        protected override void OnInitialized(EventArgs e)
         {
-            base.OnRenderSizeChanged(sizeInfo);
+            base.OnInitialized(e);
 
-            Console.WriteLine("Render size changed!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            _Host = (MDIHost)TemplatedParent;
+            _Host.SelectionChanged += SelectionChanged;
+        }
+
+        private void SelectionChanged(object sender, MDIChildEventArgs e)
+        {
+            Debug.Print($"[{nameof(MDICanvas)}.{nameof(SelectionChanged)}]");
+            // TODO: Bring selected child to front
+            
         }
 
         /// <summary>
-        /// Catches changes in the collection of visual children of the <see cref="MDICanvas"/>.
+        /// Handles changes in the collection of visual children of the <see cref="MDICanvas"/>.
         /// </summary>
         /// <param name="visualAdded">A reference to the <see cref="DependencyObject"/> that is added.</param>
         /// <param name="visualRemoved">A reference to the <see cref="DependencyObject"/> that is removed.</param>
@@ -1005,19 +1203,24 @@ namespace ControlsXL
             {
                 if (Children != null)
                 {
-                    SetZIndex((UIElement)visualAdded, (MaxIndex + 1));
-                    ((MDIChild)visualAdded).IsSelected = true;
+                    MDIChild child = (MDIChild)visualAdded;
 
-                    Console.WriteLine($"[{this.GetType().Name}.{nameof(OnVisualChildrenChanged)}] Added: {visualAdded} at Z-Index {GetZIndex((MDIChild)visualAdded)}");
-                    Console.WriteLine($"Canvas containts {Children.Count} windows.");
+                    SetZIndex(child, GetZIndex(TopChild) + 1);
+                    DeselectAll();
+
+                    child.IsSelected = true;
+
+                    Debug.Print($"[{nameof(MDICanvas)}.{nameof(OnVisualChildrenChanged)}] Added: {child.Title}");
                 }
             }
 
             if (visualRemoved != null)
             {
+                Debug.Print($"[{nameof(MDICanvas)}.{nameof(OnVisualChildrenChanged)}] Removed: {((MDIChild)visualRemoved).Title}");
+
+                _Host.SelectedChild = TopChild;
                 SelectTopChild();
             }
-            //}
         }
 
 
@@ -1038,7 +1241,6 @@ namespace ControlsXL
 
             if (!HasMaximizedChild)
             {
-
                 foreach (UIElement element in Children)
                 {
                     double left = Canvas.GetLeft(element);
@@ -1058,48 +1260,15 @@ namespace ControlsXL
                         size.Height = Math.Max(size.Height, top + desiredSize.Height);
                         size.Width = Math.Max(size.Width, left + desiredSize.Width);
                     }
-                    else
-                    {
-                        Console.WriteLine("double.IsNan");
-                    }
-
                 }
-
-                // Extra margin for visual aestetic
-                //size.Width += 10;
-                //size.Height += 10;
             }
             else
             {
-                //Console.WriteLine("Has Maximized ITEMS");
-                //foreach (MDIChild child in Children)
-                //{
-                //    if (child.State == WindowState.Maximized)
-                //    {
-                //        child.Width = _Host.ActualWidth;
-                //        child.Height = _Host.ActualHeight;
-                //        child.Position = new Point(0, 0);
-
-                //        child.Arrange(new Rect(child.Position.X, child.Position.Y, child.Width, child.Height));
-
-
-                //    }
-                //}
-
                 // Return a width and height of 0 to make the scrollbars dissapeare
                 return new Size(0, 0);
-                //return base.MeasureOverride(constraint);
-
-                //Console.WriteLine($"Measure Actual: {ActualWidth}x{ActualHeight}");
-                //Console.WriteLine($"Measure Normal: {Width}x{Height}");
-
             }
 
-           
-
-
             return size;
-
         }
 
         /// <summary>
@@ -1109,12 +1278,7 @@ namespace ControlsXL
         /// <returns>A <see cref="Size"/> structure containing the final size of the <see cref="MDICanvas"/>.</returns>
         protected override Size ArrangeOverride(Size arrangeSize)
         {
-            Console.WriteLine(HasMaximizedChild);
-
-            double positionX = 0;
             double offsetX = 0;
-
-            
 
             if(HasMaximizedChild)
             {
@@ -1127,17 +1291,6 @@ namespace ControlsXL
                     maximizedChild.Position = new Point(0, 0);
 
                     maximizedChild.Arrange(new Rect(maximizedChild.Position.X, maximizedChild.Position.Y, maximizedChild.Width, maximizedChild.Height));
-                    //foreach(MDIChild child in Children)
-                    //{
-                    //    if(child.State == WindowState.Maximized)
-                    //    {
-                    //        child.Width = arrangeSize.Width;
-                    //        child.Height = arrangeSize.Height;
-                    //        child.Position = new Point(0, 0);
-
-                    //        child.Arrange(new Rect(child.Position.X, child.Position.Y, child.Width, child.Height));
-                    //    }
-                    //}
                 }
 
             }
@@ -1148,38 +1301,24 @@ namespace ControlsXL
                     child.Position = new Point(offsetX, ActualHeight - child.Height);
                     offsetX += child.Width;
                 }
-
-                
             }
 
-            //foreach (MDIChild child in Host.Items)
-            //{
-            //    if (child.State == WindowState.Minimized && child.IsSelected == false)
-            //    {
-            //        positionX = Math.Max(positionX, child.Position.X + child.ActualWidth);
-            //    }
-            //}
-
-            //Width = MinWidth + BorderThickness.Left + BorderThickness.Right;
-            //Height = MinHeight + BorderThickness.Top + BorderThickness.Bottom;
-
-            //Position = new Point(positionX, canvas.ActualHeight - Height);
-
-            //foreach (MDIChild child in Children)
-            //{
-            //    Console.WriteLine(child.Title);
-            //}
-
-
-            
-            //Console.WriteLine($"Arrange: {arrangeSize.Width}x{arrangeSize.Height}");
-            //Console.WriteLine($"Actual: {ActualWidth}x{ActualHeight}");
-            //Console.WriteLine($"Normal: {Width}x{Height}");
-            //Console.WriteLine($"Desired: {DesiredSize.Width}x{DesiredSize.Height}");
             return base.ArrangeOverride(arrangeSize);
         }
 
         #endregion
+    }
+
+    public class MDIChildEventArgs : EventArgs
+    {
+        public MDIChildEventArgs(MDIChild activated, MDIChild deactivated) : base()
+        {
+            Activated = activated;
+            Deactivated = deactivated;
+        }
+
+        public MDIChild Activated { get; private set; }
+        public MDIChild Deactivated { get; private set; }
     }
 
     public class MDIDecorator : Control

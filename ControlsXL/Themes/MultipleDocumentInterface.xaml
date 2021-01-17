@@ -142,7 +142,10 @@
                                 </StackPanel>
                             </Border>
 
-                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}"/>
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}"
+                                              HorizontalAlignment="Left"
+                                              VerticalAlignment="Top"/>
+                            
                             <xl:MDIDecorator x:Name="Decorator" ShowDecorator="{Binding IsSelected}"/>
                             
                         </DockPanel>
@@ -179,7 +182,6 @@
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppWorkspaceBrush}}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
-        <Setter Property="ItemsSource" Value="{Binding Children}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:MDIHost}">
@@ -387,8 +389,6 @@
                                                                 </ControlTemplate>
                                                             </ToggleButton.Template>
                                                         </ToggleButton>
-                                                        
-                                                        
                                                     </Grid>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
@@ -411,7 +411,7 @@
                             <ScrollViewer CanContentScroll="False" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
                                 <Grid>
                                     <!--<xl:MDIMoveHandle Opacity="0.1" Cursor="Cross" DataContext="{Binding ElementName=Canvas, Path=.}" />-->
-                                    <xl:MDICanvas x:Name="Canvas" IsItemsHost="True"/>
+                                    <xl:MDICanvas IsItemsHost="True"/>
                                 </Grid>
                             </ScrollViewer>
 
@@ -439,6 +439,7 @@
                         <Trigger Property="ShowStatusbar" Value="False">
                             <Setter TargetName="MDIHostStatusbar" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
+                        
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

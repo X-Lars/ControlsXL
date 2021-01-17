@@ -17,4 +17,11 @@
     <StreamGeometry x:Key="GeometryMinimize">F1  M 28,36L 48,36L 48,40L 28,40L 28,36 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryCross">F1 M 22,54L 22,22L 54,22L 54,54L 22,54 Z M 26,26L 26,50L 50,50L 50,26L 26,26 Z M 30.755,27.65L 38,34.895L 45.2449,27.6501L 48.3499,30.7551L 41.105,38L 48.35,45.245L 45.245,48.35L 38,41.105L 30.755,48.35L 27.65,45.245L 34.895,38L 27.65,30.755L 30.755,27.65 Z</StreamGeometry>
     <StreamGeometry x:Key="GeometryRestore">F1 M 19,29L 47,29L 47,57L 19,57L 19,29 Z M 43,33L 23,33L 23,53L 43,53L 43,33 Z  M 24,24L 51.9999,24.0001L 51.9999,52L 48.9999,52.0001L 48.9999,27.0001L 24,27.0001L 24,24 Z </StreamGeometry>
+
+    <StreamGeometry x:Key="GeometryDecrease">F1 M 19,38L 57,38L 57,44L 19,44L 19,38 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryIncrease">F1 M 35,19L 41,19L 41,35L 57,35L 57,41L 41,41L 41,57L 35,57L 35,41L 19,41L 19,35L 35,35L 35,19 Z</StreamGeometry>
+
+    <StreamGeometry x:Key="GeometryUp">F1 M0,2 L1.5,0 L3,2 Z</StreamGeometry>
+    <StreamGeometry x:Key="GeometryDown">F1 M0,0 L3,0 L1.5,2 Z</StreamGeometry>
+
 </ResourceDictionary>

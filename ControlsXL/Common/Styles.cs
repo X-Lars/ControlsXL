@@ -34,7 +34,7 @@ namespace ControlsXL
     /// Class serves as namespace for <see cref="ComponentResourceKey"/>s and defines constant <see cref="ComponentResourceKey"/> names for use in code.
     /// </summary>
     /// <remarks><i>The defined constants are used for calculation of dynamic appearance properties that influence layout.</i></remarks>
-    internal static class Styles 
+    public static class Styles 
     {
         internal const string BorderThickness = "BorderThickness";
         internal const string Margin = "Margin";

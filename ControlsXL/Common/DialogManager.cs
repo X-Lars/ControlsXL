@@ -62,7 +62,7 @@ namespace ControlsXL
         /// <summary>
         /// Stores a reference to the <see cref="Dialog"/> placeholder element.
         /// </summary>
-        private static readonly Dialog _Placeholder;
+        private static Dialog _Placeholder;
 
         /// <summary>
         /// Stores a stack of all open <see cref="Dialog"/>s.
@@ -88,12 +88,21 @@ namespace ControlsXL
 
             if (!_Owner.IsLoaded)
                 throw new ApplicationException("Access to the dialog manager is restricted until the main window is loaded.");
-            
+
             _Placeholder = FindDialogPlaceholder(_Owner);
 
             if (_Placeholder == null)
                 throw new ApplicationException("No <Dialog/> placeholder element found!");
+
+
         }
+
+        #endregion
+
+        #region Properties
+
+        //public static bool IsLoaded { get; private set; }
+        //public static bool IsInitialized { get; private set; }
 
         #endregion
 
@@ -109,8 +118,11 @@ namespace ControlsXL
             if(sender is ProgressDialog)
                 Thread.Sleep(DIALOG_CLOSE_DELAY);
 
-            lock (_Lock)
+            lock (_Dialogs)
             {
+                if (_Dialogs.Count == 0)
+                    return;
+
                 _Dialogs.Pop();
 
                 if (_Dialogs.Count == 0)
@@ -118,7 +130,7 @@ namespace ControlsXL
                     _Dispatcher.Invoke(() =>
                     {
                         _Placeholder.Content = null;
-                    sender = null;
+                        sender = null;
                     });
                 }
                 else
@@ -150,7 +162,7 @@ namespace ControlsXL
 
                 _Placeholder.Content = dialog;
 
-                lock (_Lock)
+                lock (_Dialogs)
                 {
                     _Dialogs.Push(dialog);
                 }
@@ -167,6 +179,7 @@ namespace ControlsXL
         /// <returns>A reference to the created <see cref="MessageDialog"/>.</returns>
         public static MessageDialog MessageDialog(string title, string message)
         {
+            
             MessageDialog dialog = null;
 
             _Dispatcher.Invoke(() =>
@@ -176,7 +189,7 @@ namespace ControlsXL
 
                 _Placeholder.Content = dialog;
 
-                lock (_Lock)
+                lock (_Dialogs)
                 {
                     _Dialogs.Push(dialog);
                 }
@@ -202,7 +215,7 @@ namespace ControlsXL
 
                 _Placeholder.Content = dialog;
 
-                lock (_Lock)
+                lock (_Dialogs)
                 {
                     _Dialogs.Push(dialog);
                 }
@@ -231,7 +244,7 @@ namespace ControlsXL
 
                 _Placeholder.Content = dialog;
 
-                lock (_Lock)
+                lock (_Dialogs)
                 {
                     _Dialogs.Push(dialog);
                 }

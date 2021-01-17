@@ -3,14 +3,8 @@
                     xmlns:xl="clr-namespace:ControlsXL">
 
     <ResourceDictionary.MergedDictionaries>
-
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Colors.xaml"/>
-        <!--<ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/MarkerButton/MarkerButtonDefault.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/VectorButton/VectorButtonDefault.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Skins/SideBar/SideBarDefault.xaml"/>-->
     </ResourceDictionary.MergedDictionaries>
-    
-    <!-- TODO: All default color keys here? -->
 
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TestBrush}" Color="DeepPink"/>
     
@@ -32,6 +26,7 @@
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}" Color="{StaticResource DefaultControlBorderDisabled}" />
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, ControlBorderPressedBrush}" Color="{StaticResource DefaultControlBorderPressed}"/>
 
+    <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TextBrush}" Color="{StaticResource DefaultText}" />
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TextDisabledBrush}" Color="{StaticResource DefaultTextDisabled}" />
     <SolidColorBrush x:Key="{ComponentResourceKey xl:Styles, TextSelectedBrush}" Color="{StaticResource DefaultTextSelected}"/>
 

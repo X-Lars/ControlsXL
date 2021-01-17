@@ -421,6 +421,7 @@ namespace ControlsXL
         /// <remarks><i>The <see cref="CloseRequested"/> event is catched by the <see cref="DialogManager"/> to actualy close the <see cref="Dialog"/>.</i></remarks>
         public virtual void Close()
         {
+            if(CloseRequested != null)
             CloseRequested?.Invoke(this, new DialogEventArgs(_Result));
         }
 
