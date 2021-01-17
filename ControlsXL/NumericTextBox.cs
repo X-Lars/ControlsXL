@@ -179,7 +179,7 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set the value of the <see cref="NumericTextBox"/>.
         /// </summary>
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(NumericTextBox), new FrameworkPropertyMetadata(new double(), new PropertyChangedCallback(ValuePropertyChanged)));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(NumericTextBox), new FrameworkPropertyMetadata(new double(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(ValuePropertyChanged)));
 
         #endregion
 
