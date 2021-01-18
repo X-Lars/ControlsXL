@@ -30,6 +30,11 @@ namespace ControlsXL
         /// </summary>
         protected const int DIALOG_TASK_DELAY = 50;
 
+        /// <summary>
+        /// Defines the timer interval for indeterminate <see cref="ProgressDialog"/>s.
+        /// </summary>
+        protected const int INDETERMINATE_TIMER_INTERVAL = 100;
+
         #endregion
 
         #region Fields
@@ -38,6 +43,11 @@ namespace ControlsXL
         /// Stores the result of the <see cref="Dialog"/>.
         /// </summary>
         protected DialogResults _Result = DialogResults.DialogNone;
+
+        /// <summary>
+        /// Timer for indeterminate progress.
+        /// </summary>
+        protected DispatcherTimer _Timer;
 
         #endregion
 
@@ -63,11 +73,7 @@ namespace ControlsXL
         /// <summary>
         /// Static constructor called before initializing an instance of <see cref="MessageDialog"/>.
         /// </summary>
-        static Dialog()
-        {
-            // Overrides the default style to use the Dialog style instead.
-            //DefaultStyleKeyProperty.OverrideMetadata(typeof(Dialog), new FrameworkPropertyMetadata(typeof(Dialog)));
-        }
+        static Dialog() { }
 
         /// <summary>
         /// Creates and initializes a new blank <see cref="Dialog"/> instance without any predefined options.<br/>
@@ -84,25 +90,11 @@ namespace ControlsXL
             CommandBindings.Add(new CommandBinding(_DeclineCommand, OnDeclineCommand, CanExecuteOptionCommand));
         }
 
-        //public Dialog(Dialog d)
-        //{
-        //    CanCancel = d.CanCancel;
-        //    HasOptions = d.HasOptions;
-        //    Message = d.Message;
-        //    ShowConfirmation = d.ShowConfirmation;
-        //    ShowStatus = d.ShowStatus;
-        //    Status = d.Status;
-        //    Title = d.Title;
-        //    IsIndeterminate = d.IsIndeterminate;
-        //    Progress = d.Progress;
-        //    ShowProgress = d.ShowProgress;
-        //}
+        #endregion
 
-    #endregion
+        #region Commands
 
-    #region Commands
-
-    #region Commands: Registration
+        #region Commands: Registration
 
     /// <summary>
     /// Registers the command to cancel the <see cref="Dialog"/>.
@@ -287,7 +279,7 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set whether the <see cref="ProgressDialog"/> is indeterminate.
         /// </summary>
-        public static readonly DependencyProperty IsIndeterminateProperty = DependencyProperty.Register(nameof(IsIndeterminate), typeof(bool), typeof(ProgressDialog), new PropertyMetadata(false));
+        public static readonly DependencyProperty IsIndeterminateProperty = DependencyProperty.Register(nameof(IsIndeterminate), typeof(bool), typeof(ProgressDialog), new PropertyMetadata(false, IsIndeterminatePropertyChanged));
 
         /// <summary>
         /// Registers the property to set the <see cref="Dialog"/> progress.
@@ -395,10 +387,44 @@ namespace ControlsXL
 
         #endregion
 
+        #region Dependency Properties: Callbacks
+
+        private static void IsIndeterminatePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Dialog dialog = (Dialog)d;
+
+            if((bool)e.NewValue == true)
+            {
+                if (dialog._Timer == null)
+                {
+                    dialog._Timer = new DispatcherTimer();
+                    dialog._Timer.Tick += dialog.TimerTick;
+                    dialog._Timer.Interval = TimeSpan.FromMilliseconds(INDETERMINATE_TIMER_INTERVAL);
+                    dialog._Timer.Start();
+                }
+                else
+                {
+                    dialog._Timer.Tick += dialog.TimerTick;
+                    dialog._Timer.Start();
+                }
+            }
+            else
+            {
+                if(dialog._Timer != null)
+                {
+                    dialog._Timer.Stop();
+                    dialog._Timer.Tick -= dialog.TimerTick;
+                    dialog._Timer = null;
+                }
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Methods
-        private static readonly object _Lock = new object();
+
         /// <summary>
         /// Gets the result of the <see cref="Dialog"/> async.
         /// </summary>
@@ -421,16 +447,36 @@ namespace ControlsXL
         /// <remarks><i>The <see cref="CloseRequested"/> event is catched by the <see cref="DialogManager"/> to actualy close the <see cref="Dialog"/>.</i></remarks>
         public virtual void Close()
         {
+            if(_Timer != null)
+            {
+                _Timer.Stop();
+                _Timer.Tick -= TimerTick;
+                _Timer = null;
+            }
+
             if(CloseRequested != null)
-            CloseRequested?.Invoke(this, new DialogEventArgs(_Result));
+                CloseRequested?.Invoke(this, new DialogEventArgs(_Result));
         }
 
-        //public object Clone()
-        //{
-        //    MessageDialog dialog = new MessageDialog(this);
+        #endregion
 
-        //    return dialog;
-        //}
+        #region Event Handlers
+
+        /// <summary>
+        /// Handles the <see cref="DispatcherTimer.Tick"/> event for indeterminate progress dialogs.
+        /// </summary>
+        /// <param name="sender">The <see cref="object"/> that raised the event.</param>
+        /// <param name="e">An <see cref="EventArgs"/> containing event data.</param>
+        private void TimerTick(object sender, EventArgs e)
+        {
+            int threshold = INDETERMINATE_TIMER_INTERVAL + 5;
+
+            Progress = ((Progress + 5) % threshold);
+        }
+
+        #endregion
+
+        #region Overrides
 
         #endregion
 
@@ -473,6 +519,8 @@ namespace ControlsXL
             ShowProgress = dialog.ShowProgress;
         }
     }
+
+
     /// <summary>
     /// Defines a dialog to show a message.
     /// </summary>
@@ -585,7 +633,7 @@ namespace ControlsXL
         {
             _Result = DialogResults.DialogOK;
 
-            int threshold = 100 + 5;
+            int threshold = INDETERMINATE_TIMER_INTERVAL + 5;
 
             if (IsIndeterminate)
             {

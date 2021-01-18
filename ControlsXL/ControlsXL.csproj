@@ -54,10 +54,13 @@
     <Compile Include="Common\DialogManager.cs" />
     <Compile Include="Common\Enumerations.cs" />
     <Compile Include="Dialog.cs" />
+    <Compile Include="Expander.cs" />
+    <Compile Include="FilteredDataGrid.cs" />
     <Compile Include="LinkButton.cs" />
     <Compile Include="MarkerButton.cs" />
     <Compile Include="MultipleDocumentInterface.cs" />
     <Compile Include="NumericTextBox.cs" />
+    <Compile Include="Switch.cs" />
     <Compile Include="VectorButton.cs" />
     <Page Include="Resources\Appearances\Spaced.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -115,6 +118,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Expander.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\FilteredDataGrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -141,6 +152,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Sidebar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Switch.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -115,8 +115,8 @@ namespace ControlsXL
         /// <param name="e">A <see cref="DialogEventArgs"/> containing event data.</param>
         private static void DialogCloseRequested(object sender, DialogEventArgs e)
         {
-            if(sender is ProgressDialog)
-                Thread.Sleep(DIALOG_CLOSE_DELAY);
+            //if(sender is ProgressDialog)
+            //    Thread.Sleep(DIALOG_CLOSE_DELAY);
 
             lock (_Dialogs)
             {

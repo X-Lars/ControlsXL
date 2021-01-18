@@ -144,7 +144,7 @@ namespace ControlsXL
 
         #endregion
 
-        #region Command: Properties
+        #region Commands: Properties
 
         /// <summary>
         /// Gets the command to close the <see cref="MDIChild"/> window.
@@ -180,7 +180,7 @@ namespace ControlsXL
 
         #endregion
 
-        #region Command: Event Handlers
+        #region Commands: Event Handlers
 
         /// <summary>
         /// Implements the <see cref="CloseCommand"/> to remove the selected <see cref="MDIChild"/> window from the <see cref="MDIHost"/>.
