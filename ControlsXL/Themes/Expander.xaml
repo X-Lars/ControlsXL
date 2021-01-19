@@ -5,12 +5,12 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Geometry.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Fonts.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <common:AdaptiveThicknessConverter x:Key="AdaptiveThicknessConverter"/>
     
     <Style TargetType="{x:Type xl:Expander}">
+        
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppBrush}}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
@@ -76,7 +76,7 @@
                             <Setter TargetName="Header" Property="BorderThickness" Value="0"/>
                             <Setter TargetName="HeaderButton" Property="Vector" Value="{StaticResource GeometrySectionExpand}"/>
                         </Trigger>
-                        
+
                         <Trigger Property="HeaderButtonAlignment" Value="Left">
                             <Setter TargetName="HeaderButton" Property="DockPanel.Dock" Value="Left"/>
                         </Trigger>
