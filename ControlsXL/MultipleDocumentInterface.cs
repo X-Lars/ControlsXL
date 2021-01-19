@@ -588,7 +588,17 @@ namespace ControlsXL
             InputBindings.Add(new InputBinding(CloseCommand, new KeyGesture(Key.W , ModifierKeys.Control, "CTRL + W")));
         }
 
-        
+        #endregion
+
+        #region Events
+
+        private static readonly RoutedEvent CloseEvent = EventManager.RegisterRoutedEvent("Close", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(MDIChild));
+
+        public event RoutedEventHandler Close
+        {
+            add { AddHandler(CloseEvent, value); }
+            remove { RemoveHandler(CloseEvent, value); }
+        }
 
         #endregion
 
@@ -661,11 +671,15 @@ namespace ControlsXL
         /// </summary>
         /// <param name="sender">The <see cref="object"/> that raised the event.</param>
         /// <param name="e">An <see cref="ExecutedRoutedEventArgs"/> containing event data.</param>
-        private void OnCloseCommand(object sender, ExecutedRoutedEventArgs e)
+        protected virtual void OnCloseCommand(object sender, ExecutedRoutedEventArgs e)
         {
             // IMPORTANT: The child has to be selected before it is removed otherwise the Z index is not updated
             if (!IsSelected)
                 IsSelected = true;
+
+            this.RaiseEvent(new RoutedEventArgs(CloseEvent));
+
+            
 
             this.Host.Items.Remove(this);
         }
@@ -729,6 +743,11 @@ namespace ControlsXL
         public static readonly DependencyProperty PositionProperty = DependencyProperty.Register(nameof(Position), typeof(Point), typeof(MDIChild), new PropertyMetadata(new Point(-1.0, -1.0), PositionPropertyChangedCallback));
 
         /// <summary>
+        /// Registers the property to set the status bar visibility.
+        /// </summary>
+        public static readonly DependencyProperty ShowStatusBarProperty = DependencyProperty.Register(nameof(ShowStatusBar), typeof(bool), typeof(MDIChild), new PropertyMetadata(false));
+
+        /// <summary>
         /// Registers the property to determin the state of the <see cref="MDIChild"/> window.
         /// </summary>
         public static readonly DependencyProperty StateProperty = DependencyProperty.Register(nameof(State), typeof(WindowState), typeof(MDIChild), new PropertyMetadata(WindowState.Normal, StatePropertyChangedCallback));
@@ -763,6 +782,15 @@ namespace ControlsXL
         {
             get { return (Point)GetValue(PositionProperty); }
             set { SetValue(PositionProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the status bar visibility.
+        /// </summary>
+        public bool ShowStatusBar
+        {
+            get { return (bool)GetValue(ShowStatusBarProperty); }
+            set { SetValue(ShowStatusBarProperty, value); }
         }
 
         /// <summary>
@@ -1108,7 +1136,6 @@ namespace ControlsXL
 
         public void DeselectAll()
         {
-            
             foreach (MDIChild child in Children)
             {
                 child.IsSelected = false;
@@ -1199,6 +1226,8 @@ namespace ControlsXL
             //if(!DesignerProperties.GetIsInDesignMode(this))
             //{ 
             // Don't run this code in design time
+            
+
             if (visualAdded != null)
             {
                 if (Children != null)
@@ -1214,6 +1243,7 @@ namespace ControlsXL
                 }
             }
 
+            
             if (visualRemoved != null)
             {
                 Debug.Print($"[{nameof(MDICanvas)}.{nameof(OnVisualChildrenChanged)}] Removed: {((MDIChild)visualRemoved).Title}");

@@ -134,7 +134,8 @@
                                     Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 1 0 0'}"
-                                    DockPanel.Dock="Bottom">
+                                    DockPanel.Dock="Bottom"
+                                    Visibility="{Binding ShowStatusBar, Converter={StaticResource VisibilityConverter}}">
 
                                 <StackPanel HorizontalAlignment="Right"
                                             Orientation="Horizontal">
@@ -152,8 +153,8 @@
                     </Border>
 
                     <ControlTemplate.Triggers>
+                        
                         <Trigger Property="IsSelected" Value="True">
-                            <!--<Setter TargetName="Decorator" Property="ShowDecorator" Value="True"/>-->
                             <Setter TargetName="MDIChildBorder" Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppBorderActiveBrush}}"/>
                             <Setter TargetName="MDIChildHeader" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, AppHeaderActiveBrush}}"/>
                             <Setter TargetName="MDIChildTitle" Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextSelectedBrush}}"/>
