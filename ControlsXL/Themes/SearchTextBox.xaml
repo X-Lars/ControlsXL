@@ -39,7 +39,8 @@
                                              HorizontalAlignment="Right"
                                              Vector="{StaticResource GeometryClose}"
                                              IsEnabled="{TemplateBinding IsEnabled}"
-                                             Scale="0.8"/>
+                                             Scale="{TemplateBinding IconScale}"
+                                             VerticalAlignment="Center"/>
 
                             <Grid>
                             
