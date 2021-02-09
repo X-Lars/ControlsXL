@@ -69,7 +69,7 @@
                         <!-- IS CHECKED -->
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderSelectedBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
                         </Trigger>
                         
                     </ControlTemplate.Triggers>

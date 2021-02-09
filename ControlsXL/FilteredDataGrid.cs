@@ -140,8 +140,8 @@ namespace ControlsXL
 
         private void ApplyFilters()
         {
-            CommitEdit();
-            CommitEdit();
+            //CommitEdit();
+            //CommitEdit();
 
             // Get the default view for the data grid data source
             ICollectionView collectionView = CollectionViewSource.GetDefaultView(ItemsSource);

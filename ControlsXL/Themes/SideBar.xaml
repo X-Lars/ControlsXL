@@ -122,6 +122,7 @@
 
                                             <!-- SIDE BAR COMMON AREA CONTENT -->
                                             <ScrollViewer Grid.Row="0"
+                                                          CanContentScroll="False"
                                                           HorizontalScrollBarVisibility="Disabled"
                                                           VerticalScrollBarVisibility="Hidden">
                                             
@@ -481,7 +482,7 @@
 
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, DefaultText}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextBrush}}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Height" Value="{x:Static xl:Sidebar.SIDEBAR_SECTION_HEIGHT}"/>

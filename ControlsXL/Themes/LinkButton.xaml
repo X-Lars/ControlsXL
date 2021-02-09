@@ -4,7 +4,7 @@
 
     <Style TargetType="{x:Type xl:LinkButton}">
 
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, DefaultText}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextBrush}}"/>
         <Setter Property="Cursor" Value="Hand"/>
         
         <Setter Property="Template">

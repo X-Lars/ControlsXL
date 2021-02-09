@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,7 @@ namespace ControlsXL
         /// An <see cref="int"/> to store the number of decimal places from the interval.
         /// </summary>
         private int _Resolution = 0;
+        private bool _HasList = false;
 
         #endregion
 
@@ -91,7 +93,10 @@ namespace ControlsXL
         /// <param name="e">An <see cref="ExecutedRoutedEventArgs"/> containing event data.</param>
         private void OnDecrementCommand(object sender, ExecutedRoutedEventArgs e)
         {
-            Value -= 1;
+            if (_HasList)
+                Index--;
+            else
+                Value -= Interval;
         }
 
         /// <summary>
@@ -101,7 +106,10 @@ namespace ControlsXL
         /// <param name="e">An <see cref="ExecutedRoutedEventArgs"/> containing event data.</param>
         private void OnIncrementCommand(object sender, ExecutedRoutedEventArgs e)
         {
-            Value += 1;
+            if (_HasList)
+                Index++;
+            else
+                Value += Interval;
         }
 
         /// <summary>
@@ -112,10 +120,20 @@ namespace ControlsXL
         /// <remarks><i>The <see cref="UIElement"/>s bound to the executing command are automatically enabled or disabled based on setting the <code>e.CanExecute</code> parameter of this event handler to true or false.</i></remarks>
         private void CanExecuteDecrementCommand(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (Value > MinValue)
-                e.CanExecute = true;
+            if (_HasList)
+            {
+                if (Index > 0)
+                    e.CanExecute = true;
+                else
+                    e.CanExecute = false;
+            }
             else
-                e.CanExecute = false;
+            {
+                if (Value > MinValue)
+                    e.CanExecute = true;
+                else
+                    e.CanExecute = false;
+            }
         }
 
         /// <summary>
@@ -126,10 +144,20 @@ namespace ControlsXL
         /// <remarks><i>The <see cref="UIElement"/>s bound to the executing command are automatically enabled or disabled based on setting the <code>e.CanExecute</code> parameter of this event handler to true or false.</i></remarks>
         private void CanExecuteIncrementCommand(object sender, CanExecuteRoutedEventArgs e)
         {
-            if (Value < MaxValue)
-                e.CanExecute = true;
+            if (_HasList)
+            {
+                if (Index < Values.Count - 1)
+                    e.CanExecute = true;
+                else
+                    e.CanExecute = false;
+            }
             else
-                e.CanExecute = false;
+            {
+                if (Value < MaxValue)
+                    e.CanExecute = true;
+                else
+                    e.CanExecute = false;
+            }
         }
 
         #endregion
@@ -168,7 +196,7 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to determin whether the <see cref="NumericTextBox"/> buttons are visible
         /// </summary>
-        public static readonly DependencyProperty ShowButtonsProperty = DependencyProperty.Register("ShowButtons", typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
+        public static readonly DependencyProperty ShowButtonsProperty = DependencyProperty.Register(nameof(ShowButtons), typeof(bool), typeof(NumericTextBox), new PropertyMetadata(true));
 
         /// <summary>
         /// Registers the property to set the suffix of the <see cref="NumericTextBox"/>.
@@ -179,6 +207,18 @@ namespace ControlsXL
         /// Registers the property to set the value of the <see cref="NumericTextBox"/>.
         /// </summary>
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(NumericTextBox), new FrameworkPropertyMetadata(new double(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(ValuePropertyChanged)));
+
+        /// <summary>
+        /// Registers the property to set the predefined values of the <see cref="NumericTextBox"/>.
+        /// </summary>
+        public static readonly DependencyProperty ValuesProperty = DependencyProperty.Register(nameof(Values), typeof(List<string>), typeof(NumericTextBox), new PropertyMetadata(null, ValuesPropertyChanged));
+
+        /// <summary>
+        /// Registers the property to set the index of the <see cref="Values"/>.
+        /// </summary>
+        public static readonly DependencyProperty IndexProperty = DependencyProperty.Register(nameof(Index), typeof(int), typeof(NumericTextBox), new FrameworkPropertyMetadata(new int(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(IndexPropertyChanged)));
+
+       
 
         #endregion
 
@@ -265,6 +305,30 @@ namespace ControlsXL
             }
         }
 
+        /// <summary>
+        /// Gets or sets the list of predefined values of the <see cref="NumericTextBox"/>.
+        /// </summary>
+        public List<string> Values
+        {
+            get { return (List<string>)GetValue(ValuesProperty); }
+            set { SetValue(ValuesProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the index of the <see cref="Values"/>.
+        /// </summary>
+        public int Index
+        {
+            get { return (int)GetValue(IndexProperty); }
+            set 
+            {
+                value = Math.Min(value, Values.Count - 1);
+                value = Math.Max(value, 0);
+
+                SetValue(IndexProperty, value); 
+            }
+        }
+
         #endregion
 
         #region Dependency Properties: Callbacks
@@ -285,6 +349,31 @@ namespace ControlsXL
 
             numericTextBox.Value = value;
         }
+
+        private static void IndexPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            NumericTextBox numericTextBox = (NumericTextBox)d;
+
+            numericTextBox.Text = numericTextBox.Values[(int)e.NewValue];
+        }
+
+
+        private static void ValuesPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            NumericTextBox numericTextBox = (NumericTextBox)d;
+
+            if (e.NewValue != null)
+            {
+                numericTextBox._HasList = true;
+                numericTextBox.Text = ((List<string>)e.NewValue)[numericTextBox.Index];
+            }
+            else
+            {
+                numericTextBox._HasList = false;
+                numericTextBox.Text = numericTextBox.Value.ToString("N" + numericTextBox._Resolution.ToString());
+            }
+        }
+
 
         #endregion
 
@@ -327,7 +416,7 @@ namespace ControlsXL
 
             // Apply the number of decimal places to the text
             Text = Value.ToString("N" + _Resolution.ToString());
-            
+
             // Sets the tooltip of the text box "PF 0 ... 100 SF"
             ToolTipService.SetToolTip(this, string.Format("{2} {0} ... {1} {3}", MinValue, MaxValue, Prefix, Suffix));
         }
@@ -345,8 +434,12 @@ namespace ControlsXL
                 case Key.Add:
                 case Key.Up:
                 case Key.OemPlus:
-                    
-                    Value += isCTRLKeyDown ? Interval * 10 : Interval;
+
+                    if (_HasList)
+                        Index += isCTRLKeyDown ? 10 : 1;
+                    else
+                        Value += isCTRLKeyDown ? Interval * 10 : Interval;
+
                     SelectAll();
                     e.Handled = true;
                     break;
@@ -354,38 +447,61 @@ namespace ControlsXL
                 case Key.Subtract:
                 case Key.Down:
                 case Key.OemMinus:
-                    Value -= isCTRLKeyDown ? Interval * 10 : Interval;
+
+                    if (_HasList)
+                        Index -= isCTRLKeyDown ? 10 : 1;
+                    else
+                        Value -= isCTRLKeyDown ? Interval * 10 : Interval;
+
                     SelectAll();
                     e.Handled = true;
                     break;
 
                 case Key.PageUp:
-                    Value = MaxValue;
+
+                    if (_HasList)
+                        Index = Values.Count - 1;
+                    else
+                        Value = MaxValue;
+
                     SelectAll();
                     e.Handled = true;
                     break;
 
                 case Key.PageDown:
-                    Value = MinValue;
+
+                    if (_HasList)
+                        Index = 0;
+                    else
+                        Value = MinValue;
+
                     SelectAll();
                     e.Handled = true;
                     break;
 
                 case Key.Tab:
                     {
-                        double value;
+                        if (!_HasList)
+                        {
+                            double value;
 
-                        Value = double.TryParse(Text, out value) ? value : Value;
+                            Value = double.TryParse(Text, out value) ? value : Value;
+                        }
 
                         MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
                     }
                     break;
 
                 case Key.Enter:
                     {
-                        double value;
+                        if (!_HasList)
+                        {
+                            double value;
 
-                        Value = double.TryParse(Text, out value) ? value : Value;
+                            Value = double.TryParse(Text, out value) ? value : Value;
+                        }
+
                         SelectAll();
                     }
                     break;
@@ -402,13 +518,22 @@ namespace ControlsXL
 
             if(distance > 0)
             {
-                Value += Interval;
+                if (_HasList)
+
+                    Index += 1;
+                else
+                    Value += Interval;
             }
             else
             {
-                Value -= Interval;
+                if (_HasList)
+                    Index -= 1;
+                else
+                    Value -= Interval;
             }
 
+            CommandManager.InvalidateRequerySuggested();
+            
             SelectAll();
         }
 

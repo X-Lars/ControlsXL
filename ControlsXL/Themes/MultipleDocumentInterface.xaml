@@ -296,7 +296,7 @@
                                                         <ToggleButton Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}" 
                                                                       BorderBrush="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"
                                                                       BorderThickness="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}" 
-                                                                      Foreground="{DynamicResource {ComponentResourceKey xl:Styles, DefaultText}}"
+                                                                      Foreground="{DynamicResource {ComponentResourceKey xl:Styles, TextBrush}}"
                                                                       Content="{Binding Title}" 
                                                                       HorizontalContentAlignment="Center"
                                                                       IsChecked="{Binding IsSelected}" 

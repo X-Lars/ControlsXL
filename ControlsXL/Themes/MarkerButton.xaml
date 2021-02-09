@@ -6,7 +6,7 @@
     <Style TargetType="{x:Type xl:MarkerButton}">
 
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, DefaultText}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextBrush}}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
