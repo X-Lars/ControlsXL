@@ -3,13 +3,209 @@
                     xmlns:xl="clr-namespace:ControlsXL">
 
     <Style TargetType="{x:Type xl:Switch}">
+
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:Switch}">
-                    <Border Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                    </Border>
+                    <Grid>
+                        
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/> <!-- SWITCH OFF LABEL -->
+                            <ColumnDefinition Width="Auto"/> <!-- SWITCH -->
+                            <ColumnDefinition Width="Auto"/> <!-- SWITCH ON LABEL-->
+                        </Grid.ColumnDefinitions>
+
+                        <!-- SWITCH: OFF LABEL -->
+                        <Label x:Name="OffLabel" 
+                               Grid.Column="0"
+                               Content="{TemplateBinding OffLabel}"/>
+
+                        <!-- SWITCH: OFF -->
+                        <Border x:Name="SwitchOff" 
+                                Grid.Column="1"
+                                Visibility="Visible">
+
+                            <Grid>
+                                
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                
+                                <!-- SWITCH OFF: LEFT CORNER -->
+                                <Ellipse x:Name="SwitchOffLeft" 
+                                         Fill="{TemplateBinding Background}" 
+                                         Grid.Column="0" 
+                                         Grid.ColumnSpan="2" 
+                                         Height="{TemplateBinding Size}"
+                                         Stroke="{TemplateBinding BorderBrush}" 
+                                         Width="{TemplateBinding Size}"
+                                         VerticalAlignment="Stretch" />
+
+                                <!-- SWITCH OFF: RIGHT CORNER-->
+                                <Ellipse x:Name="SwitchOffRight" 
+                                         Fill="{TemplateBinding Background}" 
+                                         Grid.Column="3" 
+                                         Grid.ColumnSpan="2" 
+                                         Height="{TemplateBinding Size}"
+                                         Stroke="{TemplateBinding BorderBrush}" 
+                                         Width="{TemplateBinding Size}"
+                                         VerticalAlignment="Stretch" />
+
+                                <!-- SWITCH OFF: BACKGROUND-->
+                                <Border x:Name="SwitchOffBackground" 
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="0 1 0 1"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="3"
+                                        Height="{TemplateBinding Size}"/>
+                                
+
+                                <!-- SWITCH OFF: INDICATOR -->
+                                <Ellipse x:Name="SwitchOffIndicator" 
+                                         Fill="{TemplateBinding Background}"
+                                         Grid.Column="0"
+                                         Grid.ColumnSpan="2"
+                                         Height="{TemplateBinding Size}"
+                                         Stroke="{TemplateBinding BorderBrush}"
+                                         VerticalAlignment="Stretch"
+                                         Width="{TemplateBinding Size}"/>
+
+                            </Grid>
+                        </Border>
+
+                        <!-- SWITCH OFF: INLINE LABEL-->
+                        <Label x:Name="PART_OffLabel" 
+                               Content="{TemplateBinding OffLabel}"
+                               Foreground="White"
+                               Grid.Column="1"
+                               HorizontalAlignment="Right"
+                               Visibility="Collapsed"/>
+                        
+                        <!-- SWITCH: ON -->
+                        <Border x:Name="SwitchOn" 
+                                Grid.Column="1"
+                                Visibility="Collapsed">
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+
+                                <!-- SWITCH ON: LEFT CORNER -->
+                                <Ellipse x:Name="SwitchOnLeft" 
+                                         Fill="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}" 
+                                         Grid.Column="0" 
+                                         Grid.ColumnSpan="2" 
+                                         Height="{TemplateBinding Size}"
+                                         Stroke="{TemplateBinding BorderBrush}" 
+                                         Width="{TemplateBinding Size}"
+                                         VerticalAlignment="Stretch" />
+
+                                <!-- SWITCH ON: RIGHT CORNER-->
+                                <Ellipse x:Name="SwitchOnRight" 
+                                         Fill="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}" 
+                                         Grid.Column="3" 
+                                         Grid.ColumnSpan="2" 
+                                         Height="{TemplateBinding Size}"
+                                         Stroke="{TemplateBinding BorderBrush}" 
+                                         Width="{TemplateBinding Size}"
+                                         VerticalAlignment="Stretch" />
+
+                                <!-- SWITCH ON: BACKGROUND -->
+                                <Border x:Name="SwitchOnBackground" 
+                                        Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="0 1 0 1"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="3"
+                                        Height="{TemplateBinding Size}"/>
+
+                                <!-- SWITCH ON: INDICATOR -->
+                                <Ellipse x:Name="SwitchOnIndicator" 
+                                         Fill="{TemplateBinding Background}"
+                                         Grid.Column="3"
+                                         Grid.ColumnSpan="2"
+                                         Height="{TemplateBinding Size}"
+                                         Stroke="{TemplateBinding BorderBrush}"
+                                         VerticalAlignment="Stretch"
+                                         Width="{TemplateBinding Size}"/>
+
+                            </Grid>
+                        </Border>
+                        
+                        <!-- SWITCH ON: INLINE LABEL -->
+                        <Label x:Name="PART_OnLabel" 
+                               Content="{TemplateBinding OnLabel}"
+                               Foreground="White"
+                               Grid.Column="1"
+                               HorizontalAlignment="Left"
+                               Visibility="Collapsed"/>
+                        
+                        <!-- SWITCH: ON LABEL -->
+                        <Label x:Name="OnLabel" 
+                               Grid.Column="2"
+                               Content="{TemplateBinding OnLabel}"/>
+                        
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="SwitchOffLeft" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter TargetName="SwitchOffRight" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter TargetName="SwitchOffBackground" Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter TargetName="SwitchOffIndicator" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter TargetName="SwitchOffIndicator" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlActiveBrush}}"/>
+                            <Setter TargetName="SwitchOnLeft" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter TargetName="SwitchOnRight" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter TargetName="SwitchOnBackground" Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter TargetName="SwitchOnIndicator" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter TargetName="SwitchOnIndicator" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlActiveBrush}}"/>
+                        </Trigger>
+                        
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="SwitchOn" Property="Visibility" Value="Visible"/>
+                            <Setter TargetName="SwitchOff" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+
+                        <Trigger Property="InlineLabels" Value="True">
+                            <Setter TargetName="OffLabel" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="OnLabel" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                       
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsChecked" Value="True"/>
+                                <Condition Property="InlineLabels" Value="True"></Condition>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_OnLabel" Property="Visibility" Value="Visible"/>
+                        </MultiTrigger>
+
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsChecked" Value="False"/>
+                                <Condition Property="InlineLabels" Value="True"></Condition>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_OffLabel" Property="Visibility" Value="Visible"/>
+                        </MultiTrigger>
+
+                    </ControlTemplate.Triggers>
+                    
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

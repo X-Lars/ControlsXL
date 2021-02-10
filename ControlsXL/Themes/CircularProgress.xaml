@@ -50,6 +50,7 @@
                                        FontSize="10"
                                        Foreground="{DynamicResource {ComponentResourceKey xl:Styles, TextBrush}}"
                                        HorizontalAlignment="Center" 
+                                       RenderTransformOrigin="0.5, 0.5"
                                        Text="{TemplateBinding Text}"
                                        VerticalAlignment="Center"/>
 

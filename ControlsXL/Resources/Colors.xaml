@@ -11,7 +11,7 @@
     <Color x:Key="DefaultControlSelected">#3399FF</Color>
     
     <Color x:Key="DefaultControlBorder">#707070</Color>
-    <Color x:Key="DefaultControlBorderActive">#FF3C7FB1</Color>
+    <Color x:Key="DefaultControlBorderActive">#3C7FB1</Color>
     <Color x:Key="DefaultControlBorderDisabled">#ADB2B5</Color>
     <Color x:Key="DefaultControlBorderPressed">#2C628B</Color>
     <Color x:Key="DefaultControlBorderSelected">#FFFFFF</Color>
