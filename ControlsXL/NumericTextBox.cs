@@ -218,8 +218,6 @@ namespace ControlsXL
         /// </summary>
         public static readonly DependencyProperty IndexProperty = DependencyProperty.Register(nameof(Index), typeof(int), typeof(NumericTextBox), new FrameworkPropertyMetadata(new int(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(IndexPropertyChanged)));
 
-       
-
         #endregion
 
         #region Dependency Properties: Implementation

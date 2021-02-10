@@ -48,6 +48,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CircularProgress.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\Converters.cs" />
     <Compile Include="Common\DesignTimeResourceDictionary.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Common\Enumerations.cs" />
     <Compile Include="Common\StringExtensions.cs" />
     <Compile Include="Dialog.cs" />
+    <Compile Include="Elements\Arc.cs" />
     <Compile Include="Expander.cs" />
     <Compile Include="FilteredDataGrid.cs" />
     <Compile Include="LinkButton.cs" />
@@ -62,6 +64,7 @@
     <Compile Include="MultipleDocumentInterface.cs" />
     <Compile Include="NumericTextBox.cs" />
     <Compile Include="SearchTextBox.cs" />
+    <Compile Include="Slider.cs" />
     <Compile Include="Switch.cs" />
     <Compile Include="VectorButton.cs" />
     <Page Include="Resources\Appearances\Spaced.xaml">
@@ -116,6 +119,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\CircularProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Dialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -158,6 +165,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\Sidebar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Slider.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
