@@ -7,6 +7,12 @@ using System.Windows.Threading;
 
 namespace ControlsXL
 {
+    public enum ProgressIndicatorStyles
+    {
+        Linear,
+        Circular
+    }
+
     /// <summary>
     /// Base class for all dialogs, functions as placeholder element for the <see cref="DialogManager"/> to show it's dialogs.<br/>
     /// Can be used to create a customized dialog before attaching it to the UI, use <see cref="DialogManager.Show(Dialog)"/> to attach the dialog to the UI.
@@ -287,6 +293,11 @@ namespace ControlsXL
         public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(ProgressDialog), new PropertyMetadata(0.0));
 
         /// <summary>
+        /// Registers the property to set the style of the <see cref="Dialog"/> progress indicator
+        /// </summary>
+        public static readonly DependencyProperty ProgressStyleProperty = DependencyProperty.Register(nameof(ProgressStyle), typeof(ProgressIndicatorStyles), typeof(Dialog), new PropertyMetadata(ProgressIndicatorStyles.Linear));
+
+        /// <summary>
         /// Registers the property to set whether the <see cref="Dialog"/> progress bar is shown.
         /// </summary>
         public static readonly DependencyProperty ShowProgressProperty = DependencyProperty.Register(nameof(ShowProgress), typeof(bool), typeof(ProgressDialog), new PropertyMetadata(false));
@@ -359,7 +370,7 @@ namespace ControlsXL
         }
 
         /// <summary>
-        /// Gets or sets whether the <see cref="Dialog"/> is indeterminate
+        /// Gets or sets whether the <see cref="Dialog"/> is indeterminate.
         /// </summary>
         public bool IsIndeterminate
         {
@@ -374,6 +385,15 @@ namespace ControlsXL
         {
             get { return (double)GetValue(ProgressProperty); }
             set { SetValue(ProgressProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the style of the <see cref="Dialog"/> progress indicator.
+        /// </summary>
+        public ProgressIndicatorStyles ProgressStyle
+        {
+            get { return (ProgressIndicatorStyles)GetValue(ProgressStyleProperty); }
+            set { SetValue(ProgressStyleProperty, value); }
         }
 
         /// <summary>
@@ -516,6 +536,7 @@ namespace ControlsXL
             Title = dialog.Title;
             IsIndeterminate = dialog.IsIndeterminate;
             Progress = dialog.Progress;
+            ProgressStyle = dialog.ProgressStyle;
             ShowProgress = dialog.ShowProgress;
         }
     }
@@ -608,8 +629,9 @@ namespace ControlsXL
         /// <param name="showProgress">A <see cref="bool"/> to determine if the progress bar is shown.</param>
         /// <param name="isIndeterminate">A <see cref="bool"/> to determine if the <see cref="ProgressDialog"/> is indeterminate.</param>
         /// <param name="canCancel">A <see cref="bool"/> to determine if the <see cref="ProgressDialog"/> operation can be cancelled.</param>
+        /// <param name="style">The style of the progress indicator.</param>
         /// <remarks><i>Use the <see cref="DialogManager.Show(Dialog)"/> method to attach the <see cref="ProgressDialog"/> to the UI.</i></remarks>
-        public ProgressDialog(string title, string message, string status, bool isIndeterminate = false, bool canCancel = false) : base()
+        public ProgressDialog(string title, string message, string status, bool isIndeterminate = false, bool canCancel = false, ProgressIndicatorStyles style = ProgressIndicatorStyles.Linear) : base()
         {
             Title = title;
             Message = message;
@@ -618,6 +640,7 @@ namespace ControlsXL
             CanCancel = canCancel;
 
             ShowProgress = true;
+            ProgressStyle = style;
             ShowStatus = true;
         }
 

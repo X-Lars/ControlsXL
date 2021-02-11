@@ -70,6 +70,14 @@
                                          Visibility="{Binding ShowProgress, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanVisibilityConverter}}"
                                          Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"/>
 
+                            <xl:CircularProgress x:Name="CircularProgress"
+                                                 Grid.Row="2"
+                                                 MinWidth="50" MinHeight="50"
+                                                 Minimum="0" Maximum="100"
+                                                 IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}"
+                                                 Visibility="{Binding ShowProgress, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanVisibilityConverter}}"
+                                                 Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"/>
+
                             <!-- DIALOG: STATUS TEXT -->
                             <TextBlock x:Name="DialogStatusText"
                                        Grid.Row="3"
@@ -109,6 +117,15 @@
 
                         </Grid>
                     </Grid>
+
+                    <ControlTemplate.Triggers>
+                        
+                        <Trigger Property="ProgressStyle" Value="Circular">
+                            <Setter TargetName="DialogProgress" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="CircularProgress" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

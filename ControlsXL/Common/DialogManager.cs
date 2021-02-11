@@ -233,13 +233,13 @@ namespace ControlsXL
         /// <param name="isIndeterminate">A <see cref="bool"/> to determine whether the dialog is indeterminate.</param>
         /// <param name="canCancel">A <see cref="bool"/> to determine whether the dialog supports cancellation.</param>
         /// <returns>A reference to the created <see cref="ProgressDialog"/>.</returns>
-        public static ProgressDialog ProgressDialog(string title, string message, string status, bool isIndeterminate = false, bool canCancel = false)
+        public static ProgressDialog ProgressDialog(string title, string message, string status, bool isIndeterminate = false, bool canCancel = false, ProgressIndicatorStyles style = ProgressIndicatorStyles.Linear)
         {
             ProgressDialog dialog = null;
 
             _Dispatcher.Invoke(() =>
             {
-                dialog = new ProgressDialog(title, message, status, isIndeterminate, canCancel);
+                dialog = new ProgressDialog(title, message, status, isIndeterminate, canCancel, style);
                 dialog.CloseRequested += DialogCloseRequested;
 
                 _Placeholder.Content = dialog;
