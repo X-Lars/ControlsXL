@@ -22,10 +22,23 @@ namespace ControlsXL
 
         #region Dependency Properties: Registration
 
+
+
+        public double IndeterminateAngle
+        {
+            get { return (double)GetValue(IndeterminateAngleProperty); }
+            set { SetValue(IndeterminateAngleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IndeterminateAngle.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IndeterminateAngleProperty = DependencyProperty.Register(nameof(IndeterminateAngle), typeof(double), typeof(CircularProgress), new PropertyMetadata(0.0));
+
+
+
         /// <summary>
         /// Registers the property to set the angle representing the <see cref="CircularProgress"/> progress.
         /// </summary>
-        public static readonly DependencyProperty AngleProperty = DependencyProperty.Register(nameof(Angle), typeof(double), typeof(CircularProgress), new PropertyMetadata(0.0));
+        public static readonly DependencyProperty AngleOffsetProperty = DependencyProperty.Register(nameof(AngleOffset), typeof(double), typeof(CircularProgress), new PropertyMetadata(0.0));
 
         /// <summary>
         /// Registers the property to set the angle representing the max value of the <see cref="CircularProgress"/>.
@@ -35,7 +48,7 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to determin the value visibility.
         /// </summary>
-        public static readonly DependencyProperty ShowValueProperty = DependencyProperty.Register("ShowValue", typeof(bool), typeof(CircularProgress), new PropertyMetadata(true));
+        public static readonly DependencyProperty ShowValueProperty = DependencyProperty.Register(nameof(ShowValue), typeof(bool), typeof(CircularProgress), new PropertyMetadata(true));
 
         /// <summary>
         /// Registers the property to set the start angle of the <see cref="CircularProgress"/> indicator.
@@ -59,10 +72,10 @@ namespace ControlsXL
         /// <summary>
         /// Gets or sets the angle representing the <see cref="CircularProgress"/> progress.
         /// </summary>
-        private double Angle
+        private double AngleOffset
         {
             get { return EndAngle * (Value / (Maximum - Minimum)); }
-            set { SetValue(AngleProperty, value); }
+            set { SetValue(AngleOffsetProperty, value); }
         }
 
         /// <summary>
@@ -156,6 +169,7 @@ namespace ControlsXL
 
         #region Overrides
 
+        
         /// <summary>
         /// Extends the OnValueChanged method to set the angle and text properties of the <see cref="CircularProgress"/>.
         /// </summary>
@@ -165,8 +179,17 @@ namespace ControlsXL
         {
             base.OnValueChanged(oldValue, newValue);
 
-            Angle = EndAngle * (Value / (Maximum - Minimum));
-            Text = $"{Math.Round(Value, 0)} %";
+            if (!IsIndeterminate)
+            {
+                IndeterminateAngle = 0.0;
+                AngleOffset = EndAngle * (Value / (Maximum - Minimum));
+                Text = $"{Math.Round(Value, 0)} %";
+            }
+            else
+            {
+                // Rotation of the control
+                IndeterminateAngle = 360 * (Value / 100);
+            }
         }
 
         #endregion

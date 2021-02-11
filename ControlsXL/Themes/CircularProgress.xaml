@@ -20,27 +20,29 @@
                         <Grid>
 
                             <!-- CIRCULARPROGRESS: BACKGROUND ARC -->
-                            <element:Arc End="{TemplateBinding EndAngle}"
+                            <element:Arc x:Name="BackgroundArc"
+                                         End="{TemplateBinding EndAngle}"
                                          Stroke="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"
                                          StrokeThickness="{TemplateBinding Thickness}"
                                          Start="0"
                                          RenderTransformOrigin="0.5, 0.5">
                                 
                                 <element:Arc.RenderTransform>
-                                    <RotateTransform Angle="{Binding StartAngle, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    <RotateTransform Angle="{Binding AngleOffset, RelativeSource={RelativeSource TemplatedParent}}"/>
                                 </element:Arc.RenderTransform>
                                 
                             </element:Arc>
 
                             <!-- CIRCULARPROGRESS: PROGRESS ARC -->
-                            <element:Arc End="{TemplateBinding Angle}"
+                            <element:Arc x:Name="ProgressArc"
+                                         End="{TemplateBinding AngleOffset}"
                                          Stroke="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"
                                          StrokeThickness="{TemplateBinding Thickness}"
                                          Start="0"
                                          RenderTransformOrigin="0.5, 0.5">
                                 
                                 <element:Arc.RenderTransform>
-                                    <RotateTransform Angle="{Binding StartAngle, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                    <RotateTransform Angle="{Binding IndeterminateAngle, RelativeSource={RelativeSource TemplatedParent}}"/>
                                 </element:Arc.RenderTransform>
                                 
                             </element:Arc>
@@ -61,6 +63,12 @@
 
                         <Trigger Property="ShowValue" Value="false">
                             <Setter TargetName="Value" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+
+                        <Trigger Property="IsIndeterminate" Value="True">
+                            <Setter TargetName="Value" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="BackgroundArc" Property="End" Value="359.999"/>
+                            <Setter TargetName="ProgressArc" Property="End" Value="45"/>
                         </Trigger>
 
                     </ControlTemplate.Triggers>
