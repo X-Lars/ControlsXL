@@ -44,7 +44,7 @@ namespace ControlsXL
 
         // Using a DependencyProperty as the backing store for OnLabel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty OnLabelProperty =
-            DependencyProperty.Register(nameof(OnLabel), typeof(string), typeof(Switch), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register(nameof(OnLabel), typeof(string), typeof(Switch), new PropertyMetadata("On"));
 
 
 
@@ -56,7 +56,7 @@ namespace ControlsXL
 
         // Using a DependencyProperty as the backing store for OffLabel.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty OffLabelProperty =
-            DependencyProperty.Register(nameof(OffLabel), typeof(string), typeof(Switch), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register(nameof(OffLabel), typeof(string), typeof(Switch), new PropertyMetadata("Off"));
 
 
 

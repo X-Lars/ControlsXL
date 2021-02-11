@@ -67,7 +67,7 @@
                                          Minimum="0"
                                          Maximum="100"
                                          IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}"
-                                         Visibility="{Binding ShowProgress, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanVisibilityConverter}}"
+                                         Visibility="Visible"
                                          Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"/>
 
                             <xl:CircularProgress x:Name="CircularProgress"
@@ -75,7 +75,7 @@
                                                  MinWidth="50" MinHeight="50"
                                                  Minimum="0" Maximum="100"
                                                  IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}"
-                                                 Visibility="{Binding ShowProgress, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanVisibilityConverter}}"
+                                                 Visibility="Collapsed"
                                                  Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"/>
 
                             <!-- DIALOG: STATUS TEXT -->
@@ -123,6 +123,11 @@
                         <Trigger Property="ProgressStyle" Value="Circular">
                             <Setter TargetName="DialogProgress" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="CircularProgress" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+
+                        <Trigger Property="ShowProgress" Value="False">
+                            <Setter TargetName="DialogProgress" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="CircularProgress" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                         
                     </ControlTemplate.Triggers>

@@ -56,6 +56,7 @@ namespace ControlsXL.Elements
         /// <returns>The geometry to draw the arc.</returns>
         private Geometry GetGeometry()
         {
+            
             double start = Start + 90;
             double end = 90 - End;
 
@@ -84,7 +85,7 @@ namespace ControlsXL.Elements
                     , true
                     , false);
             }
-            
+
             //geometry.Transform = new TranslateTransform(StrokeThickness / 2, StrokeThickness / 2);
             
             return geometry;

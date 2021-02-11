@@ -16,18 +16,21 @@ namespace ControlsXL
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CircularProgress), new FrameworkPropertyMetadata(typeof(CircularProgress)));
         }
 
+        public CircularProgress()
+        {
+            DataContext = this;
+        }
         #endregion
 
         #region Dependency Properties
 
         #region Dependency Properties: Registration
 
-
-
+      
         public double IndeterminateAngle
         {
             get { return (double)GetValue(IndeterminateAngleProperty); }
-            set { SetValue(IndeterminateAngleProperty, value); }
+            private set { SetValue(IndeterminateAngleProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for IndeterminateAngle.  This enables animation, styling, binding, etc...
@@ -72,10 +75,10 @@ namespace ControlsXL
         /// <summary>
         /// Gets or sets the angle representing the <see cref="CircularProgress"/> progress.
         /// </summary>
-        private double AngleOffset
+        public double AngleOffset
         {
             get { return EndAngle * (Value / (Maximum - Minimum)); }
-            set { SetValue(AngleOffsetProperty, value); }
+            private set { SetValue(AngleOffsetProperty, value); }
         }
 
         /// <summary>
@@ -181,7 +184,7 @@ namespace ControlsXL
 
             if (!IsIndeterminate)
             {
-                IndeterminateAngle = 0.0;
+                //IndeterminateAngle = 0.0;
                 AngleOffset = EndAngle * (Value / (Maximum - Minimum));
                 Text = $"{Math.Round(Value, 0)} %";
             }

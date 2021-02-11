@@ -285,12 +285,12 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set whether the <see cref="ProgressDialog"/> is indeterminate.
         /// </summary>
-        public static readonly DependencyProperty IsIndeterminateProperty = DependencyProperty.Register(nameof(IsIndeterminate), typeof(bool), typeof(ProgressDialog), new PropertyMetadata(false, IsIndeterminatePropertyChanged));
+        public static readonly DependencyProperty IsIndeterminateProperty = DependencyProperty.Register(nameof(IsIndeterminate), typeof(bool), typeof(Dialog), new PropertyMetadata(false, IsIndeterminatePropertyChanged));
 
         /// <summary>
         /// Registers the property to set the <see cref="Dialog"/> progress.
         /// </summary>
-        public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(ProgressDialog), new PropertyMetadata(0.0));
+        public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(Dialog), new PropertyMetadata(0.0));
 
         /// <summary>
         /// Registers the property to set the style of the <see cref="Dialog"/> progress indicator
@@ -300,7 +300,7 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set whether the <see cref="Dialog"/> progress bar is shown.
         /// </summary>
-        public static readonly DependencyProperty ShowProgressProperty = DependencyProperty.Register(nameof(ShowProgress), typeof(bool), typeof(ProgressDialog), new PropertyMetadata(false));
+        public static readonly DependencyProperty ShowProgressProperty = DependencyProperty.Register(nameof(ShowProgress), typeof(bool), typeof(Dialog), new PropertyMetadata(false));
 
         #endregion
 
