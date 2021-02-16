@@ -82,8 +82,38 @@
 
     <Style TargetType="{x:Type xl:Slider}">
         <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBackgroundBrush}}"/>
-        <Setter Property="MinHeight" Value="21"/>
-        <Setter Property="Template" Value="{StaticResource HorizontalSlider}"/>
+        <Setter Property="Focusable" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xl:Slider}">
+                    <!-- SLIDER: BORDER-->
+                    <Border>
+                        <Grid>
+                            
+                            <!-- SLIDER TRACK: BACKGROUND -->
+                            <Border x:Name="PART_Track" Background="Gray" Height="5"/>
+                            
+                            <Canvas >
+                                
+                                <Border Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}" 
+                                        IsHitTestVisible="False"
+                                        Width="{TemplateBinding Position}"
+                                        Height="5"/>
+
+                                <Thumb x:Name="PART_Thumb"
+                                       Canvas.Left="{TemplateBinding Position}"
+                                       Focusable="True"
+                                       Height="10"
+                                       Margin="-2.5, -2.5"
+                                       Width="10"/>
+                            
+                            
+                            </Canvas>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Vertical">
                 <Setter Property="Template" Value="{StaticResource VerticalSlider}"/>

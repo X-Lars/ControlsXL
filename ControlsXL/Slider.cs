@@ -1,57 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ControlsXL
 {
-    /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:ControlsXL"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:ControlsXL;assembly=ControlsXL"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:Slider/>
-    ///
-    /// </summary>
-    [TemplatePart(Name = PART_SLIDER_CONTAINER)]
-    [TemplatePart(Name = PART_THUMB)]
+
+    [TemplatePart(Name = PART_THUMB, Type = typeof(Thumb))]
+    [TemplatePart(Name = PART_TRACK, Type = typeof(Border))]
     public class Slider : Control
     {
-        private const string PART_SLIDER_CONTAINER = "PART_Container";
         private const string PART_THUMB = "PART_Thumb";
-        private FrameworkElement _Container;
+        private const string PART_TRACK = "PART_Track";
+
+        private Border _Track;
         private Thumb _Thumb;
 
         static Slider()
@@ -59,8 +22,12 @@ namespace ControlsXL
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Slider), new FrameworkPropertyMetadata(typeof(Slider)));
         }
 
+        public Slider()
+        {
+            
+        }
 
-
+       
         public double Min
         {
             get { return (double)GetValue(MinProperty); }
@@ -93,6 +60,7 @@ namespace ControlsXL
 
 
 
+
         public Orientation Orientation
         {
             get { return (Orientation)GetValue(OrientationProperty); }
@@ -110,31 +78,129 @@ namespace ControlsXL
             DependencyProperty.Register(nameof(Value), typeof(double), typeof(Slider), new PropertyMetadata(0.0));
 
 
+        public double Position
+        {
+            get { return (double)GetValue(PositionProperty); }
+            set { SetValue(PositionProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Position.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PositionProperty =
+            DependencyProperty.Register(nameof(Position), typeof(double), typeof(Slider), new PropertyMetadata(0.0, PositionPropertyChanged, CoercePositionProperty));
+
+        private static object CoercePositionProperty(DependencyObject d, object baseValue)
+        {
+            Slider slider = (Slider)d;
+            double value = (double)baseValue;
+
+            value = Math.Max(value, 0);
+            value = Math.Min(value, slider.ActualWidth - slider._Thumb.ActualWidth / 2);
+
+            return value;
+        }
+
+        private static void PositionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Slider slider = (Slider)d;
+
+            slider.Value = (((slider.Max - slider.Min) / (slider.ActualWidth - slider._Thumb.ActualWidth / 2)) * slider.Position) + slider.Min;
+
+            Console.WriteLine(slider.Value);
+        }
+
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
 
-            _Container = GetTemplateChild(PART_SLIDER_CONTAINER) as FrameworkElement;
-
-            _Container.PreviewMouseDown += ContainerPreviewMouseDown;
+            _Track = GetTemplateChild(PART_TRACK) as Border;
+            _Track.PreviewMouseDown += TrackPreviewMouseDown;
+            _Track.PreviewMouseWheel += TrackPreviewMouseWheel;
 
             _Thumb = GetTemplateChild(PART_THUMB) as Thumb;
             _Thumb.DragDelta += ThumbDragDelta;
+            _Thumb.PreviewMouseWheel += TrackPreviewMouseWheel;
+            _Thumb.PreviewKeyDown += ThumbPreviewKeyDown;
         }
 
-        private void ContainerPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void ThumbPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            bool isCTRLKeyDown = e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl);
 
+            int interval = (int)((ActualWidth - _Thumb.ActualWidth) / (Max - Min));
+
+            switch (e.Key)
+            {
+                case Key.Add:
+                case Key.Up:
+                case Key.OemPlus:
+
+                    Position += isCTRLKeyDown ? interval * 10 : interval;
+                    e.Handled = true;
+                    break;
+
+                case Key.Subtract:
+                case Key.Down:
+                case Key.OemMinus:
+
+                    Position -= isCTRLKeyDown ? interval * 10 : interval;
+                    e.Handled = true;
+                    break;
+
+                case Key.PageUp:
+
+                    Position += interval * 10;
+                    e.Handled = true;
+                    break;
+
+                case Key.PageDown:
+
+                    Position -= interval * 10;
+                    e.Handled = true;
+                    break;
+
+                case Key.Home:
+
+                    Position = 0;
+                    e.Handled = true;
+                    break;
+
+                case Key.End:
+
+                    Position = ActualWidth;
+                    e.Handled = true;
+                    break;
+
+                case Key.Tab:
+
+                    MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    break;
+            }
         }
 
+        private void TrackPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            int speed = 2;
+
+            if(e.Delta > 0)
+            {
+                Position += ((Max - Min) / 100) * speed;
+            }
+            else
+            {
+                Position -= ((Max - Min) / 100) * speed;
+            }
+        }
+
+        private void TrackPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Position = e.GetPosition(this).X;
+        }
+
+      
         private void ThumbDragDelta(object sender, DragDeltaEventArgs e)
         {
-            var pos = e.HorizontalChange;
-
-            UIElement thumb = e.Source as UIElement;
-
-            Canvas.SetLeft(thumb, Canvas.GetLeft(thumb) + e.HorizontalChange);
-            Canvas.SetTop(thumb, Canvas.GetTop(thumb) + e.VerticalChange);
+            Position += e.HorizontalChange;
         }
+
     }
 }

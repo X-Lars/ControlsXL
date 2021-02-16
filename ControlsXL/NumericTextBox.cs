@@ -146,7 +146,7 @@ namespace ControlsXL
         {
             if (_HasList)
             {
-                if (Index < Values.Count - 1)
+                if (Index < ValueProvider.Count - 1)
                     e.CanExecute = true;
                 else
                     e.CanExecute = false;
@@ -206,15 +206,15 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set the value of the <see cref="NumericTextBox"/>.
         /// </summary>
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(NumericTextBox), new FrameworkPropertyMetadata(new double(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(ValuePropertyChanged)));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(NumericTextBox), new FrameworkPropertyMetadata(double.NaN, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(ValuePropertyChanged)));
 
         /// <summary>
         /// Registers the property to set the predefined values of the <see cref="NumericTextBox"/>.
         /// </summary>
-        public static readonly DependencyProperty ValuesProperty = DependencyProperty.Register(nameof(Values), typeof(List<string>), typeof(NumericTextBox), new PropertyMetadata(null, ValuesPropertyChanged));
+        public static readonly DependencyProperty ValueProviderProperty = DependencyProperty.Register(nameof(ValueProvider), typeof(List<string>), typeof(NumericTextBox), new PropertyMetadata(null, ValueProviderPropertyChanged));
 
         /// <summary>
-        /// Registers the property to set the index of the <see cref="Values"/>.
+        /// Registers the property to set the index of the <see cref="ValueProvider"/>.
         /// </summary>
         public static readonly DependencyProperty IndexProperty = DependencyProperty.Register(nameof(Index), typeof(int), typeof(NumericTextBox), new FrameworkPropertyMetadata(new int(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(IndexPropertyChanged)));
 
@@ -293,6 +293,7 @@ namespace ControlsXL
             get { return (double)GetValue(ValueProperty); }
             set
             {
+               
                 value = Math.Min(value, MaxValue);
                 value = Math.Max(value, MinValue);
 
@@ -300,27 +301,28 @@ namespace ControlsXL
 
                 // "N" Specifies the number of fractional digits
                 Text = value.ToString("N" + _Resolution.ToString());
+                
             }
         }
 
         /// <summary>
         /// Gets or sets the list of predefined values of the <see cref="NumericTextBox"/>.
         /// </summary>
-        public List<string> Values
+        public List<string> ValueProvider
         {
-            get { return (List<string>)GetValue(ValuesProperty); }
-            set { SetValue(ValuesProperty, value); }
+            get { return (List<string>)GetValue(ValueProviderProperty); }
+            set { SetValue(ValueProviderProperty, value); }
         }
 
         /// <summary>
-        /// Gets or sets the index of the <see cref="Values"/>.
+        /// Gets or sets the index of the <see cref="ValueProvider"/>.
         /// </summary>
         public int Index
         {
             get { return (int)GetValue(IndexProperty); }
             set 
             {
-                value = Math.Min(value, Values.Count - 1);
+                value = Math.Min(value, ValueProvider.Count - 1);
                 value = Math.Max(value, 0);
 
                 SetValue(IndexProperty, value); 
@@ -352,11 +354,11 @@ namespace ControlsXL
         {
             NumericTextBox numericTextBox = (NumericTextBox)d;
 
-            numericTextBox.Text = numericTextBox.Values[(int)e.NewValue];
+            numericTextBox.Text = numericTextBox.ValueProvider[(int)e.NewValue];
         }
 
 
-        private static void ValuesPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void ValueProviderPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             NumericTextBox numericTextBox = (NumericTextBox)d;
 
@@ -364,6 +366,8 @@ namespace ControlsXL
             {
                 numericTextBox._HasList = true;
                 numericTextBox.Text = ((List<string>)e.NewValue)[numericTextBox.Index];
+
+                ToolTipService.SetToolTip(numericTextBox, string.Join(", ", numericTextBox.ValueProvider));
             }
             else
             {
@@ -417,6 +421,7 @@ namespace ControlsXL
 
             // Sets the tooltip of the text box "PF 0 ... 100 SF"
             ToolTipService.SetToolTip(this, string.Format("{2} {0} ... {1} {3}", MinValue, MaxValue, Prefix, Suffix));
+          
         }
 
         /// <summary>
@@ -458,7 +463,7 @@ namespace ControlsXL
                 case Key.PageUp:
 
                     if (_HasList)
-                        Index = Values.Count - 1;
+                        Index = ValueProvider.Count - 1;
                     else
                         Value = MaxValue;
 
