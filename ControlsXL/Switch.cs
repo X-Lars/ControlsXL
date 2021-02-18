@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ControlsXL
 {
-  
+
     public enum SwitchStyles
     {
         Round,
@@ -29,6 +19,7 @@ namespace ControlsXL
     {
         private const string PART_ON_LABEL = "PART_OnLabel";
         private const string PART_OFF_LABEL = "PART_OffLabel";
+
         static Switch()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Switch), new FrameworkPropertyMetadata(typeof(Switch)));
@@ -139,6 +130,18 @@ namespace ControlsXL
         // Using a DependencyProperty as the backing store for LabelWidth.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty LabelWidthProperty =
             DependencyProperty.Register(nameof(LabelWidth), typeof(double), typeof(Switch), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsMeasure));
+
+        protected override void OnPreviewMouseWheel(MouseWheelEventArgs e)
+        {
+            if(e.Delta > 0)
+            {
+                IsChecked = true;
+            }
+            else
+            {
+                IsChecked = false;
+            }
+        }
 
     }
 }

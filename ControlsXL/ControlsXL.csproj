@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StylesXL">
+      <HintPath>..\..\..\StylesXL\StylesXL\StylesXL\bin\Release\StylesXL.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -62,7 +65,9 @@
     <Compile Include="LinkButton.cs" />
     <Compile Include="MarkerButton.cs" />
     <Compile Include="MultipleDocumentInterface.cs" />
+    <Compile Include="MultiRangeSlider.cs" />
     <Compile Include="NumericTextBox.cs" />
+    <Compile Include="RangeSlider.cs" />
     <Compile Include="SearchTextBox.cs" />
     <Compile Include="Slider.cs" />
     <Compile Include="Switch.cs" />
@@ -156,7 +161,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\MultiRangeSlider.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\NumericTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\RangeSlider.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

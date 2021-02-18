@@ -208,6 +208,7 @@ namespace ControlsXL
         /// </summary>
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(NumericTextBox), new FrameworkPropertyMetadata(double.NaN, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(ValuePropertyChanged)));
 
+       
         /// <summary>
         /// Registers the property to set the predefined values of the <see cref="NumericTextBox"/>.
         /// </summary>
@@ -293,7 +294,7 @@ namespace ControlsXL
             get { return (double)GetValue(ValueProperty); }
             set
             {
-               
+
                 value = Math.Min(value, MaxValue);
                 value = Math.Max(value, MinValue);
 
