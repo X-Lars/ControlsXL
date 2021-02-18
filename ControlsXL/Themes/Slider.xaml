@@ -9,7 +9,7 @@
                             BorderThickness="{TemplateBinding BorderThickness}">
             <Viewbox>
                 <TextBlock Foreground="{TemplateBinding Foreground}" 
-                           Text="{Binding Value, RelativeSource={RelativeSource AncestorType=xl:Slider}, StringFormat=0;#}"/>
+                           Text="{Binding ValueText, RelativeSource={RelativeSource AncestorType=xl:Slider}}"/>
             </Viewbox>
         </Border>
 
@@ -19,7 +19,7 @@
                     <Grid>
                         <Ellipse Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}"/>
             <Viewbox>
-                <TextBlock Text="{Binding Value, RelativeSource={RelativeSource AncestorType=xl:Slider}, StringFormat=0;#}"
+                <TextBlock Text="{Binding ValueText, RelativeSource={RelativeSource AncestorType=xl:Slider}}"
                            VerticalAlignment="Center"/>
             </Viewbox>
         </Grid>

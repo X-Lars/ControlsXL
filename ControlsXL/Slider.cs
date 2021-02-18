@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace ControlsXL
 {
@@ -26,6 +27,8 @@ namespace ControlsXL
 
         private Border _Track;
         private Thumb _Thumb;
+
+        private double _Resolution = 0;
 
         #endregion
 
@@ -55,6 +58,11 @@ namespace ControlsXL
         #region Dependency Properties
 
         #region Dependency Properties: Registration
+        
+        /// <summary>
+        /// Registers the property to set the interval.
+        /// </summary>
+        public static readonly DependencyProperty IntervalProperty = DependencyProperty.Register(nameof(Interval), typeof(double), typeof(Slider), new PropertyMetadata(1.0));
 
         /// <summary>
         /// Registers the property to set the maximum value.
@@ -82,6 +90,11 @@ namespace ControlsXL
         public static readonly DependencyProperty ThumbStyleProperty = DependencyProperty.Register(nameof(ThumbStyle), typeof(SliderThumbStyle), typeof(Slider), new PropertyMetadata(SliderThumbStyle.Square));
 
         /// <summary>
+        /// Registers the property to set the value text.
+        /// </summary>
+        public static readonly DependencyProperty ValueTextProperty = DependencyProperty.Register(nameof(ValueText), typeof(string), typeof(Slider), new PropertyMetadata(string.Empty));
+
+        /// <summary>
         /// Registers the property to set the slider track size.
         /// </summary>
         public static readonly DependencyProperty TrackSizeProperty = DependencyProperty.Register(nameof(TrackSize), typeof(double), typeof(Slider), new PropertyMetadata(5.0));
@@ -94,6 +107,15 @@ namespace ControlsXL
         #endregion
 
         #region Dependency Properties: Implementation
+
+        /// <summary>
+        /// Gets or sets the interval.
+        /// </summary>
+        public double Interval
+        {
+            get { return (double)GetValue(IntervalProperty); }
+            set { SetValue(IntervalProperty, value); }
+        }
 
         /// <summary>
         /// Gets or sets the maximum value.
@@ -166,7 +188,17 @@ namespace ControlsXL
 
                 SetValue(ValueProperty, value);
                 SetPosition();
+                ValueText = value.ToString("N" + _Resolution.ToString());
             }
+        }
+
+        /// <summary>
+        /// Gets the value text.
+        /// </summary>
+        public string ValueText
+        {
+            get { return (string)GetValue(ValueTextProperty); }
+            private set { SetValue(ValueTextProperty, value); }
         }
 
         #endregion
@@ -249,18 +281,7 @@ namespace ControlsXL
             SetPosition();
         }
 
-        protected override Size ArrangeOverride(Size arrangeBounds)
-        {
-            
-            return base.ArrangeOverride(arrangeBounds);
-        }
-        protected override Size MeasureOverride(Size constraint)
-        {
-            Console.WriteLine($"SZ: {constraint.Width}x{constraint.Height}");
-            SetPosition();
-            return base.MeasureOverride(constraint);
-        }
-
+       
         private void SetPosition()
         {
             if (Orientation == Orientation.Horizontal)
@@ -271,16 +292,18 @@ namespace ControlsXL
             {
                 Position = ((ActualHeight / (Max - Min)) * Value);
             }
-
-            InvalidateProperty(ValueProperty);
-            InvalidateProperty(PositionProperty);
-            InvalidateVisual();
         }
 
         #endregion
 
         #region Event Handlers
 
+        protected override void OnRender(DrawingContext drawingContext)
+        {
+            SetPosition();
+
+            base.OnRender(drawingContext);
+        }
 
         private void SliderLoaded(object sender, RoutedEventArgs e)
         {
@@ -289,17 +312,26 @@ namespace ControlsXL
             Initialize();
         }
 
+        protected override void OnInitialized(EventArgs e)
+        {
+            base.OnInitialized(e);
+
+            double value = Interval;
+
+            // Get the number of decimal places from the interval if smaller than 1
+            while ((int)value % 10 == 0)
+            {
+                value *= 10;
+                _Resolution++;
+            }
+
+            // Apply the number of decimal places to the text
+            ValueText = Value.ToString("N" + _Resolution.ToString());
+        }
+
         private void ThumbPreviewKeyDown(object sender, KeyEventArgs e)
         {
             bool isCTRLKeyDown = e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl);
-
-            double interval = 0;
-
-
-            if (Orientation == Orientation.Horizontal)
-                interval = ActualWidth / (Max - Min);
-            else
-                interval = ActualHeight / (Max - Min);
 
             switch (e.Key)
             {
@@ -307,7 +339,7 @@ namespace ControlsXL
                 case Key.Up:
                 case Key.OemPlus:
 
-                    Value += isCTRLKeyDown ? interval * 10 : interval;
+                    Value += isCTRLKeyDown ? Interval * 10 : Interval;
                     e.Handled = true;
                     break;
 
@@ -315,19 +347,19 @@ namespace ControlsXL
                 case Key.Down:
                 case Key.OemMinus:
 
-                    Value -= isCTRLKeyDown ? interval * 10 : interval;
+                    Value -= isCTRLKeyDown ? Interval * 10 : Interval;
                     e.Handled = true;
                     break;
 
                 case Key.PageUp:
 
-                    Value += interval * 10;
+                    Value += Interval * 10;
                     e.Handled = true;
                     break;
 
                 case Key.PageDown:
 
-                    Value -= interval * 10;
+                    Value -= Interval * 10;
                     e.Handled = true;
                     break;
 
@@ -356,22 +388,22 @@ namespace ControlsXL
             {
                 if (e.Delta > 0)
                 {
-                    Value += (ActualWidth / (Max - Min));
+                    Value += Interval;
                 }
                 else
                 {
-                    Value -= (ActualWidth / (Max - Min));
+                    Value -= Interval;
                 }
             }
             else
             {
                 if (e.Delta > 0)
                 {
-                    Value += (ActualHeight / (Max - Min));
+                    Value += Interval;
                 }
                 else
                 {
-                    Value -= (ActualHeight / (Max - Min));
+                    Value -= Interval;
                 }
             }
         }
