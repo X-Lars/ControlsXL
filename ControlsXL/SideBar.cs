@@ -256,6 +256,14 @@ namespace ControlsXL
             {
                 this.SizeChanged += new SizeChangedEventHandler(SidebarSizeChanged);
             }
+
+            //StylesXL.StyleManager.StyleChanged += StyleManager_StyleChanged;
+
+        }
+
+        private void StyleManager_StyleChanged(object sender, EventArgs e)
+        {
+            //Background = StylesXL.StyleManager.Brush(StylesXL.Brushes.TestBrush);
         }
 
         #endregion
@@ -1189,6 +1197,8 @@ namespace ControlsXL
             base.OnInitialized(e);
 
             InitializeSidebarSections();
+
+            //Background = StylesXL.StyleManager.Brush(StylesXL.Brushes.TestBrush);
         }
 
         #endregion

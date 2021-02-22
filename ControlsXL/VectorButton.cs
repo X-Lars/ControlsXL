@@ -41,6 +41,12 @@ namespace ControlsXL
             DefaultStyleKeyProperty.OverrideMetadata(typeof(VectorButton), new FrameworkPropertyMetadata(typeof(VectorButton)));
         }
 
+        public VectorButton()
+        {
+            //StylesXL.StyleManager.StyleChanged += StyleManagerStyleChanged;
+            //InitializeStyle();
+        }
+
         #endregion
 
         #region Dependency Properties
@@ -141,6 +147,8 @@ namespace ControlsXL
 
         #region Overrides
 
+       
+
         /// <summary>
         /// Handles the mouse click event.
         /// </summary>
@@ -162,6 +170,33 @@ namespace ControlsXL
             // Prevent checked state when the button mode is standard
             if (ButtonMode == ButtonModes.Toggle)
                 base.OnChecked(e);
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        private void StyleManagerStyleChanged(object sender, EventArgs e)
+        {
+            //InitializeStyle();
+        }
+
+        #endregion
+
+        #region Methods
+
+        public Brush MouseOver;
+
+        private void InitializeStyle()
+        {
+            //Background = new SolidColorBrush(Colors.Transparent);
+
+            //BorderBrush = StylesXL.StyleManager.Brush(StylesXL.Brushes.ControlBorder);
+
+            //Fill = (SolidColorBrush)StylesXL.StyleManager.Brush(StylesXL.Brushes.Control);
+            //Stroke = BorderBrush;
+
+            //MouseOver = StylesXL.StyleManager.Brush(StylesXL.Brushes.ControlSelected).Alpha(0.25);
         }
 
         #endregion

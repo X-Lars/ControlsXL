@@ -102,7 +102,9 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set the value.
         /// </summary>
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(Slider), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, null, CoerceValueProperty));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(Slider), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ValuePropertyChanged, CoerceValueProperty));
+
+       
 
         #endregion
 
@@ -188,7 +190,6 @@ namespace ControlsXL
 
                 SetValue(ValueProperty, value);
                 SetPosition();
-                ValueText = value.ToString("N" + _Resolution.ToString());
             }
         }
 
@@ -204,6 +205,19 @@ namespace ControlsXL
         #endregion
 
         #region Dependency Properties: Callbacks
+
+        private static void ValuePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Slider slider = (Slider)d;
+            double value = (double)e.NewValue;
+
+            value = Math.Max(value, slider.Min);
+            value = Math.Min(value, slider.Max);
+
+            slider.ValueText = value.ToString("N" + slider._Resolution.ToString());
+
+            slider.SetPosition();
+        }
 
         /// <summary>
         /// Invalidates the <see cref="ValueProperty"/> to be in range.
@@ -255,6 +269,9 @@ namespace ControlsXL
 
         private void Initialize()
         {
+            Value = Math.Min(Value, Max);
+            Value = Math.Max(Value, Min);
+
             _Thumb.Width = TrackSize * 2;
             _Thumb.Height = TrackSize * 2;
 
@@ -286,11 +303,11 @@ namespace ControlsXL
         {
             if (Orientation == Orientation.Horizontal)
             {
-                Position = (ActualWidth / (Max - Min)) * Value;
+                Position = (ActualWidth / (Max - Min)) * (Value - Min);
             }
             else
             {
-                Position = ((ActualHeight / (Max - Min)) * Value);
+                Position = (ActualHeight / (Max - Min)) * (Value - Min);
             }
         }
 

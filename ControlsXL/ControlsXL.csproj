@@ -32,7 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StylesXL">
+    <Reference Include="StylesXL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\StylesXL\StylesXL\StylesXL\bin\Release\StylesXL.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -52,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CircularProgress.cs" />
+    <Compile Include="Common\BrushExtensions.cs" />
+    <Compile Include="Common\ColorExtensions.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\Converters.cs" />
     <Compile Include="Common\DesignTimeResourceDictionary.cs" />

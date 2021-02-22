@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 
 namespace ControlsXL
 {
@@ -122,9 +124,24 @@ namespace ControlsXL
         /// </summary>
         /// <param name="ID">A <see cref="string"/> specifying the component resource key ID.</param>
         /// <returns>A <see cref="object"/> containing the requested component's value.</returns>
-        internal static object GetStyleValue(string ID)
+        public static object GetStyleValue(string ID)
         {
             return Application.Current.FindResource(new ComponentResourceKey(typeof(Styles), ID));
+        }
+
+        /// <summary>
+        /// Gets the specified brush from the current application runtime resources.
+        /// </summary>
+        /// <param name="ID">A constant string defined in the <see cref="Styles"/> class specifying the brush to get.</param>
+        /// <returns></returns>
+        public static Brush Brush(string ID)
+        {
+            return (Brush)Application.Current.FindResource(new ComponentResourceKey(typeof(Styles), ID));
+        }
+
+        public static Color GetColor(string ID)
+        {
+            return (Color)Application.Current.FindResource(new ComponentResourceKey(typeof(Styles), ID));
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +17,7 @@ namespace ControlsXL
         /// </summary>
         private int _Resolution = 0;
         private bool _HasList = false;
-
+        private bool _IsInversed = false;
         #endregion
 
         #region Constructor
@@ -129,10 +130,20 @@ namespace ControlsXL
             }
             else
             {
-                if (Value > MinValue)
-                    e.CanExecute = true;
+                if (!_IsInversed)
+                {
+                    if (Value > Min)
+                        e.CanExecute = true;
+                    else
+                        e.CanExecute = false;
+                }
                 else
-                    e.CanExecute = false;
+                {
+                    if (Value > Max)
+                        e.CanExecute = true;
+                    else
+                        e.CanExecute = false;
+                }
             }
         }
 
@@ -153,10 +164,20 @@ namespace ControlsXL
             }
             else
             {
-                if (Value < MaxValue)
-                    e.CanExecute = true;
+                if (!_IsInversed)
+                {
+                    if (Value < Max)
+                        e.CanExecute = true;
+                    else
+                        e.CanExecute = false;
+                }
                 else
-                    e.CanExecute = false;
+                {
+                    if (Value < Min)
+                        e.CanExecute = true;
+                    else
+                        e.CanExecute = false;
+                }
             }
         }
 
@@ -176,12 +197,12 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set the maximum value of the <see cref="NumericTextBox"/>.
         /// </summary>
-        public static readonly DependencyProperty MaxValueProperty = DependencyProperty.Register(nameof(MaxValue), typeof(double), typeof(NumericTextBox), new UIPropertyMetadata(100d));
+        public static readonly DependencyProperty MaxProperty = DependencyProperty.Register(nameof(Max), typeof(double), typeof(NumericTextBox), new UIPropertyMetadata(100d));
 
         /// <summary>
         /// Registers the property to set the minimum value of the <see cref="NumericTextBox"/>.
         /// </summary>
-        public static readonly DependencyProperty MinValueProperty = DependencyProperty.Register(nameof(MinValue), typeof(double), typeof(NumericTextBox), new UIPropertyMetadata(0d));
+        public static readonly DependencyProperty MinProperty = DependencyProperty.Register(nameof(Min), typeof(double), typeof(NumericTextBox), new UIPropertyMetadata(0d));
 
         /// <summary>
         /// Registers the property to set the orientation of the <see cref="NumericTextBox"/> buttons.
@@ -206,9 +227,8 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set the value of the <see cref="NumericTextBox"/>.
         /// </summary>
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(NumericTextBox), new FrameworkPropertyMetadata(double.NaN, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(ValuePropertyChanged)));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(NumericTextBox), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ValuePropertyChanged));
 
-       
         /// <summary>
         /// Registers the property to set the predefined values of the <see cref="NumericTextBox"/>.
         /// </summary>
@@ -217,7 +237,7 @@ namespace ControlsXL
         /// <summary>
         /// Registers the property to set the index of the <see cref="ValueProvider"/>.
         /// </summary>
-        public static readonly DependencyProperty IndexProperty = DependencyProperty.Register(nameof(Index), typeof(int), typeof(NumericTextBox), new FrameworkPropertyMetadata(new int(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, new PropertyChangedCallback(IndexPropertyChanged)));
+        public static readonly DependencyProperty IndexProperty = DependencyProperty.Register(nameof(Index), typeof(int), typeof(NumericTextBox), new FrameworkPropertyMetadata(new int(), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, IndexPropertyChanged));
 
         #endregion
 
@@ -235,19 +255,19 @@ namespace ControlsXL
         /// <summary>
         /// Gets or sets the maximum value of the <see cref="NumericTextBox"/>.
         /// </summary>
-        public double MaxValue
+        public double Max
         {
-            get { return (double)GetValue(MaxValueProperty); }
-            set { SetValue(MaxValueProperty, value); }
+            get { return (double)GetValue(MaxProperty); }
+            set { SetValue(MaxProperty, value); }
         }
 
         /// <summary>
         /// Gets or sets the minimum value of the <see cref="NumericTextBox"/>.
         /// </summary>
-        public double MinValue
+        public double Min
         {
-            get { return (double)GetValue(MinValueProperty); }
-            set { SetValue(MinValueProperty, value); }
+            get { return (double)GetValue(MinProperty); }
+            set { SetValue(MinProperty, value); }
         }
 
         /// <summary>
@@ -294,15 +314,24 @@ namespace ControlsXL
             get { return (double)GetValue(ValueProperty); }
             set
             {
+                //if (value != Value)
+                //{
+                    if (!_IsInversed)
+                    {
+                        value = Math.Min(value, Max);
+                        value = Math.Max(value, Min);
+                    }
+                    else
+                    {
+                        value = Math.Min(value, Min);
+                        value = Math.Max(value, Max);
+                    }
 
-                value = Math.Min(value, MaxValue);
-                value = Math.Max(value, MinValue);
+                    SetValue(ValueProperty, value);
 
-                SetValue(ValueProperty, value);
-
-                // "N" Specifies the number of fractional digits
-                Text = value.ToString("N" + _Resolution.ToString());
-                
+                    // "N" Specifies the number of fractional digits
+                    Text = value.ToString("N" + _Resolution.ToString());
+                //}
             }
         }
 
@@ -323,10 +352,16 @@ namespace ControlsXL
             get { return (int)GetValue(IndexProperty); }
             set 
             {
-                value = Math.Min(value, ValueProvider.Count - 1);
-                value = Math.Max(value, 0);
+                //if (value != Index)
+                //{
+                    if (ValueProvider != null)
+                    {
+                        value = Math.Min(value, ValueProvider.Count - 1);
+                        value = Math.Max(value, 0);
+                    }
 
-                SetValue(IndexProperty, value); 
+                    SetValue(IndexProperty, value);
+                //}
             }
         }
 
@@ -341,21 +376,69 @@ namespace ControlsXL
         /// <param name="e">A <see cref="DependencyPropertyChangedEventArgs"/> containing event data.</param>
         private static void ValuePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
+            //if ((double)e.OldValue == (double)e.NewValue)
+            //    return;
+
             NumericTextBox numericTextBox = (NumericTextBox)sender;
 
             double value = double.TryParse(e.NewValue.ToString(), out value) ? value : 0d;
 
-            value = Math.Min(value, numericTextBox.MaxValue);
-            value = Math.Max(value, numericTextBox.MinValue);
+            if (!numericTextBox._IsInversed)
+            {
+                value = Math.Min(value, numericTextBox.Max);
+                value = Math.Max(value, numericTextBox.Min);
+            }
+            else
+            {
+                if (!numericTextBox._HasList)
+                {
+                    value = Math.Min(value, numericTextBox.Min);
+                    value = Math.Max(value, numericTextBox.Max);
+                }
+            }
 
             numericTextBox.Value = value;
+
+            if (!numericTextBox._HasList)
+            {
+                //double r = numericTextBox.MaxValue - numericTextBox.MinValue;
+                //double f = r / numericTextBox.Interval;
+                //Console.WriteLine($"Range: {r}");
+                //Console.WriteLine($"Factor: {f}");
+                
+
+                if (!numericTextBox._IsInversed)
+                {
+                    numericTextBox.Index = (int)Math.Round(((numericTextBox.Value - numericTextBox.Min) / numericTextBox.Interval), 0);
+                }
+                else
+                {
+                    double indexes = (numericTextBox.Min - numericTextBox.Max) / numericTextBox.Interval;
+                   
+                    numericTextBox.Index = (int)(indexes - Math.Round( ((numericTextBox.Value - numericTextBox.Max) / numericTextBox.Interval)));
+                }
+
+                Console.WriteLine($"{nameof(NumericTextBox)}.Index: {numericTextBox.Index}");
+            }
         }
 
         private static void IndexPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            //if ((int)e.OldValue == (int)e.NewValue)
+            //    return;
+
             NumericTextBox numericTextBox = (NumericTextBox)d;
 
-            numericTextBox.Text = numericTextBox.ValueProvider[(int)e.NewValue];
+            if(numericTextBox._HasList)
+                numericTextBox.Text = numericTextBox.ValueProvider[(int)e.NewValue];
+            else
+            {
+                if (!numericTextBox._IsInversed)
+                    numericTextBox.Value = numericTextBox.Min + ((int)e.NewValue * numericTextBox.Interval);
+                else
+                    numericTextBox.Value = numericTextBox.Min - ((int)e.NewValue * numericTextBox.Interval);
+            }
+            
         }
 
 
@@ -409,19 +492,39 @@ namespace ControlsXL
             base.OnInitialized(e);
 
             double value = Interval;
-
+           
+            
             // Get the number of decimal places from the interval if smaller than 1
-            while ((int)value % 10 == 0)
+            while ((int)(value % 10) == 0)
             {
+                int sub = (int)(value * 10);
+                
                 value *= 10;
+                value -= sub;
+                
                 _Resolution++;
+
+                if (value == 0)
+                    break;
             }
+            Console.WriteLine($"RES {Interval} -> {_Resolution} ");
+
+            if (Min > Max)
+                _IsInversed = true;
+
+            
+            Console.WriteLine($"{Min}/{Max} = {_IsInversed}");
+
+            //if(Value == double.NaN)
+            //{
+            //    Value = 0;
+            //}
 
             // Apply the number of decimal places to the text
             Text = Value.ToString("N" + _Resolution.ToString());
 
             // Sets the tooltip of the text box "PF 0 ... 100 SF"
-            ToolTipService.SetToolTip(this, string.Format("{2} {0} ... {1} {3}", MinValue, MaxValue, Prefix, Suffix));
+            ToolTipService.SetToolTip(this, string.Format("{2} {0} ... {1} {3}", Min, Max, Prefix, Suffix));
           
         }
 
@@ -466,7 +569,12 @@ namespace ControlsXL
                     if (_HasList)
                         Index = ValueProvider.Count - 1;
                     else
-                        Value = MaxValue;
+                    {
+                        if (!_IsInversed)
+                            Value = Max;
+                        else
+                            Value = Min;
+                    }
 
                     SelectAll();
                     e.Handled = true;
@@ -477,7 +585,12 @@ namespace ControlsXL
                     if (_HasList)
                         Index = 0;
                     else
-                        Value = MinValue;
+                    {
+                        if (!_IsInversed)
+                            Value = Min;
+                        else
+                            Value = Max;
+                    }
 
                     SelectAll();
                     e.Handled = true;
