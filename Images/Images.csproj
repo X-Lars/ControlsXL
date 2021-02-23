@@ -35,6 +35,7 @@
   <ItemGroup>
     <Content Include="NumericTextBox-Horizontal-List.jpg" />
     <Content Include="NumericTextBox-Horizontal-Prefix.jpg" />
+    <Content Include="NumericTextBox-NoButtons-Interval.jpg" />
     <Content Include="NumericTextBox-Vertical-Suffix.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
