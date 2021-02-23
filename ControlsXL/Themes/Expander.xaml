@@ -11,10 +11,10 @@
     <common:AdaptiveThicknessConverter x:Key="AdaptiveThicknessConverter"/>
     
     <Style TargetType="{x:Type xl:Expander}">
-        
-        <Setter Property="Background" Value="{style:StyleManager Key=AppBrush}"/>
-        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, AppBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
         
         <Setter Property="Template">
             <Setter.Value>
@@ -34,7 +34,7 @@
 
                             <!-- EXPANDER: HEADER -->
                             <Button x:Name="Header" 
-                                    Background="{style:StyleManager Key=ControlBrush}"
+                                    Background="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"
                                     BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 0 1'}"
                                     Command="{x:Static xl:Expander.ToggleStateCommand}"
                                     Grid.Row="0"
@@ -83,8 +83,8 @@
                         </Trigger>
 
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Header" Property="BorderBrush" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
+                            <Setter TargetName="Header" Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
                         </Trigger>
 
                     </ControlTemplate.Triggers>

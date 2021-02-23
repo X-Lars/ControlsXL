@@ -18,9 +18,9 @@
     <!-- MDICHILD WINDOW -->
     <Style TargetType="{x:Type xl:MDIChild}">
         
-        <Setter Property="Background" Value="{style:StyleManager Key=AppBrush}"/>
-        <Setter Property="BorderBrush" Value="{style:StyleManager Key=AppBorderBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, AppBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, AppBorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
 
         <Setter Property="MinHeight" Value="{x:Static xl:MDIChild.MDICHILD_MINIMIZED_HEIGHT}"/>
         <Setter Property="MinWidth" Value="{x:Static xl:MDIChild.MDICHILD_MINIMIZED_WIDTH}"/>
@@ -156,9 +156,9 @@
                     <ControlTemplate.Triggers>
                         
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="MDIChildBorder" Property="BorderBrush" Value="{style:StyleManager Key=AppBorderSelectedBrush}"/>
-                            <Setter TargetName="MDIChildHeader" Property="Background" Value="{style:StyleManager Key=AppHeaderSelectedBrush}"/>
-                            <Setter TargetName="MDIChildTitle" Property="Foreground" Value="{style:StyleManager Key=TextSelectedBrush}"/>
+                            <Setter TargetName="MDIChildBorder" Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, AppBorderSelectedBrush}}"/>
+                            <Setter TargetName="MDIChildHeader" Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, AppHeaderSelectedBrush}}"/>
+                            <Setter TargetName="MDIChildTitle" Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextSelectedBrush}}"/>
                         </Trigger>
 
                         <Trigger Property="State" Value="Minimized">
@@ -181,9 +181,9 @@
     <!-- MDIHOST -->
     <Style TargetType="{x:Type xl:MDIHost}">
 
-        <Setter Property="Background" Value="{style:StyleManager Key=AppWorkspaceBrush}"/>
-        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, AppWorkspaceBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:MDIHost}">
@@ -207,7 +207,7 @@
 
                                     <!-- MDIHOST HEADER MENU -->
                                     <Menu x:Name="PART_MDIHostMenu" 
-                                          Background="{style:StyleManager Key=ControlBrush}"
+                                          Background="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"
                                           BorderBrush="{TemplateBinding BorderBrush}"
                                           BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 1 0'}"
                                           DockPanel.Dock="Left"/>
@@ -256,9 +256,9 @@
 
                                             <ListView.Style>
                                                 <Style TargetType="{x:Type ListView}">
-                                                    <Setter Property="Background" Value="{style:StyleManager Key=AppWorkspaceBrush}"/>
-                                                    <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-                                                    <Setter Property="BorderThickness" Value="0"/>
+                                                    <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, AppWorkspaceBrush}}"/>
+                                                    <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+                                                    <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
                                                     <Setter Property="DataContext" Value="{Binding SelectedItem, RelativeSource={RelativeSource Self}}"/>
                                                     <Setter Property="Template">
                                                         <Setter.Value>
@@ -294,10 +294,10 @@
                                                 <DataTemplate DataType="{x:Type xl:MDIChild}">
 
                                                     <Grid>
-                                                        <ToggleButton Background="{style:StyleManager Key=ControlBrush}" 
-                                                                      BorderBrush="{style:StyleManager Key=BorderBrush}"
-                                                                      BorderThickness="{style:StyleManager Key=BorderThickness}" 
-                                                                      Foreground="{style:StyleManager Key=TextBrush}"
+                                                        <ToggleButton Background="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}" 
+                                                                      BorderBrush="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"
+                                                                      BorderThickness="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}" 
+                                                                      Foreground="{DynamicResource {ComponentResourceKey style:Styles, TextBrush}}"
                                                                       Content="{Binding Title}" 
                                                                       HorizontalContentAlignment="Center"
                                                                       IsChecked="{Binding IsSelected}" 
@@ -361,30 +361,30 @@
 
                                                                         <!-- IS CHECKED -->
                                                                         <Trigger Property="IsChecked" Value="True">
-                                                                            <Setter TargetName="Marker" Property="Background" Value="{style:StyleManager Key=ControlSelectedBrush}"/>
-                                                                            <Setter Property="Foreground" Value="{style:StyleManager Key=ControlSelectedBrush}"/>
+                                                                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"/>
+                                                                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"/>
                                                                         </Trigger>
 
                                                                         <!-- MOUSE OVER -->
                                                                         <Trigger Property="IsMouseOver" Value="True">
-                                                                            <Setter TargetName="Marker" Property="Background" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                                                                            <Setter Property="Background" Value="{style:StyleManager Key=ControlHighlightBrush}"/>
-                                                                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
+                                                                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                                                                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
                                                                         </Trigger>
 
                                                                         <!-- MOUSE PRESS -->
                                                                         <Trigger Property="IsPressed" Value="True">
-                                                                            <Setter TargetName="Marker" Property="Background" Value="{style:StyleManager Key=BorderPressedBrush}"/>
-                                                                            <Setter Property="Background" Value="{style:StyleManager Key=ControlPressedBrush}"/>
-                                                                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderPressedBrush}"/>
+                                                                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderPressedBrush}}"/>
+                                                                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlPressedBrush}}"/>
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderPressedBrush}}"/>
                                                                         </Trigger>
 
                                                                         <!-- DISABLED -->
                                                                         <Trigger Property="IsEnabled" Value="False">
-                                                                            <Setter TargetName="Marker" Property="Background" Value="{style:StyleManager Key=BorderDisabledBrush}"/>
-                                                                            <Setter Property="Background" Value="{style:StyleManager Key=ControlDisabledBrush}"/>
-                                                                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderDisabledBrush}"/>
-                                                                            <Setter Property="Foreground" Value="{style:StyleManager Key=TextDisabledBrush}"/>
+                                                                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderDisabledBrush}}"/>
+                                                                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlDisabledBrush}}"/>
+                                                                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderDisabledBrush}}"/>
+                                                                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"/>
                                                                         </Trigger>
                                                                 
                                                                     </ControlTemplate.Triggers>
@@ -399,7 +399,7 @@
                                 </DockPanel>
                             </Border>
                             <Border x:Name="MDIHostStatusbar"
-                                    Background="{style:StyleManager Key=ControlBrush}"
+                                    Background="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 1 0 0'}"
                                     DockPanel.Dock="Bottom">

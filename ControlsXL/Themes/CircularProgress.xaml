@@ -16,7 +16,7 @@
                 <ControlTemplate TargetType="{x:Type xl:CircularProgress}">
 
                     <!-- CIRCULARPROGRESS: BORDER-->
-                    <Border BorderThickness="{style:StyleManager Key=BorderThickness}"
+                    <Border BorderThickness="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"
                             BorderBrush="Transparent">
                         
                         <!-- CIRCULARPROGRESS: LAYOUT -->
@@ -24,7 +24,7 @@
                             <!-- CIRCULARPROGRESS: BACKGROUND ARC -->
                             <element:Arc x:Name="BackgroundArc"
                                          End="{TemplateBinding EndAngle}"
-                                         Stroke="{style:StyleManager Key=ControlBrush}"
+                                         Stroke="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"
                                          StrokeThickness="{TemplateBinding Thickness}"
                                          Start="0"
                                          RenderTransformOrigin="0.5, 0.5">
@@ -38,7 +38,7 @@
                             <!-- CIRCULARPROGRESS: PROGRESS ARC -->
                             <element:Arc x:Name="ProgressArc"
                                          End="{TemplateBinding AngleOffset}"
-                                         Stroke="{style:StyleManager Key=ControlSelectedBrush}"
+                                         Stroke="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"
                                          StrokeThickness="{TemplateBinding Thickness}"
                                          Start="0"
                                          RenderTransformOrigin="0.5, 0.5">
@@ -52,7 +52,7 @@
                             <!-- CIRCULARPROGRESS: TEXT VALUE -->
                             <TextBlock x:Name="Value" 
                                        FontSize="10"
-                                       Foreground="{style:StyleManager Key=TextBrush}"
+                                       Foreground="{DynamicResource {ComponentResourceKey style:Styles, TextBrush}}"
                                        HorizontalAlignment="Center" 
                                        RenderTransformOrigin="0.5, 0.5"
                                        Text="{TemplateBinding Text}"

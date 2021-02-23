@@ -18,8 +18,7 @@ namespace ControlsXL
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LinkButton), new FrameworkPropertyMetadata(typeof(LinkButton)));
 
             // Requires style manager
-            StylesXL.StyleManager.Initialize();
+            StyleManager.Initialize();
         }
-
     }
 }

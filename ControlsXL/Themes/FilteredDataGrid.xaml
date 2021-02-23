@@ -180,9 +180,9 @@
 
     <!--Style and template for the DataGridColumnHeader.-->
     <Style x:Key="FilteredDataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
-        <Setter Property="Background" Value="{style:StyleManager Key=ControlBrush}"/>
-        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
         <Setter Property="FontWeight" Value="DemiBold"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -209,7 +209,7 @@
                             </ContentPresenter>
 
                                 <xl:SearchTextBox x:Name="FilterTextBox"
-                                                  Background="{style:StyleManager Key=AppBrush}"
+                                                  Background="{DynamicResource {ComponentResourceKey style:Styles, AppBrush}}"
                                                   BorderThickness="0"
                                                   FontWeight="Normal"
                                                   HorizontalAlignment="Stretch"
@@ -268,10 +268,10 @@
 
     <!--Style and template for the DataGrid.-->
     <Style x:Name="FilteredDataGridStyle" TargetType="{x:Type xl:FilteredDataGrid}">
-        <Setter Property="Background" Value="{style:StyleManager Key=AppBrush}"/>
-        <Setter Property="Foreground" Value="{style:StyleManager Key=TextBrush}"/>
-        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, AppBrush}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
         <Setter Property="RowDetailsVisibilityMode" Value="VisibleWhenSelected"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
         <Setter Property="ScrollViewer.PanningMode" Value="Both"/>

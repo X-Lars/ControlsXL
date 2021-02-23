@@ -7,9 +7,9 @@
     <Style TargetType="{x:Type xl:VectorButton}">
 
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-        <Setter Property="Fill" Value="{style:StyleManager Key=ControlBrush}"/>
-        <Setter Property="Stroke" Value="{style:StyleManager Key=BorderBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"/>
+        <Setter Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
 
         <!-- TODO: Move scaling to layout pass -->
         <Setter Property="Height" Value="{x:Static common:Constants.DEFAULT_CONTROL_HEIGHT}"/>
@@ -51,26 +51,26 @@
 
                         <!-- VECTOR BUTTON: MOUSE OVER -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{style:StyleManager Key=ControlHighlightBrush}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
                         </Trigger>
 
                         <!-- VECTOR BUTTON: MOUSE PRESS -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{style:StyleManager Key=ControlPressedBrush}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{style:StyleManager Key=BorderPressedBrush}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlPressedBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderPressedBrush}}"/>
                         </Trigger>
 
                         <!-- VECTOR BUTTON: DISABLED -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{style:StyleManager Key=ControlDisabledBrush}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{style:StyleManager Key=BorderDisabledBrush}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlDisabledBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderDisabledBrush}}"/>
                         </Trigger>
 
                         <!-- VECTOR BUTTON: CHECKED -->
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="VectorImage" Property="Fill" Value="{style:StyleManager Key=ControlSelectedBrush}"/>
-                            <Setter TargetName="VectorImage" Property="Stroke" Value="{style:StyleManager Key=BorderSelectedBrush}"/>
+                            <Setter TargetName="VectorImage" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"/>
+                            <Setter TargetName="VectorImage" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderSelectedBrush}}"/>
                         </Trigger>
                         
                     </ControlTemplate.Triggers>

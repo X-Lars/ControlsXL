@@ -14,12 +14,12 @@
                     <!-- SLIDER TRACK: BACKGROUND -->
                     <Border x:Name="PART_Track" 
                             Background="{TemplateBinding Background}" 
-                            BorderBrush="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"
+                            BorderBrush="{DynamicResource {ComponentResourceKey style:Styles, ControlBorderBrush}}"
                             Height="{TemplateBinding TrackSize}" 
                             Width="{TemplateBinding ActualWidth}"/>
 
-                    <Border Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}" 
-                            BorderBrush="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"
+                    <Border Background="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}" 
+                            BorderBrush="{DynamicResource {ComponentResourceKey style:Styles, ControlBorderBrush}}"
                             IsHitTestVisible="False"
                             Canvas.Left="{TemplateBinding MinPosition}"
                             
@@ -58,7 +58,7 @@
                             Height="{TemplateBinding ActualHeight}" 
                             Width="5"/>
 
-                    <Border Background="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}" 
+                    <Border Background="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}" 
                             Canvas.Bottom="0"
                             Height="{TemplateBinding Range}"
                             IsHitTestVisible="False"
@@ -87,8 +87,8 @@
 
     <Style TargetType="{x:Type xl:RangeSlider}">
 
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlBorderBrush}}"/>
         <Setter Property="Focusable" Value="True"/>
         <Setter Property="Width" Value="100"/>
         <Setter Property="Template" Value="{StaticResource HorizontalSlider}"/>

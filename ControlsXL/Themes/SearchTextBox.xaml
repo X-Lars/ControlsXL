@@ -9,19 +9,19 @@
 
     <Style TargetType="{x:Type xl:SearchTextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
 
-        <Setter Property="Background" Value="{style:StyleManager Key=AppBrush}"/>
-        <Setter Property="Foreground" Value="{style:StyleManager Key=TextBrush}"/>
-        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, AppBrush}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
 
         <!-- DEFAULT WINDOWS WIDTH & HEIGHT -->
         <Setter Property="Width" Value="120"/>
         <Setter Property="Height" Value="23"/>
 
-        <Setter Property="SelectionTextBrush" Value="{style:StyleManager Key=TextSelectedBrush}"/>
-        <Setter Property="SelectionBrush" Value="{style:StyleManager Key=ControlSelectedBrush}"/>
+        <Setter Property="SelectionTextBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, TextSelectedBrush}}"/>
+        <Setter Property="SelectionBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"/>
         <Setter Property="SelectionOpacity" Value="0.5"/>
-        <Setter Property="CaretBrush" Value="{style:StyleManager Key=ControlSelectedBrush}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"/>
 
 
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -72,19 +72,19 @@
 
                         <Trigger Property="Text" Value="">
                             <Setter TargetName="TextHint" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="TextHint" Property="Foreground" Value="{style:StyleManager Key=TextDisabledBrush}"/>
+                            <Setter TargetName="TextHint" Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"/>
                             <Setter TargetName="ClearButton" Property="Vector" Value="{StaticResource GeometryLookingGlass}"/>
                         </Trigger>
 
 
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="ClearButton" Property="Fill" Value="{style:StyleManager Key=ControlHighlightBrush}"/>
-                            <Setter TargetName="ClearButton" Property="Stroke" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="ClearButton" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
+                            <Setter TargetName="ClearButton" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
                         </Trigger>
 
                         <Trigger Property="IsKeyboardFocused" Value="true">
-                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
                             <Setter Property="Visibility" TargetName="TextHint" Value="Collapsed"/>
                         </Trigger>
 

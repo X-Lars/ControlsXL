@@ -22,9 +22,9 @@
     <!-- SIDE BAR STYLE -->
     <Style TargetType="{x:Type xl:Sidebar}" x:Name="SidebarStyle">
         
-        <Setter Property="Background" Value="{style:StyleManager Key=ControlBrush}"/>
-        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-        <Setter Property="BorderThickness" Value="{style:StyleManager Key=BorderThickness}"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
         <Setter Property="Width" Value="150"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeUI}"/>
         <Setter Property="Margin" Value="0"/>
@@ -484,10 +484,10 @@
     <!-- SIDE BAR SECTION STYLE -->
     <Style TargetType="{x:Type xl:SidebarSection}">
 
-        <Setter Property="Background" Value="{style:StyleManager Key=ControlBrush}"/>
-        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-        <Setter Property="Foreground" Value="{style:StyleManager Key=TextBrush}"/>
-        <Setter Property="BorderThickness" Value="{style:StyleManager Key=BorderThickness}"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Height" Value="{x:Static xl:Sidebar.SIDEBAR_SECTION_HEIGHT}"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -617,25 +617,25 @@
 
                         <!-- SECTION SELECTED -->
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{style:StyleManager Key=TextSelectedBrush}"/>
-                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{style:StyleManager Key=TextSelectedBrush}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, TextSelectedBrush}}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, TextSelectedBrush}}"/>
                         </Trigger>
 
                         <!-- MOUSE OVER -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{style:StyleManager Key=ControlHighlightBrush}"/>
-                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
                         </Trigger>
 
                         <!-- DISABLED -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Background" Value="{style:StyleManager Key=ControlDisabledBrush}"/>
-                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderDisabledBrush}"/>
-                            <Setter Property="Foreground" Value="{style:StyleManager Key=TextDisabledBrush}"/>
-                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{style:StyleManager Key=TextDisabledBrush}"/>
-                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{style:StyleManager Key=TextDisabledBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlDisabledBrush}}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderDisabledBrush}}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"/>
                         </Trigger>
 
                     </ControlTemplate.Triggers>

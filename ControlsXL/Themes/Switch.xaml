@@ -5,9 +5,9 @@
 
     <Style TargetType="{x:Type xl:Switch}">
 
-        <Setter Property="Background" Value="{style:StyleManager Key=ControlBrush}"/>
-        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
         
         <Setter Property="Template">
             <Setter.Value>
@@ -112,7 +112,7 @@
 
                                 <!-- SWITCH ON: LEFT CORNER -->
                                 <Ellipse x:Name="SwitchOnLeft" 
-                                         Fill="{style:StyleManager Key=ControlSelectedBrush}" 
+                                         Fill="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}" 
                                          Grid.Column="0" 
                                          Grid.ColumnSpan="2" 
                                          Height="{TemplateBinding Size}"
@@ -122,7 +122,7 @@
 
                                 <!-- SWITCH ON: RIGHT CORNER-->
                                 <Ellipse x:Name="SwitchOnRight" 
-                                         Fill="{style:StyleManager Key=ControlSelectedBrush}" 
+                                         Fill="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}" 
                                          Grid.Column="3" 
                                          Grid.ColumnSpan="2" 
                                          Height="{TemplateBinding Size}"
@@ -132,7 +132,7 @@
 
                                 <!-- SWITCH ON: BACKGROUND -->
                                 <Border x:Name="SwitchOnBackground" 
-                                        Background="{style:StyleManager Key=ControlSelectedBrush}"
+                                        Background="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"
                                         BorderBrush="{TemplateBinding BorderBrush}"
                                         BorderThickness="0 1 0 1"
                                         Grid.Column="1"
@@ -170,16 +170,16 @@
                     <ControlTemplate.Triggers>
 
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="SwitchOffLeft" Property="Stroke" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="SwitchOffRight" Property="Stroke" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="SwitchOffBackground" Property="BorderBrush" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="SwitchOffIndicator" Property="Stroke" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="SwitchOffIndicator" Property="Fill" Value="{style:StyleManager Key=ControlHighlightBrush}"/>
-                            <Setter TargetName="SwitchOnLeft" Property="Stroke" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="SwitchOnRight" Property="Stroke" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="SwitchOnBackground" Property="BorderBrush" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="SwitchOnIndicator" Property="Stroke" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
-                            <Setter TargetName="SwitchOnIndicator" Property="Fill" Value="{style:StyleManager Key=ControlHighlightBrush}"/>
+                            <Setter TargetName="SwitchOffLeft" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="SwitchOffRight" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="SwitchOffBackground" Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="SwitchOffIndicator" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="SwitchOffIndicator" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
+                            <Setter TargetName="SwitchOnLeft" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="SwitchOnRight" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="SwitchOnBackground" Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="SwitchOnIndicator" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="SwitchOnIndicator" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
                         </Trigger>
                         
                         <Trigger Property="IsChecked" Value="True">
