@@ -1,25 +1,28 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:xl="clr-namespace:ControlsXL">
+                    xmlns:xl="clr-namespace:ControlsXL"
+                    xmlns:style="clr-namespace:StylesXL;assembly=StylesXL">
 
+    <!-- LINK BUTTON -->
     <Style TargetType="{x:Type xl:LinkButton}">
 
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextBrush}}"/>
+        <Setter Property="Foreground" Value="{style:StyleManager Key=TextBrush}"/>
         <Setter Property="Cursor" Value="Hand"/>
         
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:LinkButton}">
                     
-                    <!-- LINK BUTTON BORDER -->
+                    <!-- LINK BUTTON: BORDER -->
                     <Border>
 
-                        <!-- LINK BUTTON TEXT AREA -->
+                        <!-- LINK BUTTON: TEXT AREA -->
                         <TextBlock x:Name="TextArea"
+                                   Foreground="{TemplateBinding Foreground}"
                                    TextDecorations="{x:Null}"
                                    TextTrimming="CharacterEllipsis">
                             
-                            <!-- LINK BUTTON TEXT -->
+                            <!-- LINK BUTTON: TEXT -->
                             <ContentPresenter/>
                             
                         </TextBlock>
@@ -27,20 +30,20 @@
 
                     <ControlTemplate.Triggers>
 
-                        <!-- LINK BUTTON DISABLED -->
+                        <!-- LINK BUTTON: DISABLED -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"/>
+                            <Setter Property="Foreground" Value="{style:StyleManager Key=TextDisabledBrush}"/>
                         </Trigger>
                         
-                        <!-- LINK BUTTON MOUSE OVER -->
+                        <!-- LINK BUTTON: MOUSE OVER -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter Property="Foreground" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
                             <Setter TargetName="TextArea" Property="TextDecorations" Value="Underline"/>
                         </Trigger>
 
-                        <!-- LINK BUTTON PRESSED-->
+                        <!-- LINK BUTTON: PRESSED -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
+                            <Setter Property="Foreground" Value="{style:StyleManager Key=BorderPressedBrush}"/>
                             <Setter TargetName="TextArea" Property="TextDecorations" Value="{x:Null}"/>
                         </Trigger>
                         
@@ -49,5 +52,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
 </ResourceDictionary>

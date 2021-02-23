@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 
@@ -138,6 +137,7 @@ namespace ControlsXL
         {
             return (Brush)Application.Current.FindResource(new ComponentResourceKey(typeof(Styles), ID));
         }
+
 
         public static Color GetColor(string ID)
         {

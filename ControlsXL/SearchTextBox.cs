@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
+using StylesXL;
 namespace ControlsXL
 {
 
@@ -12,6 +12,8 @@ namespace ControlsXL
         static SearchTextBox()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SearchTextBox), new FrameworkPropertyMetadata(typeof(SearchTextBox)));
+            StylesXL.StyleManager.Initialize();
+
         }
 
         public SearchTextBox() : base()

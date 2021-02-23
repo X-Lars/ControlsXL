@@ -1,5 +1,4 @@
 ﻿using ControlsXL.Common;
-using System;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
@@ -39,12 +38,9 @@ namespace ControlsXL
         {
             // Overrides the default style of the inherited ToggleButton to use the VectorButton style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(VectorButton), new FrameworkPropertyMetadata(typeof(VectorButton)));
-        }
 
-        public VectorButton()
-        {
-            //StylesXL.StyleManager.StyleChanged += StyleManagerStyleChanged;
-            //InitializeStyle();
+            // Requires style manager
+            StylesXL.StyleManager.Initialize();
         }
 
         #endregion
@@ -147,8 +143,6 @@ namespace ControlsXL
 
         #region Overrides
 
-       
-
         /// <summary>
         /// Handles the mouse click event.
         /// </summary>
@@ -170,33 +164,6 @@ namespace ControlsXL
             // Prevent checked state when the button mode is standard
             if (ButtonMode == ButtonModes.Toggle)
                 base.OnChecked(e);
-        }
-
-        #endregion
-
-        #region Event Handlers
-
-        private void StyleManagerStyleChanged(object sender, EventArgs e)
-        {
-            //InitializeStyle();
-        }
-
-        #endregion
-
-        #region Methods
-
-        public Brush MouseOver;
-
-        private void InitializeStyle()
-        {
-            //Background = new SolidColorBrush(Colors.Transparent);
-
-            //BorderBrush = StylesXL.StyleManager.Brush(StylesXL.Brushes.ControlBorder);
-
-            //Fill = (SolidColorBrush)StylesXL.StyleManager.Brush(StylesXL.Brushes.Control);
-            //Stroke = BorderBrush;
-
-            //MouseOver = StylesXL.StyleManager.Brush(StylesXL.Brushes.ControlSelected).Alpha(0.25);
         }
 
         #endregion

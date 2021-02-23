@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using StylesXL;
 
 namespace ControlsXL
 {
@@ -13,8 +14,12 @@ namespace ControlsXL
         /// </summary>
         static LinkButton()
         {
-            // Overrides the default style of the inherited Button to use the LinkButton style instead.
+            // Overrides the default style of the inherited Button to use the LinkButton style instead
             DefaultStyleKeyProperty.OverrideMetadata(typeof(LinkButton), new FrameworkPropertyMetadata(typeof(LinkButton)));
+
+            // Requires style manager
+            StylesXL.StyleManager.Initialize();
         }
+
     }
 }

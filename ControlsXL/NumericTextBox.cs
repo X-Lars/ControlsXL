@@ -29,6 +29,7 @@ namespace ControlsXL
         {
             // Overrides the default style of the inherited Button to use the NumericTextBox style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(NumericTextBox), new FrameworkPropertyMetadata(typeof(NumericTextBox)));
+            StylesXL.StyleManager.Initialize();
         }
 
         /// <summary>
