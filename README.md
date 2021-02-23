@@ -55,9 +55,9 @@ from the `Interval`.
   Value="10"/>
 ```
 ###### <i>List binding</i>
+![Alt text](/Images/NumericTextBox-Horizontal-List.jpg)
 
 Creates a `NumericTextbox` bound to a list, use the `ValueProvider` property for binding, the `Index` property will contain the selected list index.
-![Alt text](/Images/NumericTextBox-Horizontal-List.jpg)
 ```
 // List property to bind the NumericTextbox
 public List<string> Values
