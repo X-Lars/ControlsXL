@@ -45,7 +45,6 @@ are reversed, i.e. -36 is smaller than -12, the `Index` is reversed too, index 0
 Creates a `NumericTextbox` where the buttons are hidden, use the mouse wheel or keys to modify the `Value`. The display precision is automatically adapted
 from the `Interval`.
 ```
-// Interval is fractional, value display is automatically updated to show the Interval resolution
 <xl:NumericTextBox
   Min="0" Max="127"
   Interval="0.5"
@@ -58,8 +57,9 @@ from the `Interval`.
 ![Alt text](/Images/NumericTextBox-Horizontal-List.jpg)
 
 Creates a `NumericTextbox` bound to a list, use the `ValueProvider` property for binding, the `Index` property will contain the selected list index.
+Incrementing and decrementing will cycle through the list values.
 ```
-// List property to bind the NumericTextbox
+// Example property to bind
 public List<string> Values
 {
   get 
@@ -74,7 +74,6 @@ public List<string> Values
 ```
 
 ```
-// ValueProvider is bound to the list Values, the NumericTextbox will cycle through the list values on increment and decrement
 <xl:NumericTextBox
     Index="0"
     ValueProvider="{Binding Values}"/>
