@@ -90,6 +90,7 @@ namespace ControlsXL
         {
             // Overrides the default style of the inherited ItemsControl to use the MDIHost style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MDIHost), new FrameworkPropertyMetadata(typeof(MDIHost)));
+            StylesXL.StyleManager.Initialize();
         }
 
         /// <summary>
@@ -571,6 +572,7 @@ namespace ControlsXL
         static MDIChild()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MDIChild), new FrameworkPropertyMetadata(typeof(MDIChild)));
+            StylesXL.StyleManager.Initialize();
         }
 
         /// <summary>

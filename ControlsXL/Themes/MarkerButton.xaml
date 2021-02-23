@@ -1,14 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:xl="clr-namespace:ControlsXL"
-                    xmlns:common="clr-namespace:ControlsXL.Common">
+                    xmlns:style="clr-namespace:StylesXL;assembly=StylesXL">
 
     <Style TargetType="{x:Type xl:MarkerButton}">
 
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
+        <Setter Property="Background" Value="{style:StyleManager Key=ControlBrush}"/>
+        <Setter Property="Foreground" Value="{style:StyleManager Key=TextBrush}"/>
+        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Width" Value="Auto"/>
@@ -28,7 +28,7 @@
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{DynamicResource {ComponentResourceKey xl:Styles, CornerRadius}}">
+                                CornerRadius="0">
 
                             <!-- MARKER BUTTON CONTENT -->
                             <DockPanel>
@@ -80,30 +80,30 @@
 
                         <!-- IS CHECKED -->
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"/>
+                            <Setter TargetName="Marker" Property="Background" Value="{style:StyleManager Key=ControlSelectedBrush}"/>
+                            <Setter Property="Foreground" Value="{style:StyleManager Key=ControlSelectedBrush}"/>
                         </Trigger>
 
                         <!-- MOUSE OVER -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
-                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlActiveBrush}}"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter TargetName="Marker" Property="Background" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
+                            <Setter Property="Background" Value="{style:StyleManager Key=ControlHighlightBrush}"/>
+                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
                         </Trigger>
 
                         <!-- MOUSE PRESS -->
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
-                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlPressedBrush}}"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderPressedBrush}}"/>
+                            <Setter TargetName="Marker" Property="Background" Value="{style:StyleManager Key=BorderPressedBrush}"/>
+                            <Setter Property="Background" Value="{style:StyleManager Key=ControlPressedBrush}"/>
+                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderPressedBrush}"/>
                         </Trigger>
 
                         <!-- DISABLED -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Marker" Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
-                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlDisabledBrush}}"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"/>
+                            <Setter TargetName="Marker" Property="Background" Value="{style:StyleManager Key=BorderDisabledBrush}"/>
+                            <Setter Property="Background" Value="{style:StyleManager Key=ControlDisabledBrush}"/>
+                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderDisabledBrush}"/>
+                            <Setter Property="Foreground" Value="{style:StyleManager Key=TextDisabledBrush}"/>
                         </Trigger>
 
                     </ControlTemplate.Triggers>

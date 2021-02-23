@@ -28,6 +28,7 @@ namespace ControlsXL
         static FilteredDataGridColumnHeader()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FilteredDataGridColumnHeader), new FrameworkPropertyMetadata(typeof(FilteredDataGridColumnHeader)));
+            StylesXL.StyleManager.Initialize();
         }
     }
 
@@ -42,6 +43,7 @@ namespace ControlsXL
         static FilteredDataGrid()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(FilteredDataGrid), new FrameworkPropertyMetadata(typeof(FilteredDataGrid)));
+            StylesXL.StyleManager.Initialize();
         }
         /// <summary>
         /// Register for all text changed events

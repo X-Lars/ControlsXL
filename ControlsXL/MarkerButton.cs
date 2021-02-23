@@ -35,6 +35,8 @@ namespace ControlsXL
         {
             // Overrides the default style of the inherited ToggleButton to use the MarkerButton style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MarkerButton), new FrameworkPropertyMetadata(typeof(MarkerButton)));
+
+            StylesXL.StyleManager.Initialize();
         }
 
         #endregion

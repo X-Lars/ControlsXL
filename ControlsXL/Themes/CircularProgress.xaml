@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:xl="clr-namespace:ControlsXL"
+                    xmlns:style="clr-namespace:StylesXL;assembly=StylesXL"
                     xmlns:common ="clr-namespace:ControlsXL.Common"
                     xmlns:element="clr-namespace:ControlsXL.Elements">
 
@@ -15,7 +16,7 @@
                 <ControlTemplate TargetType="{x:Type xl:CircularProgress}">
 
                     <!-- CIRCULARPROGRESS: BORDER-->
-                    <Border BorderThickness="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"
+                    <Border BorderThickness="{style:StyleManager Key=BorderThickness}"
                             BorderBrush="Transparent">
                         
                         <!-- CIRCULARPROGRESS: LAYOUT -->
@@ -23,7 +24,7 @@
                             <!-- CIRCULARPROGRESS: BACKGROUND ARC -->
                             <element:Arc x:Name="BackgroundArc"
                                          End="{TemplateBinding EndAngle}"
-                                         Stroke="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"
+                                         Stroke="{style:StyleManager Key=ControlBrush}"
                                          StrokeThickness="{TemplateBinding Thickness}"
                                          Start="0"
                                          RenderTransformOrigin="0.5, 0.5">
@@ -37,7 +38,7 @@
                             <!-- CIRCULARPROGRESS: PROGRESS ARC -->
                             <element:Arc x:Name="ProgressArc"
                                          End="{TemplateBinding AngleOffset}"
-                                         Stroke="{DynamicResource {ComponentResourceKey xl:Styles, ControlSelectedBrush}}"
+                                         Stroke="{style:StyleManager Key=ControlSelectedBrush}"
                                          StrokeThickness="{TemplateBinding Thickness}"
                                          Start="0"
                                          RenderTransformOrigin="0.5, 0.5">
@@ -51,7 +52,7 @@
                             <!-- CIRCULARPROGRESS: TEXT VALUE -->
                             <TextBlock x:Name="Value" 
                                        FontSize="10"
-                                       Foreground="{DynamicResource {ComponentResourceKey xl:Styles, TextBrush}}"
+                                       Foreground="{style:StyleManager Key=TextBrush}"
                                        HorizontalAlignment="Center" 
                                        RenderTransformOrigin="0.5, 0.5"
                                        Text="{TemplateBinding Text}"

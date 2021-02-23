@@ -1,11 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:xl="clr-namespace:ControlsXL"
+                    xmlns:style="clr-namespace:StylesXL;assembly=StylesXL"
                     xmlns:common="clr-namespace:ControlsXL.Common">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Geometry.xaml"/>
-        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Fonts.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Fonts.xaml"/>
+        <!--<xl:DesignTimeResourceDictionary DesignTimeSource="ControlsXL;Component/Resources/Styles/Default.xaml"/>
+        <xl:DesignTimeResourceDictionary DesignTimeSource="ControlsXL;Component/Resources/Appearances/Default.xaml"/>-->
+
     </ResourceDictionary.MergedDictionaries>
     
     <!-- Converts a boolean to visibility values -->
@@ -18,12 +22,12 @@
     <!-- SIDE BAR STYLE -->
     <Style TargetType="{x:Type xl:Sidebar}" x:Name="SidebarStyle">
         
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
+        <Setter Property="Background" Value="{style:StyleManager Key=ControlBrush}"/>
+        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="{style:StyleManager Key=BorderThickness}"/>
         <Setter Property="Width" Value="150"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeUI}"/>
-        <Setter Property="Margin" Value="{DynamicResource {ComponentResourceKey xl:Styles, Margin}}"/>
+        <Setter Property="Margin" Value="0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xl:Sidebar}">
@@ -81,7 +85,7 @@
                                                 Background="{TemplateBinding Background}"
                                                 BorderBrush="{TemplateBinding BorderBrush}"
                                                 BorderThickness="{TemplateBinding BorderThickness, Converter={StaticResource AdaptiveThicknessConverter}, ConverterParameter='0 0 0 1'}"
-                                                CornerRadius="{DynamicResource {ComponentResourceKey xl:Styles, CornerRadius}}"
+                                                CornerRadius="0"
                                                 Grid.Row="0"
                                                 Height="{x:Static xl:Sidebar.SIDEBAR_SECTION_HEIGHT}">
 
@@ -112,7 +116,7 @@
 
                                         <!-- SIDE BAR COMMON AREA CONTENT -->
                                         <Grid x:Name="SidebarCommonContent"
-                                              Background="{DynamicResource {ComponentResourceKey xl:Styles, AppBrush}}"
+                                              Background="{style:StyleManager Key=AppBrush}"
                                               Grid.Row="1">
                                             
                                             <Grid.RowDefinitions>
@@ -193,7 +197,7 @@
 
                                 <!-- SIDE BAR CONTENT AREA -->
                                 <Grid x:Name="SidebarContentArea"
-                                      Background="{DynamicResource {ComponentResourceKey xl:Styles, AppBrush}}"
+                                      Background="{style:StyleManager Key=AppBrush}"
                                       Grid.Row="2">
 
                                     <!-- SIDE BAR EXPANDED CONTENT -->
@@ -480,14 +484,14 @@
     <!-- SIDE BAR SECTION STYLE -->
     <Style TargetType="{x:Type xl:SidebarSection}">
 
-        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}"/>
-        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextBrush}}"/>
-        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey xl:Styles, BorderThickness}}"/>
+        <Setter Property="Background" Value="{style:StyleManager Key=ControlBrush}"/>
+        <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
+        <Setter Property="Foreground" Value="{style:StyleManager Key=TextBrush}"/>
+        <Setter Property="BorderThickness" Value="{style:StyleManager Key=BorderThickness}"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Height" Value="{x:Static xl:Sidebar.SIDEBAR_SECTION_HEIGHT}"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="Margin" Value="{DynamicResource {ComponentResourceKey xl:Styles, Margin}}"/>
+        <Setter Property="Margin" Value="0"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         
         <Setter Property="Template">
@@ -545,11 +549,11 @@
                                     <Path x:Name="SidebarSectionVectorData"
                                           Data="{TemplateBinding Vector}"
                                           DockPanel.Dock="Left"
-                                          Fill="{DynamicResource {ComponentResourceKey xl:Styles, ControlBrush}}"
+                                          Fill="{style:StyleManager Key=ControlBrush}"
                                           Focusable="False"
                                           RenderTransformOrigin="0.5, 0.5"
                                           Stretch="Uniform"
-                                          Stroke="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderBrush}}">
+                                          Stroke="{style:StyleManager Key=BorderBrush}">
 
                                         <Path.RenderTransform>
                                             
@@ -613,25 +617,25 @@
 
                         <!-- SECTION SELECTED -->
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextSelectedBrush}}"/>
-                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextSelectedBrush}}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{style:StyleManager Key=TextSelectedBrush}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{style:StyleManager Key=TextSelectedBrush}"/>
                         </Trigger>
 
                         <!-- MOUSE OVER -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlActiveBrush}}"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
-                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
-                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderActiveBrush}}"/>
+                            <Setter Property="Background" Value="{style:StyleManager Key=ControlHighlightBrush}"/>
+                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{style:StyleManager Key=BorderHighlightBrush}"/>
                         </Trigger>
 
                         <!-- DISABLED -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlDisabledBrush}}"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey xl:Styles, ControlBorderDisabledBrush}}"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"/>
-                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"/>
-                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{DynamicResource {ComponentResourceKey xl:Styles, TextDisabledBrush}}"/>
+                            <Setter Property="Background" Value="{style:StyleManager Key=ControlDisabledBrush}"/>
+                            <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderDisabledBrush}"/>
+                            <Setter Property="Foreground" Value="{style:StyleManager Key=TextDisabledBrush}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Fill" Value="{style:StyleManager Key=TextDisabledBrush}"/>
+                            <Setter TargetName="SidebarSectionVectorData" Property="Stroke" Value="{style:StyleManager Key=TextDisabledBrush}"/>
                         </Trigger>
 
                     </ControlTemplate.Triggers>

@@ -11,7 +11,7 @@
         
         <Setter Property="Background" Value="{style:StyleManager Key=AppBrush}"/>
         <Setter Property="BorderBrush" Value="{style:StyleManager Key=BorderBrush}"/>
-        <Setter Property="BorderThickness" Value="{style:StyleManager Key=BorderThickness}"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Foreground" Value="{style:StyleManager Key=TextBrush}"/>
         <Setter Property="Height" Value="23"/>
         <Setter Property="Width" Value="120"/>

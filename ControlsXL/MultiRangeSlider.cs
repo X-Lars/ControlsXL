@@ -33,6 +33,7 @@ namespace ControlsXL
         static MultiRangeSlider()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MultiRangeSlider), new FrameworkPropertyMetadata(typeof(MultiRangeSlider)));
+            StylesXL.StyleManager.Initialize();
         }
 
         public MultiRangeSlider()

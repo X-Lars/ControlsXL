@@ -226,6 +226,8 @@ namespace ControlsXL
         {
             // Overrides the default style of the inherited HeaderedItemsControl to use the Sidebar style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Sidebar), new FrameworkPropertyMetadata(typeof(Sidebar)));
+
+            StylesXL.StyleManager.Initialize();
         }
 
         /// <summary>
@@ -256,14 +258,6 @@ namespace ControlsXL
             {
                 this.SizeChanged += new SizeChangedEventHandler(SidebarSizeChanged);
             }
-
-            //StylesXL.StyleManager.StyleChanged += StyleManager_StyleChanged;
-
-        }
-
-        private void StyleManager_StyleChanged(object sender, EventArgs e)
-        {
-            //Background = StylesXL.StyleManager.Brush(StylesXL.Brushes.TestBrush);
         }
 
         #endregion
@@ -906,7 +900,10 @@ namespace ControlsXL
                 Point mousePosition = e.GetPosition(this);
 
                 // Get dynamic applied border thickness style value
-                Thickness border = (Thickness)StyleManager.GetStyleValue(Styles.BorderThickness);
+                Thickness border = new Thickness(1);
+
+                if(!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                    border = (Thickness)StylesXL.StyleManager.GetStyleValue(StylesXL.Layout.BorderThickness);
 
                 double height = this.ActualHeight - SIDEBAR_DIMENSION_CONSTANT - mousePosition.Y;
 
@@ -1197,8 +1194,6 @@ namespace ControlsXL
             base.OnInitialized(e);
 
             InitializeSidebarSections();
-
-            //Background = StylesXL.StyleManager.Brush(StylesXL.Brushes.TestBrush);
         }
 
         #endregion
@@ -1317,7 +1312,11 @@ namespace ControlsXL
                 return 0;
 
             // Get dynamic applied border thickness style value
-            Thickness border = (Thickness)StyleManager.GetStyleValue(Styles.BorderThickness);
+            Thickness border = new Thickness(1);
+
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                border = (Thickness)StylesXL.StyleManager.GetStyleValue(StylesXL.Layout.BorderThickness);
+
 
             return (int)Math.Floor((_PARTMinimizedSections.ActualWidth - SIDEBAR_SECTION_IMAGE_DIMENSIONS) 
                                   / (SIDEBAR_SECTION_IMAGE_DIMENSIONS + border.Right));
@@ -1330,7 +1329,11 @@ namespace ControlsXL
         private double GetMinimumSidebarSectionsAreaHeight()
         {
             // Get dynamic applied border thickness style value
-            Thickness border = (Thickness)StyleManager.GetStyleValue(Styles.BorderThickness);
+            Thickness border = new Thickness(1);
+
+            if (!DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+                border = (Thickness)StylesXL.StyleManager.GetStyleValue(StylesXL.Layout.BorderThickness);
+
 
             return (_MaximizedSidebarSections.Count * SIDEBAR_DIMENSION_CONSTANT + border.Top)
                    + SIDEBAR_SECTION_IMAGE_DIMENSIONS + border.Top 
@@ -1460,6 +1463,7 @@ namespace ControlsXL
         {
             // Overrides the default style of the inherited HeaderedContentControl to use the SidebarSection style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SidebarSection), new FrameworkPropertyMetadata(typeof(SidebarSection)));
+            StylesXL.StyleManager.Initialize();
         }
 
         /// <summary>

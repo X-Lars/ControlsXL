@@ -53,8 +53,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CircularProgress.cs" />
-    <Compile Include="Common\BrushExtensions.cs" />
-    <Compile Include="Common\ColorExtensions.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\Converters.cs" />
     <Compile Include="Common\DesignTimeResourceDictionary.cs" />
@@ -75,55 +73,11 @@
     <Compile Include="Slider.cs" />
     <Compile Include="Switch.cs" />
     <Compile Include="VectorButton.cs" />
-    <Page Include="Resources\Appearances\Spaced.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Appearances\Raised.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Appearances\Shadowed.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Appearances\Rounded.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Appearances\Strong.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Resources\Colors.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resources\Fonts.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Resources\Geometry.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Appearance.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Styles\Dark.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Styles\Default.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resources\Appearances\Flat.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Resources\Appearances\Default.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -147,8 +101,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Common\Styles.cs" />
-    <Compile Include="Common\StyleManager.cs" />
     <Compile Include="Sidebar.cs">
       <SubType>Code</SubType>
     </Compile>

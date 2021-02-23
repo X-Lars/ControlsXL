@@ -13,6 +13,7 @@ namespace ControlsXL
         static Expander()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ControlsXL.Expander), new FrameworkPropertyMetadata(typeof(ControlsXL.Expander)));
+            StylesXL.StyleManager.Initialize();
         }
 
         public Expander() : base()

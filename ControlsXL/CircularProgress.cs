@@ -14,6 +14,7 @@ namespace ControlsXL
         static CircularProgress()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(CircularProgress), new FrameworkPropertyMetadata(typeof(CircularProgress)));
+            StylesXL.StyleManager.Initialize();
         }
 
         public CircularProgress()

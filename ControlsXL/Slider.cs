@@ -37,6 +37,8 @@ namespace ControlsXL
         static Slider()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Slider), new FrameworkPropertyMetadata(typeof(Slider)));
+
+            StylesXL.StyleManager.Initialize();
         }
 
         public Slider()

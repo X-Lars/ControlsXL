@@ -23,6 +23,7 @@ namespace ControlsXL
         static Switch()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Switch), new FrameworkPropertyMetadata(typeof(Switch)));
+            StylesXL.StyleManager.Initialize();
         }
 
 

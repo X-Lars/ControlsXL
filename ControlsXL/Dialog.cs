@@ -79,7 +79,10 @@ namespace ControlsXL
         /// <summary>
         /// Static constructor called before initializing an instance of <see cref="MessageDialog"/>.
         /// </summary>
-        static Dialog() { }
+        static Dialog() 
+        {
+            StylesXL.StyleManager.Initialize();
+        }
 
         /// <summary>
         /// Creates and initializes a new blank <see cref="Dialog"/> instance without any predefined options.<br/>
@@ -523,6 +526,7 @@ namespace ControlsXL
         {
             // Overrides the default style to use the Dialog style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DialogBase), new FrameworkPropertyMetadata(typeof(Dialog)));
+            StylesXL.StyleManager.Initialize();
         }
 
         internal DialogBase(Dialog dialog)
@@ -554,6 +558,7 @@ namespace ControlsXL
         {
             // Overrides the default style to use the Dialog style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MessageDialog), new FrameworkPropertyMetadata(typeof(Dialog)));
+            StylesXL.StyleManager.Initialize();
         }
 
         /// <summary>
@@ -585,6 +590,8 @@ namespace ControlsXL
         {
             // Overrides the default style to use the Dialog style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(QuestionDialog), new FrameworkPropertyMetadata(typeof(Dialog)));
+
+            StylesXL.StyleManager.Initialize();
         }
 
         /// <summary>
@@ -618,6 +625,7 @@ namespace ControlsXL
         {
             // Overrides the default style to use the Dialog style instead.
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ProgressDialog), new FrameworkPropertyMetadata(typeof(Dialog)));
+            StylesXL.StyleManager.Initialize();
         }
 
         /// <summary>

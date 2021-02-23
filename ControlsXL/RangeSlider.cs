@@ -36,6 +36,7 @@ namespace ControlsXL
         static RangeSlider()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(RangeSlider), new FrameworkPropertyMetadata(typeof(RangeSlider)));
+            StylesXL.StyleManager.Initialize();
         }
 
         public RangeSlider()
