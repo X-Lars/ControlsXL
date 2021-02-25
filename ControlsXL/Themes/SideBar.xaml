@@ -116,7 +116,7 @@
 
                                         <!-- SIDE BAR COMMON AREA CONTENT -->
                                         <Grid x:Name="SidebarCommonContent"
-                                              Background="{style:StyleManager Key=AppBrush}"
+                                              Background="{DynamicResource {ComponentResourceKey style:Styles, AppBrush}}"
                                               Grid.Row="1">
                                             
                                             <Grid.RowDefinitions>
@@ -197,7 +197,7 @@
 
                                 <!-- SIDE BAR CONTENT AREA -->
                                 <Grid x:Name="SidebarContentArea"
-                                      Background="{style:StyleManager Key=AppBrush}"
+                                      Background="{DynamicResource {ComponentResourceKey style:Styles, AppBrush}}"
                                       Grid.Row="2">
 
                                     <!-- SIDE BAR EXPANDED CONTENT -->
@@ -549,11 +549,11 @@
                                     <Path x:Name="SidebarSectionVectorData"
                                           Data="{TemplateBinding Vector}"
                                           DockPanel.Dock="Left"
-                                          Fill="{style:StyleManager Key=ControlBrush}"
+                                          Fill="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"
                                           Focusable="False"
                                           RenderTransformOrigin="0.5, 0.5"
                                           Stretch="Uniform"
-                                          Stroke="{style:StyleManager Key=BorderBrush}">
+                                          Stroke="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}">
 
                                         <Path.RenderTransform>
                                             

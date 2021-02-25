@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
@@ -25,6 +24,19 @@ namespace ControlsXL
             DefaultStyleKeyProperty.OverrideMetadata(typeof(Switch), new FrameworkPropertyMetadata(typeof(Switch)));
             StylesXL.StyleManager.Initialize();
         }
+
+
+
+        public double LabelOffset
+        {
+            get { return (double)GetValue(LabelOffsetProperty); }
+            private set { SetValue(LabelOffsetProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for LabelOffset.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LabelOffsetProperty =
+            DependencyProperty.Register(nameof(LabelOffset), typeof(double), typeof(Switch), new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.AffectsArrange | FrameworkPropertyMetadataOptions.AffectsMeasure));
+
 
 
 
@@ -91,8 +103,8 @@ namespace ControlsXL
         {
             base.OnApplyTemplate();
 
-            _OnLabel = GetTemplateChild(PART_ON_LABEL) as Label;
-            _OffLabel = GetTemplateChild(PART_OFF_LABEL) as Label;
+            //_OnLabel = GetTemplateChild(PART_ON_LABEL) as Label;
+            //_OffLabel = GetTemplateChild(PART_OFF_LABEL) as Label;
 
             //_OnLabel.SizeChanged += _OnLabel_SizeChanged;
             //_OffLabel.SizeChanged += _OffLabel_SizeChanged;
@@ -102,25 +114,27 @@ namespace ControlsXL
 
         private void _OffLabel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Console.WriteLine(_OffLabel.ActualWidth);
+            //Console.WriteLine(_OffLabel.ActualWidth);
         }
 
         private void _OnLabel_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            Console.WriteLine(_OnLabel.ActualWidth);
+            //Console.WriteLine(_OnLabel.ActualWidth);
         }
 
         private void SwitchLoaded(object sender, RoutedEventArgs e)
         {
-        
-            _OffLabel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            _OnLabel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            Console.WriteLine(_OffLabel.DesiredSize.Width);
-            Console.WriteLine(_OnLabel.DesiredSize.Width);
+            LabelOffset = ActualHeight / 3;
+            InvalidateVisual();
+            Console.WriteLine("label offset" + LabelOffset);
+            //_OffLabel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            //_OnLabel.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            //Console.WriteLine(_OffLabel.DesiredSize.Width);
+            //Console.WriteLine(_OnLabel.DesiredSize.Width);
         }
 
-        private Label _OffLabel;
-        private Label _OnLabel;
+        //private Label _OffLabel;
+        //private Label _OnLabel;
 
         public double LabelWidth
         {

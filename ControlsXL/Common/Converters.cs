@@ -6,6 +6,19 @@ using System.Windows.Media;
 
 namespace ControlsXL.Common
 {
+    public class InvertConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            
+            return -(double)value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Binding.DoNothing;
+        }
+    }
     /// <summary>
     /// Converts a <see cref="null"/> value to a <see cref="bool"/>.
     /// </summary>
