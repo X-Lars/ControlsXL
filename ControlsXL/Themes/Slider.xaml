@@ -1,0 +1,134 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:xl="clr-namespace:ControlsXL"
+                    xmlns:style="clr-namespace:StylesXL;assembly=StylesXL">
+
+    <ControlTemplate TargetType="Thumb" x:Key="ThumbSquare">
+        
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
+            <Viewbox>
+                <TextBlock Foreground="{TemplateBinding Foreground}" 
+                           Text="{Binding ValueText, RelativeSource={RelativeSource AncestorType=xl:Slider}}"/>
+            </Viewbox>
+        </Border>
+
+    </ControlTemplate>
+
+    <ControlTemplate TargetType="Thumb" x:Key="ThumbRound">
+                    <Grid>
+                        <Ellipse Fill="{TemplateBinding Background}" Stroke="{TemplateBinding BorderBrush}"/>
+            <Viewbox>
+                <TextBlock Text="{Binding ValueText, RelativeSource={RelativeSource AncestorType=xl:Slider}}"
+                           VerticalAlignment="Center"/>
+            </Viewbox>
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="HorizontalSlider" TargetType="{x:Type xl:Slider}">
+       
+        <!-- SLIDER: BORDER-->
+        <Border>
+            
+            <Grid VerticalAlignment="Center">
+
+                <!-- SLIDER TRACK: BACKGROUND -->
+                <Border x:Name="PART_Track" 
+                        Background="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}" 
+                        Height="{TemplateBinding TrackSize}"/>
+
+                <Canvas >
+
+                    <Border x:Name="Indicator" 
+                            Background="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}" 
+                            IsHitTestVisible="False"
+                            Height="{TemplateBinding TrackSize}"
+                            Width="{TemplateBinding Position}"/>
+
+                    <Thumb x:Name="PART_Thumb"
+                           Background="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"
+                           BorderBrush="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"
+                           BorderThickness="0.5"
+                           Canvas.Left="{TemplateBinding Position}"
+                           Focusable="True"
+                           Template="{StaticResource ThumbSquare}"/>
+
+
+                </Canvas>
+            </Grid>
+        </Border>
+        
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="PART_Thumb" Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
+            </Trigger>
+            <Trigger Property="ThumbStyle" Value="Round">
+                <Setter TargetName="PART_Thumb" Property="Template" Value="{StaticResource ThumbRound}"/>
+            </Trigger>
+            
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="VerticalSlider" TargetType="{x:Type xl:Slider}" >
+        
+        <!-- SLIDER: BORDER-->
+        <Border>
+            <Grid HorizontalAlignment="Center">
+
+                <!-- SLIDER TRACK: BACKGROUND -->
+                <Border x:Name="PART_Track" 
+                        Background="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}" 
+                        Height="{TemplateBinding ActualHeight}"
+                        Width="{TemplateBinding TrackSize}"/>
+
+                <Canvas Height="{TemplateBinding ActualHeight}">
+
+                    <Border x:Name="Indicator" 
+                            Background="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}" 
+                            Canvas.Bottom="0"
+                            IsHitTestVisible="False"
+                            Height="{TemplateBinding Position}"
+                            VerticalAlignment="Bottom"
+                            Width="{TemplateBinding TrackSize}"/>
+
+                    <Thumb x:Name="PART_Thumb"
+                           Background="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"
+                           BorderBrush="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"
+                           BorderThickness="0.5"
+                           Canvas.Bottom="{Binding Position, RelativeSource={RelativeSource AncestorType=xl:Slider}}"
+                           Focusable="True"
+                           Foreground="{DynamicResource {ComponentResourceKey style:Styles, TextBrush}}"
+                           Template="{StaticResource ThumbSquare}"/>
+
+
+                </Canvas>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="PART_Thumb" Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
+            </Trigger>
+            <Trigger Property="ThumbStyle" Value="Round">
+                <Setter TargetName="PART_Thumb" Property="Template" Value="{StaticResource ThumbRound}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Name="SliderStyle" TargetType="{x:Type xl:Slider}">
+
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="Focusable" Value="True"/>
+        <Setter Property="Template" Value="{StaticResource HorizontalSlider}"/>
+        <Setter Property="MinHeight" Value="100"/>
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Template" Value="{StaticResource VerticalSlider}"/>
+            </Trigger>
+        </Style.Triggers>
+
+    </Style>
+</ResourceDictionary>

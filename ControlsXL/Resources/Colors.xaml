@@ -1,0 +1,87 @@
+﻿
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:xl="clr-namespace:ControlsXL">
+
+    <!-- DEFAULT CONTROLS XL COLORS -->
+    <Color x:Key="DefaultControl">#DDDDDD</Color>
+    <Color x:Key="DefaultControlActive">#BEE6FD</Color>
+    <Color x:Key="DefaultControlDisabled">#F4F4F4</Color>
+    <Color x:Key="DefaultControlPressed">#C4E5F6</Color>
+    <Color x:Key="DefaultControlSelected">#3399FF</Color>
+    
+    <Color x:Key="DefaultControlBorder">#707070</Color>
+    <Color x:Key="DefaultControlBorderActive">#3C7FB1</Color>
+    <Color x:Key="DefaultControlBorderDisabled">#ADB2B5</Color>
+    <Color x:Key="DefaultControlBorderPressed">#2C628B</Color>
+    <Color x:Key="DefaultControlBorderSelected">#FFFFFF</Color>
+    
+    <Color x:Key="DefaultApp">#FFFFFF</Color>
+    <Color x:Key="DefaultAppBorder">#707070</Color>
+    <Color x:Key="DefaultAppBorderActive">#646464</Color>
+    <Color x:Key="DefaultAppHeader">#BFCDDB</Color>
+    <Color x:Key="DefaultAppHeaderActive">#99B4D1</Color>
+    <Color x:Key="DefaultAppHeaderDisabled">#707070</Color>
+    <Color x:Key="DefaultAppHeaderSelected">#007ACC</Color>
+    <Color x:Key="DefaultAppWorkspace">#ABABAB</Color>
+    
+    <Color x:Key="DefaultText">#000000</Color>
+    <Color x:Key="DefaultTextActive">#000000</Color>
+    <Color x:Key="DefaultTextDisabled">#838383</Color>
+    <Color x:Key="DefaultTextSelected">#FFFFFF</Color>
+
+    <Color x:Key="DefaultShadow">#80000000</Color>
+    <Color x:Key="DefaultHighlight">#80FFFFFF</Color>    
+    
+    <!-- DEFAULT WINDOWS SYSTEM COLORS -->
+    <Color x:Key="WindowsSystemControlColor">#E3E3E3</Color>
+    <Color x:Key="WindowsSystemControlLightColor">#F0F0F0</Color>
+    <Color x:Key="WindowsSystemControlLightLightColor">#FFFFFF</Color>
+    <Color x:Key="WindowsSystemControlDark">#A0A0A0</Color>
+    <Color x:Key="WindowsSystemControlDarkDarkColor">#696969</Color>
+    <Color x:Key="WindowsSystemActiveBorder">#B4B4B4</Color>
+    <Color x:Key="WindowsSystemActiveCaption">#99B4D1</Color>
+    <Color x:Key="WindowsSystemActiveCaptionText">#000000</Color>
+    <Color x:Key="WindowsSystemAppWorkspace">#ABABAB</Color>
+    <Color x:Key="WindowsSystemControlText">#000000</Color>
+    <Color x:Key="WindowsSystemDesktop">#FFFFFF</Color>
+    <Color x:Key="WindowsSystemGradientActiveCaption">#B9D1EA</Color>
+    <Color x:Key="WindowsSystemGradientInactiveCaption">#D7E4F2</Color>
+    <Color x:Key="WindowsSystemGrayText">#6D6D6D</Color>
+    <Color x:Key="WindowsSystemHighlight">#3399FF</Color>
+    <Color x:Key="WindowsSystemHighlightText">#FFFFFF</Color>
+    <Color x:Key="WindowsSystemHotTrack">#0066CC</Color>
+    <Color x:Key="WindowsSystemInactiveBorder">#F4F7FC</Color>
+    <Color x:Key="WindowsSystemInactiveCaption">#BFCDDB</Color>
+    <Color x:Key="WindowsSystemInactiveCaptionText">#434E54</Color>
+    <Color x:Key="WindowsSystemInfo">#FDFBE2</Color>
+    <Color x:Key="WindowsSystemInfoText">#000000</Color>
+    <Color x:Key="WindowsSystemMenu">#F0F0F0</Color>
+    <Color x:Key="WindowsSystemMenuBar">#F0F0F0</Color>
+    <Color x:Key="WindowsSystemMenuHighlight">#3399FF</Color>
+    <Color x:Key="WindowsSystemMenuText">#000000</Color>
+    <Color x:Key="WindowsSystemScrollBar">#C8C8C8</Color>
+    <Color x:Key="WindowsSystemWindow">#FFFFFF</Color>
+    <Color x:Key="WindowsSystemWindowFrame">#646464</Color>
+    <Color x:Key="WindowsSystemWindowText">#000000</Color>
+    
+    <!-- Resource dictionary specifying the default Windows colors -->
+    
+    
+    <!-- OVERLAY COLORS -->
+    <Color x:Key="OverlayLightLow">#40FFFFFF</Color>
+    <Color x:Key="OverlayLightMedium">#80FFFFFF</Color>
+    <Color x:Key="OverlayLightHigh">#C0FFFFFF</Color>
+
+    <Color x:Key="OverlayDarkLow">#40000000</Color>
+    <Color x:Key="OverlayDarkMedium">#80000000</Color>
+    <Color x:Key="OverlayDarkHigh">#C0000000</Color>
+
+
+
+    <!-- Default Control Colors -->
+    
+    <!-- Effect Colors -->
+    <Color x:Key="DropShadow">#33000000</Color>
+
+</ResourceDictionary>

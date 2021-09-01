@@ -1,0 +1,97 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:xl="clr-namespace:ControlsXL"
+                    xmlns:style="clr-namespace:StylesXL;assembly=StylesXL">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Resources/Geometry.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="{x:Type xl:SearchTextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, AppBrush}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextBrush}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
+
+        <!-- DEFAULT WINDOWS WIDTH & HEIGHT -->
+        <Setter Property="Width" Value="120"/>
+        <Setter Property="Height" Value="23"/>
+
+        <Setter Property="SelectionTextBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, TextSelectedBrush}}"/>
+        <Setter Property="SelectionBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"/>
+        <Setter Property="SelectionOpacity" Value="0.5"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"/>
+
+
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xl:SearchTextBox}">
+                    
+                    <!-- CONTROL BORDER -->
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+
+                        <!-- CONTROL LAYOUT -->
+                        <DockPanel>
+
+                            <xl:VectorButton x:Name="ClearButton"
+                                             Command="{x:Static xl:SearchTextBox.ClearCommand}"
+                                             DockPanel.Dock="Right"
+                                             HorizontalAlignment="Right"
+                                             Vector="{StaticResource GeometryClose}"
+                                             IsEnabled="{TemplateBinding IsEnabled}"
+                                             Scale="{TemplateBinding IconScale}"
+                                             VerticalAlignment="Center"/>
+
+                            <Grid>
+                            
+                                <ScrollViewer x:Name="PART_ContentHost" 
+                                              Focusable="false" 
+                                              HorizontalScrollBarVisibility="Hidden" 
+                                              VerticalScrollBarVisibility="Hidden"/>
+
+                                <TextBlock x:Name="TextHint" 
+                                           Foreground="{TemplateBinding Foreground}" 
+                                           Text="{Binding TextHint, RelativeSource={RelativeSource TemplatedParent}}"
+                                           HorizontalAlignment="Stretch" 
+                                           VerticalAlignment="Center"
+                                           Visibility="Collapsed"
+                                           TextTrimming="CharacterEllipsis"/>
+
+                            
+                            </Grid>
+                        </DockPanel>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="Text" Value="">
+                            <Setter TargetName="TextHint" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="TextHint" Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"/>
+                            <Setter TargetName="ClearButton" Property="Vector" Value="{StaticResource GeometryLookingGlass}"/>
+                        </Trigger>
+
+
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="ClearButton" Property="Fill" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
+                            <Setter TargetName="ClearButton" Property="Stroke" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsKeyboardFocused" Value="true">
+                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter Property="Visibility" TargetName="TextHint" Value="Collapsed"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

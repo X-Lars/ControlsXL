@@ -1,0 +1,140 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:xl="clr-namespace:ControlsXL"
+                    xmlns:style="clr-namespace:StylesXL;assembly=StylesXL">
+
+    <BooleanToVisibilityConverter x:Key="BooleanVisibilityConverter"/>
+
+    <Style x:Name="DialogStyle" TargetType="{x:Type xl:Dialog}">
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey style:Styles, TintBrush}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xl:Dialog}">
+
+                    <!-- DIALOG -->
+                    <Grid x:Name="DialogGrid" Background="{TemplateBinding Background}">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="250"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- DIALOG: CONTENT AREA -->
+                        <Border x:Name="DialogContent" 
+                                Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" 
+                                Background="{DynamicResource {ComponentResourceKey style:Styles, AppBrush}}"/>
+
+                        <Grid x:Name="ContentGrid" Grid.Column="1" Grid.Row="1"
+                              Margin="5">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <!-- DIALOG: TITLE -->
+                            <TextBlock x:Name="DialogTitle" 
+                                       Grid.Row="0" 
+                                       HorizontalAlignment="Center"
+                                       FontSize="18" FontWeight="Bold"
+                                       Text="{Binding Title, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <!-- DIALOG: MESSAGE -->
+                            <TextBlock x:Name="DialogMessage" 
+                                       FontSize="14"
+                                       Grid.Row="1"
+                                       HorizontalAlignment="Left"
+                                       Text="{Binding Message, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <!-- DIALOG: PROGRESS BAR -->
+                            <ProgressBar x:Name="DialogProgress"
+                                         Grid.Row="2"
+                                         HorizontalAlignment="Stretch"
+                                         MinWidth="200" MinHeight="10"
+                                         Background="{DynamicResource {ComponentResourceKey style:Styles, ControlBrush}}"
+                                         Foreground="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"
+                                         BorderBrush="{DynamicResource {ComponentResourceKey style:Styles, BorderBrush}}"
+                                         Minimum="0"
+                                         Maximum="100"
+                                         IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}"
+                                         Visibility="Visible"
+                                         Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <xl:CircularProgress x:Name="CircularProgress"
+                                                 Grid.Row="2"
+                                                 MinWidth="50" MinHeight="50"
+                                                 Minimum="0" Maximum="100"
+                                                 IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}"
+                                                 Visibility="Collapsed"
+                                                 Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"/>
+
+                            <!-- DIALOG: STATUS TEXT -->
+                            <TextBlock x:Name="DialogStatusText"
+                                       Grid.Row="3"
+                                       HorizontalAlignment="Left"
+                                       FontSize="10"
+                                       Text="{Binding Status, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Visibility="{Binding ShowStatus, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+                            <!-- DIALOG: OPTION BUTTONS -->
+                            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                <Button x:Name="AcceptButton"
+                                        Command="{Binding AcceptCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Content="Yes"
+                                        MinWidth="50"
+                                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+                                <Button x:Name="DeclineButton"
+                                        Command="{Binding DeclineCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Content="No"
+                                        MinWidth="50"
+                                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+                                <Button x:Name="CancelButton"
+                                        Command="{Binding CancelCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Content="Cancel"
+                                        MinWidth="50"
+                                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+                                <Button x:Name="ConfirmButton"
+                                        Command="{Binding ConfirmCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Content="OK"
+                                        MinWidth="50"
+                                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanVisibilityConverter}}"/>
+
+                            </StackPanel>
+
+                        </Grid>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        
+                        <Trigger Property="ProgressStyle" Value="Circular">
+                            <Setter TargetName="DialogProgress" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="CircularProgress" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+
+                        <Trigger Property="ShowProgress" Value="False">
+                            <Setter TargetName="DialogProgress" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="CircularProgress" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>

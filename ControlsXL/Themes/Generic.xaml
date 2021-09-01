@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+
+
+    <!-- Merges the specified dictionaries containing custom control styles into Themes\Generic.xaml -->
+    <ResourceDictionary.MergedDictionaries>
+        
+        <!-- MERGE THE RESOURCES FOLDER FILES -->
+        <ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Colors.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Fonts.xaml"/>
+
+        <!-- MERGE THE DEFAULT SKIN -->
+        <ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Style/Default.xaml"/>
+
+        <!-- MERGE THE DEFAULT APPEARANCE -->
+        <ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Appearance/Default.xaml"/>
+
+        <!-- MERGE THE CUSTOM CONTROL STYLES -->
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/LinkButton.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/MarkerButton.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/VectorButton.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Expander.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/NumericTextBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Slider.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/CircularProgress.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Switch.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/SearchTextBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/FilteredDataGrid.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/MultipleDocumentInterface.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Sidebar.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Dialog.xaml"/>
+
+    </ResourceDictionary.MergedDictionaries>
+   
+
+   
+</ResourceDictionary>
+
+    
