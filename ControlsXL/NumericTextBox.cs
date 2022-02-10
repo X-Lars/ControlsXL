@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,6 +19,7 @@ namespace ControlsXL
         private int _Resolution = 0;
         private bool _HasList = false;
         private bool _IsInversed = false;
+        private List<string> _Values = new ();
         #endregion
 
         #region Constructor
@@ -430,8 +432,10 @@ namespace ControlsXL
 
             NumericTextBox numericTextBox = (NumericTextBox)d;
 
-            if(numericTextBox._HasList)
+            if (numericTextBox._HasList)
+            {
                 numericTextBox.Text = numericTextBox.ValueProvider[(int)e.NewValue];
+            }
             else
             {
                 if (!numericTextBox._IsInversed)

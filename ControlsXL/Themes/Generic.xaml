@@ -20,7 +20,9 @@
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/VectorButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Expander.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/NumericTextBox.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/EnumeratedText.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Slider.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/RangeSlider.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/CircularProgress.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Switch.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/SearchTextBox.xaml"/>
@@ -33,6 +35,8 @@
    
 
    
+
+    
 </ResourceDictionary>
 
     

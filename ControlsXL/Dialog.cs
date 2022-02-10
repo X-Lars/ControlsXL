@@ -1,4 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,7 +30,7 @@ namespace ControlsXL
     /// DialogManager.Show(dialog);
     /// </code>
     /// </example>
-    public class Dialog : ContentControl//, ICloneable
+    public class Dialog : ContentControl, INotifyPropertyChanged//, ICloneable
     {
         #region Constants
 
@@ -515,6 +518,25 @@ namespace ControlsXL
         }
 
         #endregion
+
+        #region Interfaces: INotifyPropertyChanged
+
+        /// <summary>
+        /// Event raised when a property value is changed.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Raises the property changed event for the specified property.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that is changed.</param>
+        /// <remarks><i>If no property name is specified, the actual name of the property in code is used.</i></remarks>
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
     }
 
     internal sealed class DialogBase : Dialog
@@ -544,7 +566,6 @@ namespace ControlsXL
             ShowProgress = dialog.ShowProgress;
         }
     }
-
 
     /// <summary>
     /// Defines a dialog to show a message.
