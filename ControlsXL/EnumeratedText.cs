@@ -242,19 +242,19 @@ namespace ControlsXL
                 case Key.Up:
                 case Key.OemPlus:
 
-                    Index -= CTRL_KEY_DOWN ? 10 : 1;
+                    Index += CTRL_KEY_DOWN ? 10 : 1;
                     break;
 
                 case Key.Subtract:
                 case Key.Down:
                 case Key.OemMinus:
 
-                    Index += CTRL_KEY_DOWN ? 10 : 1;
+                    Index -= CTRL_KEY_DOWN ? 10 : 1;
                     break;
 
                 case Key.PageDown:
                     
-                    Index += 10;
+                    Index -= 10;
                     break;
 
                 case Key.End:
@@ -264,7 +264,7 @@ namespace ControlsXL
 
                 case Key.PageUp:
 
-                    Index -= 10;
+                    Index += 10;
                     break;
 
                 case Key.Home:
