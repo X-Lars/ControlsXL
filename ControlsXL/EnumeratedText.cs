@@ -186,8 +186,21 @@ namespace ControlsXL
                         }
 
                         instance.Text = instance.EnumerationValues[instance.Index].Value;
+
+                        ToolTipService.SetToolTip(instance, string.Format("{2} {0} ... {1} {3}", instance.EnumerationValues[instance._Min].Value, instance.EnumerationValues[instance._Max].Value, instance.Prefix, instance.Suffix));
                     }
                 }
+            }
+            else
+            {
+                EnumeratedText instance = (EnumeratedText)d;
+
+                instance.EnumerationValues.Clear();
+                instance._Type = null;
+                instance._Max = 0;
+                instance.Text = string.Empty;
+
+                ToolTipService.SetToolTip(instance, string.Empty);
             }
         }
 
