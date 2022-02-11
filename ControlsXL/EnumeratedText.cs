@@ -224,6 +224,7 @@ namespace ControlsXL
         /// <param name="e">The event's associated data.</param>
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
+            base.OnMouseUp(e);
             Keyboard.Focus(this);
         }
 
@@ -298,16 +299,14 @@ namespace ControlsXL
 
             if (distance > 0)
             {
-                if (Index > _Min)
-                    Index--;
-            }
-            else
-            {
                 if (Index < _Max)
                     Index++;
             }
-
-            e.Handled = true;
+            else
+            {
+                if (Index > _Min)
+                    Index--;
+            }
         }
 
         #endregion

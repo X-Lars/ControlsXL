@@ -11,6 +11,7 @@
         <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextBrush}}"/>
         <Setter Property="Height" Value="23"/>
         <Setter Property="HorizontalContentAlignment" Value="Right"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
 
         <Setter Property="Template">
             
@@ -32,7 +33,6 @@
                             
                             <!-- SUFFIX -->
                             <TextBlock DockPanel.Dock="Right"
-                                       Focusable="False"
                                        Foreground="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"
                                        HorizontalAlignment="Right"
                                        Padding="5 0 0 0"
@@ -40,13 +40,9 @@
                                        VerticalAlignment="Center"/>
                             
                             <!-- CONTENT -->
-                            <ScrollViewer HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          HorizontalScrollBarVisibility="Disabled" 
-                                          VerticalScrollBarVisibility="Hidden">
-
-                                <TextBlock x:Name="PART_Content"/>
-
-                            </ScrollViewer>
+                            <TextBlock x:Name="PART_Content"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 
                         </DockPanel>
                     </Border>
