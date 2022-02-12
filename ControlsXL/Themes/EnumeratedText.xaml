@@ -2,17 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:xl="clr-namespace:ControlsXL"
                     xmlns:style="clr-namespace:StylesXL;assembly=StylesXL">
-
+   
     <Style TargetType="{x:Type xl:EnumeratedText}">
-        
+
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderThickness}}"/>
         <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, TextBrush}}"/>
-        <Setter Property="Height" Value="23"/>
         <Setter Property="HorizontalContentAlignment" Value="Right"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Template">
             
             <Setter.Value>
@@ -26,23 +25,25 @@
                         <DockPanel>
 
                             <!-- PREFIX -->
-                            <TextBlock DockPanel.Dock="Left"
+                            <TextBlock x:Name="Prefix"
+                                       DockPanel.Dock="Left"
                                        Foreground="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"
-                                       Padding="0 0 0 5"
                                        Text="{TemplateBinding Prefix}"/>
                             
                             <!-- SUFFIX -->
-                            <TextBlock DockPanel.Dock="Right"
+                            <TextBlock x:Name="Suffix"
+                                       DockPanel.Dock="Right"
                                        Foreground="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"
                                        HorizontalAlignment="Right"
-                                       Padding="5 0 0 0"
                                        Text="{TemplateBinding Suffix}"
                                        VerticalAlignment="Center"/>
                             
                             <!-- CONTENT -->
-                            <TextBlock x:Name="PART_Content"
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <TextBlock x:Name="Text"
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                       SnapsToDevicePixels="True"
+                                       Text="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 
                         </DockPanel>
                     </Border>
@@ -50,7 +51,9 @@
                     <ControlTemplate.Triggers>
 
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter TargetName="Text" Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"/>
+                            <Setter TargetName="Prefix" Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
+                            <Setter TargetName="Suffix" Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
                         </Trigger>
 
                         <Trigger Property="IsFocused" Value="True">
@@ -60,6 +63,7 @@
                     </ControlTemplate.Triggers>
                     
                 </ControlTemplate>
+                
             </Setter.Value>
         </Setter>
     </Style>

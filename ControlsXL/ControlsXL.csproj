@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWPF>true</UseWPF>
@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="StylesXL">
-      <HintPath>..\..\..\StylesXL\StylesXL\StylesXL\bin\Release\net5.0-windows\StylesXL.dll</HintPath>
+      <HintPath>..\..\..\StylesXL\StylesXL\StylesXL\bin\Debug\net6.0-windows\StylesXL.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

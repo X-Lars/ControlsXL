@@ -1,31 +1,30 @@
-﻿using System;
+﻿using ControlsXL.Adorners;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace ControlsXL
 {
-    [TemplatePart(Name = "PART_Content", Type = typeof(TextBlock))]
     public class EnumeratedText : Control
     {
         #region Fields
 
         /// <summary>
-        /// Dictionary to store the enumeration value and description to the associated <see cref="Index"/>.
+        /// Dictionary to store the enumeration value and description.
         /// </summary>
         /// <remarks><i>
         /// - The key is the index from 0 to the size of the bound enumeration.<br/>
-        /// - The key value pair key references the selected enumeration value.<br/>
-        /// - The key value pair value references an enumeration to string type converter value if present to override the displayed value.<br/>
         /// </i></remarks>
-        private readonly Dictionary<int, KeyValuePair<object, string>> EnumerationValues = new();
-
-        /// <summary>
-        /// Stores the minimum index value.
-        /// </summary>
-        private int _Min = 0;
+        private readonly Dictionary<int, Descriptor> Enumeration = new();
 
         /// <summary>
         /// Stores the maximum index value.
@@ -38,18 +37,14 @@ namespace ControlsXL
         private int _Index = 0;
 
         /// <summary>
-        /// Stores the type of the bound enumeration.
+        /// Tracks wheter the adorner is attached.
         /// </summary>
-        private Type _Type;
-
-        #endregion
-
-        #region Fields: WPF
+        private bool _IsAdorned = false;
 
         /// <summary>
-        /// Stores the template part.
+        /// Stores the adorner.
         /// </summary>
-        private TextBlock _Text;
+        private readonly ScrollAdorner _Adorner;
 
         #endregion
 
@@ -57,14 +52,38 @@ namespace ControlsXL
 
         static EnumeratedText()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(EnumeratedText), new FrameworkPropertyMetadata(typeof(EnumeratedText)));
             StylesXL.StyleManager.Initialize();
+
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(EnumeratedText), new FrameworkPropertyMetadata(typeof(EnumeratedText)));
         }
 
         public EnumeratedText() : base()
         {
+            _Adorner = new ScrollAdorner(this);
+
             Focusable = true;
             IsTabStop = true;
+        }
+
+
+        #endregion
+
+        #region Structures
+
+        /// <summary>
+        /// Structure to hold an enumeration value and description.
+        /// </summary>
+        internal struct Descriptor
+        {
+            /// <summary>
+            /// Stores the actual enumeration value.
+            /// </summary>
+            public object ID;
+
+            /// <summary>
+            /// Stores the enumeration value description.
+            /// </summary>
+            public string Description;
         }
 
         #endregion
@@ -75,7 +94,7 @@ namespace ControlsXL
         /// The actual value of the bound enumaration property.
         /// </summary>
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(object), typeof(EnumeratedText), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ValueChanged));
-
+        
         /// <summary>
         /// The displayed prefix.
         /// </summary>
@@ -86,18 +105,14 @@ namespace ControlsXL
         /// </summary>
         public static readonly DependencyProperty SuffixProperty = DependencyProperty.Register(nameof(Suffix), typeof(string), typeof(EnumeratedText), new UIPropertyMetadata(string.Empty));
 
+        /// <summary>
+        /// The displayed text.
+        /// </summary>
+        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(EnumeratedText), new PropertyMetadata(string.Empty));
+
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// Gets the control's displayed text.
-        /// </summary>
-        public string Text
-        {
-            get => _Text.Text;
-            private set => _Text.Text = value;
-        }
 
         /// <summary>
         /// Gets or sets the displayed prefix.
@@ -128,16 +143,18 @@ namespace ControlsXL
             {
                 if (value != _Index)
                 {
-                    if (value < _Min)
-                        value = _Min;
+                    if (value < 0)
+                        value = 0;
 
                     if (value > _Max)
                         value = _Max;
 
-                    _Index = value;
+                    if (value != _Index)
+                    {
+                        _Index = value;
 
-                    Text  = EnumerationValues[value].Value;
-                    Value = EnumerationValues[value];
+                        Value = Enumeration[value];
+                    }
                 }
             }
         }
@@ -148,7 +165,16 @@ namespace ControlsXL
         public object Value
         {
             get => GetValue(ValueProperty);
-            set => SetValue(ValueProperty, EnumerationValues[Index].Key);
+            set => SetValue(ValueProperty, Enumeration[Index].ID);
+        }
+
+        /// <summary>
+        /// Gets the description.
+        /// </summary>
+        public string Text
+        {
+            get { return (string)GetValue(TextProperty); }
+            private set { SetValue(TextProperty, value); }
         }
 
         #endregion
@@ -160,43 +186,65 @@ namespace ControlsXL
         /// </summary>
         /// <param name="d">The dependency object that raised the event.</param>
         /// <param name="e">The event's associated data.</param>
+        /// <remarks><i>
+        /// - If the new value not is null, the old value is checked.<br/>
+        /// - If the old value is null, the enumeration values and descriptions are stored.<br/>
+        /// - If the old value not is null, the index and text properties are set.<br/>
+        /// - If the new value is null, the properties are reset.<br/>
+        /// </i></remarks>
         private static void ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue != null)
             {
                 EnumeratedText instance = (EnumeratedText)d;
 
-                if (e.NewValue.GetType() != instance._Type)
+                if (e.OldValue == null)
                 {
                     // This should in normal circumstances only be excecuted once on binding.
-
                     if (e.NewValue.GetType().IsEnum)
                     {
-                        instance.EnumerationValues.Clear();
-                        instance._Type = e.NewValue.GetType();
-                        instance._Max = Enum.GetValues(instance._Type).Length - 1;
+                        Type  type   = e.NewValue.GetType();
+                        Array values = Enum.GetValues(type);
 
-                        for (int index = 0; index <= instance._Max; index++)
+                        instance.Enumeration.Clear();
+                        instance._Max = values.Length - 1;
+
+                        for (int i = 0; i <= instance._Max; i++)
                         {
-                            object value = Convert.ChangeType(Enum.GetValues(instance._Type).GetValue(index), instance._Type);
-                            string description = (string)TypeDescriptor.GetConverter(e.NewValue).ConvertTo(Enum.GetValues(instance._Type).GetValue(index), typeof(string));
+                            Descriptor descriptor = new();
 
-                            KeyValuePair<object, string> enumValue = new KeyValuePair<object, string>(value, description);
-                            instance.EnumerationValues.Add(index, enumValue);
+                            descriptor.ID = Convert.ChangeType(values.GetValue(i), type);
+                            descriptor.Description = (string)TypeDescriptor.GetConverter(e.NewValue).ConvertTo(values.GetValue(i), typeof(string));
+
+                            instance.Enumeration.Add(i, descriptor);
                         }
 
-                        instance.Text = instance.EnumerationValues[instance.Index].Value;
+                        // Gets the dictionary key based on the actual enumeration value
+                        // Backing field is used because the Index property also changes the Value property
+                        instance._Index = instance.Enumeration.Where(x => x.Value.ID.ToString() == e.NewValue.ToString()).Select(x => x.Key).FirstOrDefault();
+                        instance.Text = instance.Enumeration[instance.Index].Description;
 
-                        ToolTipService.SetToolTip(instance, string.Format("{2} {0} ... {1} {3}", instance.EnumerationValues[instance._Min].Value, instance.EnumerationValues[instance._Max].Value, instance.Prefix, instance.Suffix));
+                        ToolTipService.SetToolTip(instance, string.Format("{2} {0} ... {1} {3}", instance.Enumeration[0].Description, instance.Enumeration[instance._Max].Description, instance.Prefix, instance.Suffix));
                     }
+                    else
+                    {
+                        throw new Exception($"[{nameof(EnumeratedText)}]\nThe {nameof(Value)} property can only be bound to an enumeration.");
+                    }
+                }
+                else if (e.OldValue.ToString() != e.NewValue.ToString())
+                {
+                    // Gets the dictionary key based on the actual enumeration value
+                    // Backing field is used because the Index property also changes the Value property
+                    instance._Index = instance.Enumeration.Where(x => x.Value.ID.ToString() == e.NewValue.ToString()).Select(x => x.Key).FirstOrDefault();
+                    instance.Text = instance.Enumeration[instance.Index].Description;
                 }
             }
             else
             {
+                // Reset the instance properties
                 EnumeratedText instance = (EnumeratedText)d;
 
-                instance.EnumerationValues.Clear();
-                instance._Type = null;
+                instance.Enumeration.Clear();
                 instance._Max = 0;
                 instance.Text = string.Empty;
 
@@ -209,13 +257,55 @@ namespace ControlsXL
         #region Override: Control
 
         /// <summary>
-        /// Handles the apply template event to get the template parts of the control.
+        /// Handles the mouse enter event to attach the adorner.
         /// </summary>
-        public override void OnApplyTemplate()
+        /// <param name="e">The event's associated data.</param>
+        protected override void OnMouseEnter(MouseEventArgs e)
         {
-            base.OnApplyTemplate();
+            base.OnMouseEnter(e);
 
-            _Text = GetTemplateChild("PART_Content") as TextBlock;
+            if (!_IsAdorned)
+            {
+                AdornerLayer layer = AdornerLayer.GetAdornerLayer(this);
+
+                layer.Add(_Adorner);
+
+                _IsAdorned = true;
+            }
+
+            e.Handled = true;
+        }
+
+        /// <summary>
+        /// Handles the mouse leave event to release the adorner.
+        /// </summary>
+        /// <param name="e">The event's associated data.</param>
+        protected override void OnMouseLeave(MouseEventArgs e)
+        {
+            base.OnMouseLeave(e);
+
+            if (_IsAdorned)
+            {
+                AdornerLayer layer = AdornerLayer.GetAdornerLayer(this);
+
+                if (layer != null)
+                {
+                    layer.Remove(_Adorner);
+                }
+
+                _IsAdorned = false;
+            }
+        }
+
+        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            base.OnGotKeyboardFocus(e);
+
+        }
+
+        protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            base.OnLostKeyboardFocus(e);
         }
 
         /// <summary>
@@ -269,7 +359,7 @@ namespace ControlsXL
 
                 case Key.Home:
 
-                    Index = _Min;
+                    Index = 0;
                     break;
 
                 case Key.Tab:
@@ -304,7 +394,7 @@ namespace ControlsXL
             }
             else
             {
-                if (Index > _Min)
+                if (Index > 0)
                     Index--;
             }
         }

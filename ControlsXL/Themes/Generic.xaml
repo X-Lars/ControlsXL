@@ -5,16 +5,19 @@
     <ResourceDictionary.MergedDictionaries>
         
         <!-- MERGE THE RESOURCES FOLDER FILES -->
-        <ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Colors.xaml"/>
+        <!--<ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Colors.xaml"/>-->
         <ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Fonts.xaml"/>
 
         <!-- MERGE THE DEFAULT SKIN -->
-        <ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Style/Default.xaml"/>
+        <!--<ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Style/Default.xaml"/>-->
 
         <!-- MERGE THE DEFAULT APPEARANCE -->
-        <ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Appearance/Default.xaml"/>
+        <!--<ResourceDictionary Source="pack://application:,,,/StylesXL;Component/Resources/Appearance/Default.xaml"/>-->
 
+        
+        
         <!-- MERGE THE CUSTOM CONTROL STYLES -->
+        <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/Adorners.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/LinkButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/MarkerButton.xaml"/>
         <ResourceDictionary Source="pack://application:,,,/ControlsXL;Component/Themes/VectorButton.xaml"/>
