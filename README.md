@@ -2,6 +2,40 @@
 WPF Custom Controls Library
 ###### <i> This is currently a work in progress, styles are gonna be bound to the [StylesXL](https://github.com/X-Lars/StylesXL) for styling which should also support custom skin colors.</i>
 
+## EnumeratedText
+Plain text bound to an property of the type enum and displays the enum names.
+Use the mouse wheel to modify the value or click the control to set keyboard focus and use the predefined keys. (+, -, HOME, END, PGUP, PGDN).
+If I, in the below example, did not added the type convert, the values _164T, _164 etc. would show. When you don't hover the control with the mouse, the control is shown as plain text.
+
+Examples | Inside a treeview
+----|-------
+![Alt text](/Images/EnumeratedTextToolTip.jpg)|![Alt text](/Images/EnumeratedTextUse.jpg)
+![Alt text](/Images/EnumeratedText.jpg)
+```
+<xl:EnumeratedText FontSize="20"
+                   HorizontalContentAlignment="Center"
+                   Suffix="Note"
+                   Value="{Binding Notes}"/>
+```
+
+```
+[TypeConverter(typeof(DescriptionConverter))]
+public enum NoteEnum : int
+{
+    [Description("\U0001D163\U00002083")] _164T = 0x00,
+    [Description("\U0001D163")]           _164  = 0x01,
+    [Description("\U0001D162\U00002083")] _132T = 0x02,
+    [Description("\U0001D162")]           _132  = 0x03,
+    [Description("\U0001D161\U00002083")] _116T = 0x04,
+    [Description("\U0001D162\U0001D16D")] _132D = 0x05
+}
+
+public NoteEnum Notes
+{
+    get => _Note;
+    set => _Note = value;
+}
+```
 ## NumericTextBox
 Text box limited to min and max values, with optional value prefix or suffix and supports binding to a `List<string>`.
 Optionally the increment and decrement buttons can be hidden because the control can be operated with the mouse wheel and predefined keys.
