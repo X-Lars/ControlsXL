@@ -49,7 +49,11 @@ namespace ControlsXL.Adorners
                 context.LineTo(new Point(cx + 2, sy), true, true);
             }
         }
-
+        protected override Size MeasureOverride(Size constraint)
+        {
+            IsClipEnabled = true;
+            return base.MeasureOverride(constraint);
+        }
         protected override Size ArrangeOverride(Size finalSize)
         {
             UpdateGeometry(finalSize);

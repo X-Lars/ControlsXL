@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:xl="clr-namespace:ControlsXL"
                     xmlns:style="clr-namespace:StylesXL;assembly=StylesXL">
-   
-    <Style TargetType="{x:Type xl:EnumeratedText}">
+
+    <Style TargetType="{x:Type xl:SpinText}">
 
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
@@ -14,16 +14,16 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="Template">
-            
+
             <Setter.Value>
-                
-                <ControlTemplate TargetType="{x:Type xl:EnumeratedText}">
+
+                <ControlTemplate TargetType="{x:Type xl:SpinText}">
 
                     <Border Background="{TemplateBinding Background}">
 
                         <DockPanel>
-                    
-                            <!-- PREFIX -->
+
+                             <!--PREFIX--> 
                             <TextBlock x:Name="Prefix"
                                        DockPanel.Dock="Left"
                                        Foreground="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"
@@ -32,7 +32,7 @@
                                        Text="{TemplateBinding Prefix}"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 
-                            <!-- SUFFIX -->
+                             <!--SUFFIX--> 
                             <TextBlock x:Name="Suffix"
                                        DockPanel.Dock="Right"
                                        Foreground="{DynamicResource {ComponentResourceKey style:Styles, TextDisabledBrush}}"
@@ -41,18 +41,17 @@
                                        Text="{TemplateBinding Suffix}"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 
-                            <!-- CONTENT -->
+                             <!--CONTENT--> 
                             <TextBlock x:Name="Text"
                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                        SnapsToDevicePixels="True"
                                        Text="{Binding Text, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                       TextTrimming="CharacterEllipsis"
                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 
                         </DockPanel>
                     </Border>
 
-                        <ControlTemplate.Triggers>
+                    <ControlTemplate.Triggers>
 
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"/>
@@ -64,11 +63,11 @@
                             <Setter TargetName="Prefix" Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
                             <Setter TargetName="Suffix" Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlHighlightBrush}}"/>
                         </Trigger>
-                        
+
                     </ControlTemplate.Triggers>
-                    
+
                 </ControlTemplate>
-                
+
             </Setter.Value>
         </Setter>
     </Style>

@@ -1,20 +1,18 @@
 ﻿using ControlsXL.Adorners;
+using ControlsXL.Extensions;
+using ControlsXL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace ControlsXL
 {
-    public class EnumeratedText : Control
+    public class EnumeratedText : Control, INextItemsAdorner
     {
         #region Fields
 
@@ -37,15 +35,28 @@ namespace ControlsXL
         private int _Index = 0;
 
         /// <summary>
-        /// Tracks wheter the adorner is attached.
+        /// Tracks wheter the mouse adorner is attached.
         /// </summary>
-        private bool _IsAdorned = false;
+        private bool _HasMouseAdorner = false;
 
         /// <summary>
-        /// Stores the adorner.
+        /// Tracks wheter the keyboard adorner is attached.
         /// </summary>
-        private readonly ScrollAdorner _Adorner;
+        private bool _HasKeyboardAdorner = false;
 
+        /// <summary>
+        /// Stores the mouse adorner.
+        /// </summary>
+        private readonly ScrollAdorner _MouseAdorner;
+
+        /// <summary>
+        /// Stores the keyboard adorner
+        /// </summary>
+        private readonly SpinAdorner _KeyboardAdorner;
+
+        private readonly NextItemsAdorner _NextItemsAdorner;
+
+        
         #endregion
 
         #region Constructor
@@ -59,8 +70,12 @@ namespace ControlsXL
 
         public EnumeratedText() : base()
         {
-            _Adorner = new ScrollAdorner(this);
+            _MouseAdorner = new ScrollAdorner(this);
+            _KeyboardAdorner = new SpinAdorner(this);
+            _NextItemsAdorner = new NextItemsAdorner(this);
 
+            FocusVisualStyle = null;
+            
             Focusable = true;
             IsTabStop = true;
         }
@@ -159,6 +174,9 @@ namespace ControlsXL
             }
         }
 
+        public string Next { get; private set; }
+        public string Previous { get; private set; }
+
         /// <summary>
         /// Gets or sets the bound enumeration property's value.
         /// </summary>
@@ -203,6 +221,9 @@ namespace ControlsXL
                     // This should in normal circumstances only be excecuted once on binding.
                     if (e.NewValue.GetType().IsEnum)
                     {
+                        TextBlock textBlock = new();
+                        double maxText = 0;
+
                         Type  type   = e.NewValue.GetType();
                         Array values = Enum.GetValues(type);
 
@@ -217,13 +238,37 @@ namespace ControlsXL
                             descriptor.Description = (string)TypeDescriptor.GetConverter(e.NewValue).ConvertTo(values.GetValue(i), typeof(string));
 
                             instance.Enumeration.Add(i, descriptor);
+
+                            textBlock.Text = descriptor.Description + instance.Prefix + instance.Suffix;
+
+                            maxText = Math.Max(textBlock.GetTextWidth(20), maxText);
                         }
+
+                        instance.MinWidth = maxText;
 
                         // Gets the dictionary key based on the actual enumeration value
                         // Backing field is used because the Index property also changes the Value property
                         instance._Index = instance.Enumeration.Where(x => x.Value.ID.ToString() == e.NewValue.ToString()).Select(x => x.Key).FirstOrDefault();
                         instance.Text = instance.Enumeration[instance.Index].Description;
 
+                        if (instance._Index > 0)
+                        {
+                            instance.Previous = instance.Enumeration[instance._Index - 1].Description;
+                        }
+                        else
+                        {
+                            instance.Previous = string.Empty;
+                        }
+
+                        if (instance._Index < instance._Max)
+                        {
+                            instance.Next = instance.Enumeration[instance._Index + 1].Description;
+                        }
+                        else
+                        {
+                            instance.Next = string.Empty;
+                        }
+                        instance._NextItemsAdorner.Update();
                         ToolTipService.SetToolTip(instance, string.Format("{2} {0} ... {1} {3}", instance.Enumeration[0].Description, instance.Enumeration[instance._Max].Description, instance.Prefix, instance.Suffix));
                     }
                     else
@@ -237,6 +282,26 @@ namespace ControlsXL
                     // Backing field is used because the Index property also changes the Value property
                     instance._Index = instance.Enumeration.Where(x => x.Value.ID.ToString() == e.NewValue.ToString()).Select(x => x.Key).FirstOrDefault();
                     instance.Text = instance.Enumeration[instance.Index].Description;
+
+                    if(instance._Index > 0)
+                    {
+                        instance.Previous = instance.Enumeration[instance._Index - 1].Description;
+                    }
+                    else
+                    {
+                        instance.Previous = string.Empty;
+                    }
+
+                    if(instance._Index < instance._Max)
+                    {
+                        instance.Next = instance.Enumeration[instance._Index + 1].Description;
+                    }
+                    else
+                    {
+                        instance.Next = string.Empty;
+                    }
+
+                    instance._NextItemsAdorner.Update();
                 }
             }
             else
@@ -264,13 +329,16 @@ namespace ControlsXL
         {
             base.OnMouseEnter(e);
 
-            if (!_IsAdorned)
+            if (!_HasMouseAdorner)
             {
                 AdornerLayer layer = AdornerLayer.GetAdornerLayer(this);
 
-                layer.Add(_Adorner);
-
-                _IsAdorned = true;
+                if (layer != null)
+                {
+                    layer.Add(_NextItemsAdorner);
+                    layer.Add(_MouseAdorner);
+                    _HasMouseAdorner = true;
+                }
             }
 
             e.Handled = true;
@@ -284,39 +352,66 @@ namespace ControlsXL
         {
             base.OnMouseLeave(e);
 
-            if (_IsAdorned)
+            if (_HasMouseAdorner)
             {
                 AdornerLayer layer = AdornerLayer.GetAdornerLayer(this);
-
+               
                 if (layer != null)
                 {
-                    layer.Remove(_Adorner);
+                    layer.Remove(_MouseAdorner);
+                    layer.Remove(_NextItemsAdorner);
                 }
 
-                _IsAdorned = false;
+                _HasMouseAdorner = false;
             }
+
+            e.Handled = true;
         }
 
-        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
-        {
-            base.OnGotKeyboardFocus(e);
+            protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+            {
+                base.OnGotKeyboardFocus(e);
 
-        }
+                if(!_HasKeyboardAdorner)
+                {
+                    AdornerLayer layer = AdornerLayer.GetAdornerLayer(this);
 
-        protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
-        {
-            base.OnLostKeyboardFocus(e);
-        }
+                    layer.Add(_KeyboardAdorner);
 
-        /// <summary>
-        /// Handles the mouse up event to set keyboard focus.
-        /// </summary>
-        /// <param name="e">The event's associated data.</param>
-        protected override void OnMouseUp(MouseButtonEventArgs e)
-        {
-            base.OnMouseUp(e);
-            Keyboard.Focus(this);
-        }
+                    _HasKeyboardAdorner = true;
+                }
+
+                e.Handled = true;
+            }
+
+            protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+            {
+                base.OnLostKeyboardFocus(e);
+
+                if(_HasKeyboardAdorner)
+                {
+                    AdornerLayer layer = AdornerLayer.GetAdornerLayer(this);
+
+                    if (layer != null)
+                    {
+                        layer.Remove(_KeyboardAdorner);
+                    }
+
+                    _HasKeyboardAdorner = false;
+                }
+
+                e.Handled = true;
+            }
+
+            /// <summary>
+            /// Handles the mouse up event to set keyboard focus.
+            /// </summary>
+            /// <param name="e">The event's associated data.</param>
+            protected override void OnMouseUp(MouseButtonEventArgs e)
+            {
+                base.OnMouseUp(e);
+                Keyboard.Focus(this);
+            }
 
         /// <summary>
         /// Handles the preview key down event to change the control's value.
@@ -374,6 +469,13 @@ namespace ControlsXL
                     }
 
                     break;
+
+                case Key.Enter:
+                case Key.Escape:
+                    FocusManager.SetFocusedElement(FocusManager.GetFocusScope(this), null);
+                    Keyboard.ClearFocus();
+                    break;
+
             }
 
             e.Handled = true;
