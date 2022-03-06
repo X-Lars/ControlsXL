@@ -55,6 +55,9 @@ namespace ControlsXL
         /// </summary>
         private readonly SpinAdorner _KeyboardAdorner;
 
+        private TextBlock _Prefix;
+        private TextBlock _Suffix;
+
         #endregion
 
         #region Constructor
@@ -200,6 +203,20 @@ namespace ControlsXL
         #endregion
 
         #region Override: Control
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            _Prefix = GetTemplateChild("Prefix") as TextBlock;
+            _Suffix = GetTemplateChild("Suffix") as TextBlock;
+
+            if (string.IsNullOrEmpty(_Prefix.Text))
+                _Prefix.Visibility = Visibility.Collapsed;
+
+            if (string.IsNullOrEmpty(_Suffix.Text))
+                _Suffix.Visibility = Visibility.Collapsed;
+        }
 
         /// <summary>
         /// Handles the mouse enter event to attach the adorner.

@@ -40,6 +40,9 @@ namespace ControlsXL
         /// </summary>
         private readonly SpinAdorner _KeyboardAdorner;
 
+        private TextBlock _Prefix;
+        private TextBlock _Suffix;
+
         #endregion
 
 
@@ -97,6 +100,11 @@ namespace ControlsXL
         /// </summary>
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(SpinText), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.NotDataBindable));
 
+        /// <summary>
+        /// Registers the property to display or hide the positive sign of the <see cref="SpinText"/>.
+        /// </summary>
+        public static readonly DependencyProperty ShowPositiveSignProperty = DependencyProperty.Register(nameof(ShowPositiveSign), typeof(bool), typeof(SpinText), new PropertyMetadata(false));
+
         #endregion
 
         #region Properties
@@ -135,6 +143,15 @@ namespace ControlsXL
         {
             get => (string)GetValue(PrefixProperty);
             set => SetValue(PrefixProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets wheter the positive sign is shown.
+        /// </summary>
+        public bool ShowPositiveSign
+        {
+            get { return (bool)GetValue(ShowPositiveSignProperty); }
+            set { SetValue(ShowPositiveSignProperty, value); }
         }
 
         /// <summary>
@@ -229,10 +246,29 @@ namespace ControlsXL
         {
             SpinText instance = (SpinText)d;
 
-            instance.Text = ((double)e.NewValue).ToString($"N{instance._Resolution}");
+            double value = (double)e.NewValue;
+
+            instance.Text = value.ToString($"N{instance._Resolution}");
+
+            if (instance.ShowPositiveSign && value > 0)
+                instance.Text = $"+{instance.Text}";
         }
 
         #endregion
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            _Prefix = GetTemplateChild("Prefix") as TextBlock;
+            _Suffix = GetTemplateChild("Suffix") as TextBlock;
+
+            if (string.IsNullOrEmpty(_Prefix.Text))
+                _Prefix.Visibility = Visibility.Collapsed;
+
+            if (string.IsNullOrEmpty(_Suffix.Text))
+                _Suffix.Visibility = Visibility.Collapsed;
+        }
 
         /// <summary>
         /// Initializes the <see cref="SpinText"/> properties.

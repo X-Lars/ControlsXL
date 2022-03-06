@@ -56,7 +56,9 @@ namespace ControlsXL
 
         private readonly NextItemsAdorner _NextItemsAdorner;
 
-        
+        private TextBlock _Prefix;
+        private TextBlock _Suffix;
+
         #endregion
 
         #region Constructor
@@ -80,6 +82,7 @@ namespace ControlsXL
             IsTabStop = true;
         }
 
+       
 
         #endregion
 
@@ -193,6 +196,24 @@ namespace ControlsXL
         {
             get { return (string)GetValue(TextProperty); }
             private set { SetValue(TextProperty, value); }
+        }
+
+        #endregion
+
+        #region Overrides
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+
+            _Prefix = GetTemplateChild("Prefix") as TextBlock;
+            _Suffix = GetTemplateChild("Suffix") as TextBlock;
+
+            if (string.IsNullOrEmpty(_Prefix.Text))
+                _Prefix.Visibility = Visibility.Collapsed;
+
+            if (string.IsNullOrEmpty(_Suffix.Text))
+                _Suffix.Visibility = Visibility.Collapsed;
         }
 
         #endregion
@@ -335,7 +356,7 @@ namespace ControlsXL
 
                 if (layer != null)
                 {
-                    layer.Add(_NextItemsAdorner);
+                    //layer.Add(_NextItemsAdorner);
                     layer.Add(_MouseAdorner);
                     _HasMouseAdorner = true;
                 }
@@ -359,7 +380,7 @@ namespace ControlsXL
                 if (layer != null)
                 {
                     layer.Remove(_MouseAdorner);
-                    layer.Remove(_NextItemsAdorner);
+                    //layer.Remove(_NextItemsAdorner);
                 }
 
                 _HasMouseAdorner = false;
