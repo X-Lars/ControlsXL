@@ -279,6 +279,7 @@ namespace ControlsXL
             base.OnInitialized(e);
 
             double interval = Interval;
+            int padding = 0;
 
             _Resolution = Interval.GetDecimalPlaces();
 
@@ -286,11 +287,18 @@ namespace ControlsXL
             if (Value < Min) Value = Min;
             if (Value > Max) Value = Max;
 
+
             TextBlock textBlock = new();
+
             textBlock.Text = Min.ToString($"-N{_Resolution}") + Prefix + Suffix;
-            double minWidth = textBlock.GetTextWidth(10);
+            
+            padding += string.IsNullOrEmpty(Prefix) ? 0 : 5;
+            padding += string.IsNullOrEmpty(Suffix) ? 0 : 5;
+
+            double minWidth = textBlock.GetTextWidth(padding);
+
             textBlock.Text = Max.ToString($"-N{_Resolution}") + Prefix + Suffix;
-            MinWidth = Math.Max(minWidth, textBlock.GetTextWidth(20));
+            MinWidth = Math.Max(minWidth, textBlock.GetTextWidth(padding));
 
 
             // Apply the number of decimal places to the text

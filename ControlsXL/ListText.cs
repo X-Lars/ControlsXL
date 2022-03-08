@@ -2,6 +2,7 @@
 using ControlsXL.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -86,9 +87,10 @@ namespace ControlsXL
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(ListText), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.NotDataBindable));
 
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(nameof(ItemsSource), typeof(List<string>), typeof(ListText), new PropertyMetadata(null, ItemsSourceChanged));
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(nameof(ItemsSource), typeof(List<string>), typeof(ListText), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None, ItemsSourceChanged));
 
         public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register(nameof(SelectedIndex), typeof(int), typeof(ListText), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SelectedIndexChanged));
+
         /// <summary>
         /// Registers the property to set the prefix of the <see cref="SpinText"/>.
         /// </summary>
@@ -113,28 +115,28 @@ namespace ControlsXL
 
             if (e.NewValue != null)
             {
-                if (e.OldValue == null)
-                {
+                instance.List.Clear();
                     TextBlock textBlock = new();
                     double minWidth = 0;
                     
                     var items = (List<string>)e.NewValue;
 
-                    for (int i = 0; i < items.Count; i++)
-                    {
-                        instance.List.Add(items[i]);
+                    
+                for (int i = 0; i < items.Count; i++)
+                {
+                    instance.List.Add(items[i]);
 
-                        textBlock.Text = items[i] + instance.Prefix + instance.Suffix;
+                    textBlock.Text = items[i] + instance.Prefix + instance.Suffix;
 
-                        minWidth = Math.Max(textBlock.GetTextWidth(20), minWidth);
-                    }
-
-                    instance.MinWidth = minWidth;
-                    instance._Max = items.Count - 1;
-                    instance.Text = instance.List[instance.SelectedIndex];
-
-                    ToolTipService.SetToolTip(instance, string.Format("{0} ... {1}", instance.List[0], instance.List[instance._Max]));
+                    minWidth = Math.Max(textBlock.GetTextWidth(20), minWidth);
                 }
+
+                instance.SelectedIndex = 0;
+                instance.MinWidth = minWidth;
+                instance._Max = items.Count - 1;
+                instance.Text = instance.List[instance.SelectedIndex];
+
+                ToolTipService.SetToolTip(instance, string.Format("{0} ... {1}", instance.List[0], instance.List[instance._Max]));
             }
             else
             {
