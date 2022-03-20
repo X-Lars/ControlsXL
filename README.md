@@ -7,10 +7,8 @@ Plain text bound to an property of the type enum and displays the enum names.
 Use the mouse wheel to modify the value or click the control to set keyboard focus and use the predefined keys. (+, -, HOME, END, PGUP, PGDN).
 If I, in the below example, did not added the type converter, the values _164T, _164, _132T, etc. would show. When you don't hover the control with the mouse, the control is shown as plain text.
 
-Examples | Inside a treeview
-----|-------
-![Alt text](/Images/EnumeratedTextToolTip.jpg)|![Alt text](/Images/EnumeratedTextUse.jpg)
-![Alt text](/Images/EnumeratedText.jpg)
+![Alt text](/Images/EnumeratedTextToolTip.jpg)![Alt text](/Images/EnumeratedTextUse.jpg)
+![Alt text](/Images/EnumeratedText.jpg)![Alt text](/Images/EnumeratedTextKeyFocus.jpg)
 
 In XAML actually only the minimal binding to the `Value` is required.
 ```
@@ -19,7 +17,7 @@ In XAML actually only the minimal binding to the `Value` is required.
                    Suffix="Note"
                    Value="{Binding Notes}"/>
 ```
-The converter I use can be found [here](https://github.com/X-Lars/ControlsXL/blob/master/ControlsXL/Common/DescriptionConverter.cs), but if your enum has meaningful names there is not use for a converter. The values are ordered by the integer value of the enum but don't have the be continuous.
+The converter I use can be found [here](https://github.com/X-Lars/ControlsXL/blob/master/ControlsXL/Common/DescriptionConverter.cs), but if your enum has meaningful names there is ot use for a converter. The values are ordered by the integer value of the enum but don't have the be continuous.
 ```
 [TypeConverter(typeof(DescriptionConverter))]
 public enum NoteEnum : int
