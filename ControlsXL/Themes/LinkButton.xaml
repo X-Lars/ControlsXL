@@ -38,7 +38,7 @@
                         
                         <!-- LINK BUTTON: MOUSE OVER -->
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, BorderHighlightBrush}}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey style:Styles, ControlSelectedBrush}}"/>
                             <Setter TargetName="TextArea" Property="TextDecorations" Value="Underline"/>
                         </Trigger>
 

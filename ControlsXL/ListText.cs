@@ -34,7 +34,7 @@ namespace ControlsXL
         /// <summary>
         /// Stores the maximum index value.
         /// </summary>
-        private int _Max = 0;
+        private int MaxIndex = 0;
 
         /// <summary>
         /// Tracks wheter the mouse adorner is attached.
@@ -87,9 +87,23 @@ namespace ControlsXL
 
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(nameof(Text), typeof(string), typeof(ListText), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.NotDataBindable));
 
-        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(nameof(ItemsSource), typeof(List<string>), typeof(ListText), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None, ItemsSourceChanged));
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyProperty.Register(nameof(ItemsSource), typeof(List<string>), typeof(ListText), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsMeasure, ItemsSourceChanged));
 
-        public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register(nameof(SelectedIndex), typeof(int), typeof(ListText), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SelectedIndexChanged));
+        public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register(nameof(SelectedIndex), typeof(int), typeof(ListText), new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SelectedIndexChanged, CoerceIndex));
+
+        private static object CoerceIndex(DependencyObject d, object baseValue)
+        {
+            ListText instance = (ListText)d;
+
+            int value = (int)baseValue;
+
+            value = value < 0 ? 0 : value;
+            value = value > instance.MaxIndex ? instance.MaxIndex : value;
+
+            //Debug.Print($"[{nameof(SpinText)}.{nameof(CoerceIndex)}] Base:{(int)baseValue}, Result:{value}");
+
+            return value;
+        }
 
         /// <summary>
         /// Registers the property to set the prefix of the <see cref="SpinText"/>.
@@ -104,44 +118,95 @@ namespace ControlsXL
         private static void SelectedIndexChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ListText instance = (ListText)d;
+            int index = (int)e.NewValue;
 
-            if(instance.List.Count != 0)
-                instance.Text = instance.List[(int)e.NewValue];
+            if (instance.List.Count != 0)
+            {
+                if (index < 0)
+                {
+                    instance.Text = instance.List[0];
+                }
+                else if(index > instance.MaxIndex)
+                {
+                    instance.Text = instance.List[instance.MaxIndex];
+                }
+                else
+                {
+                    instance.Text = instance.List[index];
+                }
+            }
+            else
+            {
+                instance.Text = string.Empty;
+            }
+
+            //Debug.Print($"[{nameof(SpinText)}.{nameof(SelectedIndexChanged)}] Index:{index}");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="e"></param>
+        /// <remarks><i>
+        /// - The <see cref="SelectedIndex"/> is not changed when the <see cref="ItemsSource"/> is changed.
+        /// </i></remarks>
         private static void ItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             ListText instance = (ListText)d;
 
             if (e.NewValue != null)
             {
-                instance.List.Clear();
+                if (e.NewValue != e.OldValue)
+                {
+
+                    instance.List.Clear();
                     TextBlock textBlock = new();
                     double minWidth = 0;
-                    
+
                     var items = (List<string>)e.NewValue;
 
-                    
-                for (int i = 0; i < items.Count; i++)
-                {
-                    instance.List.Add(items[i]);
+                    // ADD LIST ITEMS & GET MIN WIDTH
+                    for (int i = 0; i < items.Count; i++)
+                    {
+                        instance.List.Add(items[i]);
 
-                    textBlock.Text = items[i] + instance.Prefix + instance.Suffix;
+                        textBlock.Text = items[i] + instance.Prefix + instance.Suffix;
 
-                    minWidth = Math.Max(textBlock.GetTextWidth(20), minWidth);
+                        minWidth = Math.Max(textBlock.GetTextWidth(20), minWidth);
+                    }
+
+                    Debug.Assert(instance.List.Count != 0);
+                    //instance.SelectedIndex = 0;
+                    instance.MinWidth = minWidth;
+                    instance.MaxIndex = items.Count - 1;
+
+                    //instance.SelectedIndex = (int)CoerceIndex(d, instance.SelectedIndex);
+                    //if (instance.SelectedIndex > instance._Max)
+                    //    instance.SelectedIndex = instance._Max;
+
+                    if (instance.SelectedIndex < 0)
+                    {
+                        instance.Text = instance.List[0];
+                    }
+                    else if(instance.SelectedIndex > instance.MaxIndex)
+                    {
+                        instance.Text = instance.List[instance.MaxIndex];
+                    }
+                    else
+                    {
+                        instance.Text = instance.List[instance.SelectedIndex];
+                    }
+
+                    ToolTipService.SetToolTip(instance, string.Format("{0} ... {1}", instance.List[0], instance.List[instance.MaxIndex]));
+
+                    //Debug.Print($"[{nameof(SpinText)}.{nameof(ItemsSourceChanged)}] Count:{items.Count}, Max:{instance.MaxIndex}, Index:{instance.SelectedIndex}");
                 }
-
-                instance.SelectedIndex = 0;
-                instance.MinWidth = minWidth;
-                instance._Max = items.Count - 1;
-                instance.Text = instance.List[instance.SelectedIndex];
-
-                ToolTipService.SetToolTip(instance, string.Format("{0} ... {1}", instance.List[0], instance.List[instance._Max]));
             }
             else
             {
                 instance.List.Clear();
-                instance._Max = 0;
+                instance.MaxIndex = 0;
                 instance.Text = string.Empty;
                 ToolTipService.SetToolTip(instance, string.Empty);
             }
@@ -155,7 +220,7 @@ namespace ControlsXL
             get { return (int)GetValue(SelectedIndexProperty); }
             set
             {
-                value = value < 0 ? 0 : value > _Max ? _Max : value;
+                value = value < 0 ? 0 : value > MaxIndex ? MaxIndex : value;
 
                 if(SelectedIndex != value)
                 { 
@@ -339,7 +404,7 @@ namespace ControlsXL
 
                 case Key.End:
 
-                    SelectedIndex = _Max;
+                    SelectedIndex = MaxIndex;
                     break;
 
                 case Key.PageUp:
@@ -386,7 +451,7 @@ namespace ControlsXL
 
             if (distance > 0)
             {
-                if (SelectedIndex < _Max)
+                if (SelectedIndex < MaxIndex)
                     SelectedIndex++;
             }
             else
